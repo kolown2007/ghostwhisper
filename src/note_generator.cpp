@@ -43,5 +43,10 @@ std::vector<String> generateNoteUrls(const String& baseUrl, const String& instru
 
 // Helper function to get a specific note URL
 String getNoteUrl(const String& baseUrl, const String& instrument, const String& note, int octave) {
-    return baseUrl + instrument + "/" + note + String(octave) + ".mp3";
+    // Remove trailing slash from baseUrl if it exists to prevent double slashes
+    String cleanBaseUrl = baseUrl;
+    if (cleanBaseUrl.endsWith("/")) {
+        cleanBaseUrl = cleanBaseUrl.substring(0, cleanBaseUrl.length() - 1);
+    }
+    return cleanBaseUrl + "/" + instrument + note + String(octave) + ".mp3";
 }

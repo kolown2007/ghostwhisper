@@ -19,8 +19,6 @@ size_t getBellSoundsCount() {
 
 
 
-
-
 const char* musicFromServer[] = {
 "https://kolown.net/storage/projects/whisper/Dayang%20Dayang.mp3"
 };
