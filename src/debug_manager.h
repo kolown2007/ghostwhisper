@@ -5,3 +5,4 @@
 // Debug and logging functions
 void logAudioStatus();
 void setupAudioCallbacks();
+void monitorSystemHealth();

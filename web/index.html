@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GhostWhisper Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 GhostWhisper Control Panel</h1>
+        
+        <div class="volume-control">
+            <h2>Volume Control</h2>
+            <p>Current Volume: <span id="volume">%VOLUME%</span>%</p>
+            <button class="button" onclick="changeVolume(-10)">Volume Down</button>
+            <button class="button" onclick="changeVolume(10)">Volume Up</button>
+            <br><br>
+            <input type="range" id="volumeSlider" min="0" max="100" value="%VOLUME%" onchange="setVolume(this.value)">
+        </div>
+        
+        <div class="playback-control">
+            <h2>Playback Control</h2>
+            <button class="button play-button" onclick="playRandomFile()">🎲 Play Random Song</button>
+            <br><br>
+            <h3>System Info</h3>
+            <p>GhostWhisper Audio System</p>
+            <p>WiFi: %WIFI_IP%</p>
+            <button class="button" onclick="runVolumeTest()">Test Volume Control</button>
+        </div>
+        
+        <div class="status" id="status">
+            <h3>System Status</h3>
+            <p>Loading status...</p>
+        </div>
+        
+        <div class="footer">
+            <p><small>Uptime: %UPTIME% seconds | Free Heap: %FREE_HEAP% bytes</small></p>
+            <p><small>Keyboard shortcuts: ↑/↓ Volume, T = Test, R = Random Play</small></p>
+        </div>
+    </div>
+    
+    <script src="/app.js"></script>
+</body>
+</html>

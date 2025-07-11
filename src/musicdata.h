@@ -22,3 +22,20 @@ size_t getBellSoundsCount() {
 const char* musicFromServer[] = {
 "https://kolown.net/storage/projects/whisper/Dayang%20Dayang.mp3"
 };
+
+
+
+// SD Card Music Files
+const std::vector<String> sdCardMusic = {
+    "/music/dayang.mp3",
+     "/music/La_Decadanse.mp3",
+   
+};
+
+const std::vector<String>& getSDCardMusic() {
+    return sdCardMusic;
+}
+
+size_t getSDCardMusicCount() {
+    return sdCardMusic.size();
+}
