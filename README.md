@@ -2,7 +2,7 @@
 
 ----
 
-Internet Radio Project for QC Biennale 2025
+Internet Radi- **`radio_manager.h/.cpp`** - Radio program coordination Project for QC Biennale 2025
 
 ## Overview
 GhostWhisper is an ambient music generation system that creates real-time generative soundscapes using ESP32 hardware and online sound libraries. The system streams musical notes from remote servers and uses Markov chain algorithms to create evolving ambient compositions.
@@ -222,7 +222,7 @@ main.cpp
 │   ├── secrets.h (WiFi credentials)
 │   └── Audio (external library)
 │
-├── playback_manager.h/.cpp
+├── radio_manager.h/.cpp
 │   ├── hardware_setup.h (audio object)
 │   └── sequence_manager.h (note progression)
 │

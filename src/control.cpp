@@ -7,7 +7,10 @@
 #include "control.h"
 #include "config.h"
 #include "hardware_setup.h"
-#include "playback_manager.h"
+#include "radio_manager.h"
+#include "stream_manager.h"
+#include "shuffle_manager.h"
+#include "generative_manager.h"
 #include "musicdata.h"
 #include <WebServer.h>
 #include <WiFi.h>
@@ -538,18 +541,20 @@ void handleProgramStatus() {
     json += "\"currentProgram\":\"" + programName + "\",";
     json += "\"programActive\":" + String(state.programActive ? "true" : "false") + ",";
     
-    // Program-specific status
+    // Program-specific status - get from individual managers
     if (state.currentProgram == SHUFFLE_PROGRAM) {
-        json += "\"shuffleQueue\":" + String(state.shuffleQueue.size()) + ",";
-        json += "\"musicFolder\":\"" + state.musicFolder + "\",";
-        json += "\"autoAdvance\":" + String(state.shuffleAutoAdvance ? "true" : "false") + ",";
+        ShuffleState& shuffleState = getShuffleState();
+        json += "\"shuffleQueue\":" + String(shuffleState.shuffleQueue.size()) + ",";
+        json += "\"musicFolder\":\"" + shuffleState.musicFolder + "\",";
+        json += "\"autoAdvance\":" + String(shuffleState.shuffleAutoAdvance ? "true" : "false") + ",";
     } else if (state.currentProgram == GENERATIVE_PROGRAM) {
-        json += "\"generativeActive\":" + String(state.generativeActive ? "true" : "false") + ",";
-        json += "\"waitingForTransition\":" + String(state.waitingForTransition ? "true" : "false") + ",";
+        GenerativeState& genState = getGenerativeState();
+        json += "\"generativeActive\":" + String(genState.generativeActive ? "true" : "false") + ",";
     } else if (state.currentProgram == STREAM_PROGRAM) {
-        json += "\"streamURL\":\"" + state.currentStreamURL + "\",";
-        json += "\"streamConnected\":" + String(state.streamConnected ? "true" : "false") + ",";
-        json += "\"reconnectAttempts\":" + String(state.reconnectAttempts) + ",";
+        StreamState& streamState = getStreamState();
+        json += "\"streamURL\":\"" + streamState.currentStreamURL + "\",";
+        json += "\"streamConnected\":" + String(streamState.streamConnected ? "true" : "false") + ",";
+        json += "\"reconnectAttempts\":" + String(streamState.reconnectAttempts) + ",";
     }
     
     json += "\"audioRunning\":" + String(audio.isRunning() ? "true" : "false");
