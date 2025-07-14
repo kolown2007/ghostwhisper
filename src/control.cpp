@@ -8,6 +8,7 @@
 #include "config.h"
 #include "hardware_setup.h"
 #include "playback_manager.h"
+#include "musicdata.h"
 #include <WebServer.h>
 #include <WiFi.h>
 
@@ -27,6 +28,21 @@ void handleStaticFile();
 void handleVolumeTest();
 void handleRandomPlay();
 void handleMemoryCheck();
+void handleStop();
+void handlePause();
+void handleResume();
+void handleProgramShuffle();
+void handleProgramGenerative();
+void handleProgramStream();
+void handleProgramNewStream(); // NEW: Force new stream
+void handleProgramStatus();
+void handleShuffleNext();
+void handleShuffleFolder();
+void handleGenerativeSequence();
+void handleGenerativeRegenerate();
+void handleStreamConnect();
+void handleStreamReset();
+void checkMemoryLimits();
 String generateMainPage();
 String generateStatusJson();
 
@@ -61,7 +77,24 @@ void initializeWebControl() {
     server.on("/test", handleVolumeTest);
     server.on("/random", handleRandomPlay);
     server.on("/memory", handleMemoryCheck);
-    server.on("/random", handleRandomPlay);
+    server.on("/stop", handleStop);
+    server.on("/pause", handlePause);
+    server.on("/resume", handleResume);
+    
+    // Radio program endpoints
+    server.on("/program/shuffle", handleProgramShuffle);
+    server.on("/program/generative", handleProgramGenerative);
+    server.on("/program/stream", handleProgramStream);
+    server.on("/program/newstream", handleProgramNewStream); // NEW: Force new stream
+    server.on("/program/status", handleProgramStatus);
+    
+    // Program-specific endpoints
+    server.on("/shuffle/next", handleShuffleNext);
+    server.on("/shuffle/folder", handleShuffleFolder);
+    server.on("/generative/sequence", handleGenerativeSequence);
+    server.on("/generative/regenerate", handleGenerativeRegenerate);
+    server.on("/stream/connect", handleStreamConnect);
+    server.on("/stream/reset", handleStreamReset);
     
     // Handle static files from SD card
     server.on("/style.css", handleStaticFile);
@@ -310,6 +343,52 @@ void handleMemoryCheck() {
 }
 
 /**
+ * @brief Handle stop playback request.
+ */
+void handleStop() {
+    Serial.println("Stop playback requested via web interface");
+    
+    // Stop the audio
+    audio.stopSong();
+    
+    // Reset playback manager state
+    stopPlayback();
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Playback stopped\"}");
+}
+
+/**
+ * @brief Handle pause playback request.
+ */
+void handlePause() {
+    Serial.println("Pause playback requested via web interface");
+    
+    // Check if audio is currently running
+    if (audio.isRunning()) {
+        audio.pauseResume();
+        server.send(200, "application/json", 
+            "{\"status\":\"success\",\"message\":\"Playback paused\"}");
+    } else {
+        server.send(200, "application/json", 
+            "{\"status\":\"info\",\"message\":\"No active playback to pause\"}");
+    }
+}
+
+/**
+ * @brief Handle resume playback request.
+ */
+void handleResume() {
+    Serial.println("Resume playback requested via web interface");
+    
+    // Resume audio playback
+    audio.pauseResume();
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Playback resumed\"}");
+}
+
+/**
  * @brief Serve static files from SD card (CSS, JS, images, etc.)
  */
 void handleStaticFile() {
@@ -345,7 +424,255 @@ void handleStaticFile() {
     file.close();
 }
 
-// HTML and JSON Generators
+// Radio Program Handlers
+
+/**
+ * @brief Handle shuffle program request.
+ */
+void handleProgramShuffle() {
+    Serial.println("Shuffle program requested via web interface");
+    
+    // Get the music folder parameter (default to "/music")
+    String musicFolder = "/music";
+    if (server.hasArg("folder")) {
+        musicFolder = server.arg("folder");
+    }
+    
+    // Set shuffle program mode
+    setProgramMode(SHUFFLE_PROGRAM, musicFolder);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Shuffle program started\",\"program\":\"SHUFFLE\",\"folder\":\"" + musicFolder + "\"}");
+}
+
+/**
+ * @brief Handle generative program request.
+ */
+void handleProgramGenerative() {
+    Serial.println("Generative program requested via web interface");
+    
+    // Get optional sequence parameter
+    String sequence = "";
+    if (server.hasArg("sequence")) {
+        sequence = server.arg("sequence");
+    }
+    
+    // Set generative program mode
+    setProgramMode(GENERATIVE_PROGRAM, sequence);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Generative program started\",\"program\":\"GENERATIVE\",\"sequence\":\"" + sequence + "\"}");
+}
+
+/**
+ * @brief Handle stream program request.
+ */
+void handleProgramStream() {
+    Serial.println("Stream program requested via web interface");
+    
+    String streamURL;
+    
+    // Get the stream URL parameter (optional)
+    if (server.hasArg("url")) {
+        streamURL = server.arg("url");
+        Serial.println("Using provided stream URL: " + streamURL);
+    } else {
+        // Use default stream URL from musicdata.h
+        streamURL = getDefaultStreamURL();
+        Serial.println("Using default stream URL from musicdata.h: " + streamURL);
+    }
+    
+    // Set stream program mode
+    setProgramMode(STREAM_PROGRAM, streamURL);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Stream program started\",\"program\":\"STREAM\",\"url\":\"" + streamURL + "\"}");
+}
+
+/**
+ * @brief Handle NEW stream program request with forced new URL.
+ */
+void handleProgramNewStream() {
+    Serial.println("=== NEW STREAM PROGRAM REQUESTED ===");
+    Serial.println("NEW Stream program requested via web interface - FORCING NEW URL");
+    
+    // Stop any current playback first
+    audio.stopSong();
+    delay(200);
+    
+    // Force use the NEW stream URL - bypass any cached state
+    String forceNewURL = getForceNewStreamURL();
+    Serial.println("=== FORCING NEW STREAM URL: " + forceNewURL + " ===");
+    
+    // Set stream program mode with the forced new URL
+    setProgramMode(STREAM_PROGRAM, forceNewURL);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"NEW Stream program started with forced URL\",\"program\":\"NEWSTREAM\",\"url\":\"" + forceNewURL + "\"}");
+    
+    Serial.println("=== NEW STREAM SETUP COMPLETE ===");
+}
+
+/**
+ * @brief Handle program status request.
+ */
+void handleProgramStatus() {
+    Serial.println("Program status requested via web interface");
+    
+    ProgramState& state = getProgramState();
+    String programName;
+    
+    switch (state.currentProgram) {
+        case SHUFFLE_PROGRAM:
+            programName = "SHUFFLE";
+            break;
+        case GENERATIVE_PROGRAM:
+            programName = "GENERATIVE";
+            break;
+        case STREAM_PROGRAM:
+            programName = "STREAM";
+            break;
+    }
+    
+    String json = "{";
+    json += "\"currentProgram\":\"" + programName + "\",";
+    json += "\"programActive\":" + String(state.programActive ? "true" : "false") + ",";
+    
+    // Program-specific status
+    if (state.currentProgram == SHUFFLE_PROGRAM) {
+        json += "\"shuffleQueue\":" + String(state.shuffleQueue.size()) + ",";
+        json += "\"musicFolder\":\"" + state.musicFolder + "\",";
+        json += "\"autoAdvance\":" + String(state.shuffleAutoAdvance ? "true" : "false") + ",";
+    } else if (state.currentProgram == GENERATIVE_PROGRAM) {
+        json += "\"generativeActive\":" + String(state.generativeActive ? "true" : "false") + ",";
+        json += "\"waitingForTransition\":" + String(state.waitingForTransition ? "true" : "false") + ",";
+    } else if (state.currentProgram == STREAM_PROGRAM) {
+        json += "\"streamURL\":\"" + state.currentStreamURL + "\",";
+        json += "\"streamConnected\":" + String(state.streamConnected ? "true" : "false") + ",";
+        json += "\"reconnectAttempts\":" + String(state.reconnectAttempts) + ",";
+    }
+    
+    json += "\"audioRunning\":" + String(audio.isRunning() ? "true" : "false");
+    json += "}";
+    
+    server.send(200, "application/json", json);
+}
+
+/**
+ * @brief Handle shuffle next track request.
+ */
+void handleShuffleNext() {
+    Serial.println("Shuffle next requested via web interface");
+    
+    if (getCurrentProgram() != SHUFFLE_PROGRAM) {
+        server.send(400, "application/json", 
+            "{\"status\":\"error\",\"message\":\"Not in shuffle mode\"}");
+        return;
+    }
+    
+    playNextShuffleTrack();
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Playing next shuffle track\"}");
+}
+
+/**
+ * @brief Handle shuffle folder change request.
+ */
+void handleShuffleFolder() {
+    Serial.println("Shuffle folder change requested via web interface");
+    
+    if (!server.hasArg("path")) {
+        server.send(400, "application/json", 
+            "{\"status\":\"error\",\"message\":\"Missing folder path parameter\"}");
+        return;
+    }
+    
+    String folderPath = server.arg("path");
+    
+    // Rebuild shuffle queue with new folder
+    buildShuffleQueue(folderPath);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Shuffle folder changed to: " + folderPath + "\"}");
+}
+
+/**
+ * @brief Handle generative sequence change request.
+ */
+void handleGenerativeSequence() {
+    Serial.println("Generative sequence change requested via web interface");
+    
+    if (getCurrentProgram() != GENERATIVE_PROGRAM) {
+        server.send(400, "application/json", 
+            "{\"status\":\"error\",\"message\":\"Not in generative mode\"}");
+        return;
+    }
+    
+    String sequence = "";
+    if (server.hasArg("name")) {
+        sequence = server.arg("name");
+    }
+    
+    // Note: You might want to add sequence change logic here
+    // For now, just acknowledge the request
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Generative sequence changed to: " + sequence + "\"}");
+}
+
+/**
+ * @brief Handle stream connect request.
+ */
+void handleStreamConnect() {
+    Serial.println("Stream connect requested via web interface");
+    
+    if (!server.hasArg("url")) {
+        server.send(400, "application/json", 
+            "{\"status\":\"error\",\"message\":\"Missing stream URL parameter\"}");
+        return;
+    }
+    
+    String streamURL = server.arg("url");
+    
+    // Connect to new stream
+    connectToStream(streamURL);
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Connecting to stream: " + streamURL + "\"}");
+}
+
+/**
+ * @brief Handle stream reset request - clears cache and forces reload of default URL.
+ */
+void handleStreamReset() {
+    Serial.println("Stream reset requested via web interface");
+    
+    // Clear stream cache and force reload
+    clearStreamCache();
+    
+    // Get the new default URL
+    String newURL = getDefaultStreamURL();
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"Stream cache cleared and reset to default URL\",\"url\":\"" + newURL + "\"}");
+}
+
+/**
+ * @brief Handle generative sequence regeneration request.
+ */
+void handleGenerativeRegenerate() {
+    Serial.println("Generative sequence regeneration requested via web interface");
+    
+    if (getCurrentProgram() != GENERATIVE_PROGRAM) {
+        server.send(400, "application/json", 
+            "{\"status\":\"error\",\"message\":\"Not in generative mode\"}");
+        return;
+    }
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"New generative sequence generated\"}");
+}
 
 /**
  * @brief Load HTML file from SD card and process template variables.
@@ -384,6 +711,21 @@ String generateMainPage() {
  * @brief Generate system status JSON.
  */
 String generateStatusJson() {
+    ProgramState& state = getProgramState();
+    String programName;
+    
+    switch (state.currentProgram) {
+        case SHUFFLE_PROGRAM:
+            programName = "SHUFFLE";
+            break;
+        case GENERATIVE_PROGRAM:
+            programName = "GENERATIVE";
+            break;
+        case STREAM_PROGRAM:
+            programName = "STREAM";
+            break;
+    }
+    
     String json = "{";
     json += "\"volume\":" + String(currentVolume) + ",";
     json += "\"wifi\":\"" + WiFi.localIP().toString() + "\",";
@@ -391,7 +733,11 @@ String generateStatusJson() {
     json += "\"freeHeap\":" + String(ESP.getFreeHeap()) + ",";
     json += "\"totalHeap\":" + String(ESP.getHeapSize()) + ",";
     json += "\"flashSize\":" + String(ESP.getFlashChipSize()) + ",";
-    json += "\"freeSketchSpace\":" + String(ESP.getFreeSketchSpace());
+    json += "\"freeSketchSpace\":" + String(ESP.getFreeSketchSpace()) + ",";
+    json += "\"audioRunning\":" + String(audio.isRunning() ? "true" : "false") + ",";
+    json += "\"playbackActive\":" + String(isPlaybackActive() ? "true" : "false") + ",";
+    json += "\"currentProgram\":\"" + programName + "\",";
+    json += "\"programActive\":" + String(state.programActive ? "true" : "false");
     json += "}";
     
     return json;

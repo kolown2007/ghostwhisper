@@ -21,10 +21,10 @@
 #define WIFI_TIMEOUT_SEC 180
 
 // Audio Configuration
-#define DEFAULT_VOLUME 10
+#define DEFAULT_VOLUME 5
 #define MAX_VOLUME 100
 #define MIN_VOLUME 0
-#define VOLUME_STEP 10
+#define VOLUME_STEP 1
 
 // Web Server Configuration
 #define WEB_SERVER_PORT 80

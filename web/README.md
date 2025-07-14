@@ -53,8 +53,8 @@ This folder contains the web interface files for the GhostWhisper ambient audio 
 ### API Endpoints
 The web interface communicates with these ESP32 endpoints:
 - `GET /` - Main control panel
-- `GET /volume/up` - Increase volume by 10%
-- `GET /volume/down` - Decrease volume by 10%
+- `GET /volume/up` - Increase volume by 1%
+- `GET /volume/down` - Decrease volume by 1%
 - `GET /volume/set?level=X` - Set volume to X%
 - `GET /status` - Get system status JSON
 - `GET /test` - Run volume diagnostic test

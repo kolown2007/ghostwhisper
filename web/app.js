@@ -1,10 +1,12 @@
 // GhostWhisper Control Panel JavaScript
 // Author: Assistant
-// Description: Handles volume control and system status updates
+// Description: Handles volume control, program switching, and system status updates
 
 // Global variables
 let statusUpdateInterval;
 let isVolumeChanging = false;
+let currentProgram = 'GENERATIVE'; // Default program
+let programStatus = {};
 
 // Volume control functions
 function changeVolume(delta) {
@@ -112,11 +114,22 @@ function updateStatus() {
             if (statusDiv) {
                 statusDiv.innerHTML = 
                     '<h3>System Status</h3>' +
+                    '<p><strong>Current Program:</strong> ' + (data.currentProgram || 'Unknown') + '</p>' +
+                    '<p><strong>Program Active:</strong> ' + (data.programActive ? 'Yes' : 'No') + '</p>' +
+                    '<p><strong>Audio Running:</strong> ' + (data.audioRunning ? 'Yes' : 'No') + '</p>' +
                     '<p><strong>Volume:</strong> ' + data.volume + '%</p>' +
                     '<p><strong>WiFi:</strong> ' + data.wifi + '</p>' +
                     '<p><strong>Uptime:</strong> ' + formatUptime(data.uptime) + '</p>' +
-                    '<p><strong>Free Heap:</strong> ' + formatBytes(data.freeHeap) + '</p>' +
-                    '<p><strong>Track:</strong> ' + (data.track ? data.track : 'None') + '</p>';
+                    '<p><strong>Free Heap:</strong> ' + formatBytes(data.freeHeap) + '</p>';
+                
+                // Update current program display
+                const currentProgramSpan = document.getElementById('currentProgram');
+                if (currentProgramSpan && data.currentProgram) {
+                    currentProgramSpan.textContent = data.currentProgram;
+                    currentProgram = data.currentProgram;
+                    updateProgramButtons(data.currentProgram);
+                    updateProgramControls(data.currentProgram.toLowerCase());
+                }
                 
                 statusDiv.classList.add('status-update');
                 setTimeout(() => statusDiv.classList.remove('status-update'), 500);
@@ -139,7 +152,7 @@ function playRandomFile(folder = '/music') {
     const originalText = playButton.textContent;
     
     // Visual feedback
-    playButton.textContent = '🎵 Playing...';
+    playButton.textContent = 'Playing...';
     playButton.disabled = true;
     
     fetch('/random' + (folder !== '/music' ? '?folder=' + folder : ''))
@@ -150,7 +163,7 @@ function playRandomFile(folder = '/music') {
         .then(data => {
             console.log('Random play response:', data);
             if (data.status === 'success') {
-                showNotification('🎵 ' + data.message, 'success');
+                showNotification(data.message, 'success');
                 // Update status to reflect new playback
                 setTimeout(updateStatus, 1000);
             } else {
@@ -166,6 +179,238 @@ function playRandomFile(folder = '/music') {
             playButton.disabled = false;
         });
 }
+
+// Playback control functions
+function stopPlayback() {
+    console.log('Stopping playback');
+    
+    const stopButton = document.querySelector('.stop-button');
+    const originalText = stopButton.textContent;
+    
+    stopButton.textContent = 'Stopping...';
+    stopButton.disabled = true;
+    
+    fetch('/stop')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Stop response:', data);
+            showNotification(data.message, 'success');
+            setTimeout(updateStatus, 500);
+        })
+        .catch(error => {
+            console.error('Stop error:', error);
+            showNotification('Error stopping playback', 'error');
+        })
+        .finally(() => {
+            stopButton.textContent = originalText;
+            stopButton.disabled = false;
+        });
+}
+
+function pausePlayback() {
+    console.log('Pausing playback');
+    
+    const pauseButton = document.querySelector('.pause-button');
+    const originalText = pauseButton.textContent;
+    
+    pauseButton.textContent = 'Pausing...';
+    pauseButton.disabled = true;
+    
+    fetch('/pause')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Pause response:', data);
+            showNotification(data.message, data.status === 'success' ? 'success' : 'info');
+            setTimeout(updateStatus, 500);
+        })
+        .catch(error => {
+            console.error('Pause error:', error);
+            showNotification('Error pausing playback', 'error');
+        })
+        .finally(() => {
+            pauseButton.textContent = originalText;
+            pauseButton.disabled = false;
+        });
+}
+
+function resumePlayback() {
+    console.log('Resuming playback');
+    
+    const resumeButton = document.querySelector('.resume-button');
+    const originalText = resumeButton.textContent;
+    
+    resumeButton.textContent = 'Resuming...';
+    resumeButton.disabled = true;
+    
+    fetch('/resume')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Resume response:', data);
+            showNotification(data.message, 'success');
+            setTimeout(updateStatus, 500);
+        })
+        .catch(error => {
+            console.error('Resume error:', error);
+            showNotification('Error resuming playback', 'error');
+        })
+        .finally(() => {
+            resumeButton.textContent = originalText;
+            resumeButton.disabled = false;
+        });
+}
+
+// Program management functions
+function setProgram(program) {
+    console.log('Setting program to:', program);
+    
+    // Visual feedback - highlight selected button
+    updateProgramButtons(program.toUpperCase());
+    
+    let endpoint = '';
+    let params = '';
+    
+    switch(program) {
+        case 'shuffle':
+            endpoint = '/program/shuffle';
+            const folder = document.getElementById('shuffleFolder').value || '/music';
+            params = '?folder=' + encodeURIComponent(folder);
+            break;
+        case 'generative':
+            endpoint = '/program/generative';
+            // No parameters needed - generative mode uses default note-based sounds
+            break;
+        case 'stream':
+            endpoint = '/program/stream';
+            // Stream URL is handled by backend configuration
+            break;
+        case 'newstream':
+            endpoint = '/program/newstream';
+            // NEW: Force new stream URL to bypass cache
+            break;
+    }
+    
+    fetch(endpoint + params)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Program change response:', data);
+            if (data.status === 'success') {
+                currentProgram = program.toUpperCase();
+                updateProgramControls(program);
+                showNotification('Switched to ' + program.toUpperCase() + ' program');
+                updateStatus(); // Refresh status
+            } else {
+                showNotification('Error: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Program change error:', error);
+            showNotification('Error switching program', 'error');
+        });
+}
+
+function updateProgramButtons(activeProgram) {
+    const buttons = ['shuffleBtn', 'generativeBtn', 'streamBtn'];
+    buttons.forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.classList.remove('active-program');
+            if (btnId.startsWith(activeProgram.toLowerCase())) {
+                btn.classList.add('active-program');
+            }
+        }
+    });
+}
+
+function updateProgramControls(program) {
+    // Hide all program controls
+    const controls = ['shuffleControls', 'generativeControls', 'streamControls'];
+    controls.forEach(controlId => {
+        const control = document.getElementById(controlId);
+        if (control) {
+            control.style.display = 'none';
+        }
+    });
+    
+    // Show controls for active program
+    const activeControl = document.getElementById(program + 'Controls');
+    if (activeControl) {
+        activeControl.style.display = 'block';
+    }
+}
+
+// Program-specific functions
+function shuffleNext() {
+    fetch('/shuffle/next')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showNotification('Playing next shuffle track');
+            } else {
+                showNotification('Error: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Shuffle next error:', error);
+            showNotification('Error playing next track', 'error');
+        });
+}
+
+function changeShuffleFolder() {
+    const folder = document.getElementById('shuffleFolder').value;
+    fetch('/shuffle/folder?path=' + encodeURIComponent(folder))
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showNotification('Shuffle folder changed to: ' + folder);
+            } else {
+                showNotification('Error: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Folder change error:', error);
+            showNotification('Error changing folder', 'error');
+        });
+}
+
+function regenerateSequence() {
+    console.log('Regenerating generative sequence...');
+    
+    const regenButton = event.target;
+    const originalText = regenButton.textContent;
+    regenButton.textContent = 'Regenerating...';
+    regenButton.disabled = true;
+    
+    fetch('/generative/regenerate')
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showNotification('New sequence generated');
+            } else {
+                showNotification('Error: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Sequence regeneration error:', error);
+            showNotification('Error regenerating sequence', 'error');
+        })
+        .finally(() => {
+            regenButton.textContent = originalText;
+            regenButton.disabled = false;
+        });
+}
+
+// Stream functionality is handled entirely by the backend
+// No frontend stream controls needed
+
+// NEW: Test function for new stream mode
+function testNewStream() {
+    console.log('Testing NEW stream mode...');
+    showNotification('Testing NEW stream mode...', 'info');
+    setProgram('newstream');
+}
+
+// Add this to your HTML for testing:
+// <button onclick="testNewStream()" style="background: #e74c3c; color: white; padding: 10px; margin: 5px; border: none; border-radius: 5px;">Test NEW Stream</button>
 
 // Utility functions
 function formatUptime(seconds) {
@@ -231,11 +476,11 @@ document.addEventListener('keydown', function(event) {
         switch(event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                changeVolume(10);
+                changeVolume(1);
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                changeVolume(-10);
+                changeVolume(-1);
                 break;
             case 't':
                 event.preventDefault();
@@ -244,6 +489,30 @@ document.addEventListener('keydown', function(event) {
             case 'r':
                 event.preventDefault();
                 playRandomFile();
+                break;
+            case 's':
+                event.preventDefault();
+                stopPlayback();
+                break;
+            case 'p':
+                event.preventDefault();
+                pausePlayback();
+                break;
+            case 'Enter':
+                event.preventDefault();
+                resumePlayback();
+                break;
+            case '1':
+                event.preventDefault();
+                setProgram('shuffle');
+                break;
+            case '2':
+                event.preventDefault();
+                setProgram('generative');
+                break;
+            case '3':
+                event.preventDefault();
+                setProgram('stream');
                 break;
         }
     }
@@ -290,5 +559,12 @@ window.GhostWhisper = {
     setVolume,
     runVolumeTest,
     updateStatus,
-    playRandomFile
+    playRandomFile,
+    stopPlayback,
+    pausePlayback,
+    resumePlayback,
+    setProgram,
+    shuffleNext,
+    changeShuffleFolder,
+    regenerateSequence
 };

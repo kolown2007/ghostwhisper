@@ -39,11 +39,6 @@ GhostWhisper is an ambient music generation system that creates real-time genera
   - Pin definitions and hardware abstraction
 
 **Manager Layer:**
-- **`sequence_manager.h/.cpp`** - Sequence lifecycle management
-  - Sequence initialization and regeneration
-  - Current note tracking and progression
-  - Sequence completion detection
-  
 - **`playback_manager.h/.cpp`** - Audio playback coordination
   - Transition timing and gap management
   - Audio streaming control
@@ -227,12 +222,6 @@ main.cpp
 │   ├── secrets.h (WiFi credentials)
 │   └── Audio (external library)
 │
-├── sequence_manager.h/.cpp
-│   ├── url_filter.h/.cpp
-│   │   └── (filters URLs from musicdata)
-│   ├── musicdata.h (bell sounds data)
-│   └── sequencer.h/.cpp (Markov chains)
-│
 ├── playback_manager.h/.cpp
 │   ├── hardware_setup.h (audio object)
 │   └── sequence_manager.h (note progression)
@@ -247,11 +236,11 @@ main.cpp
    main.cpp → hardware_setup → WiFi/Audio/SD Card
 
 2. SEQUENCE CREATION
-   main.cpp → sequence_manager → url_filter → musicdata.h
-                              ↓
-                           sequencer.h (Markov chains)
-                              ↓
-                         Generated sequence
+   main.cpp → sequence_manager → musicdata.h
+                           ↓
+                        sequencer.h (Markov chains)
+                           ↓
+                  Generated sequence
 
 3. PLAYBACK CYCLE
    main.cpp → playback_manager → audio.connecttohost()

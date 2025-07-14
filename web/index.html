@@ -1,42 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GhostWhisper Control</title>
+    <title>GhostWhisper</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container">
-        <h1>🎵 GhostWhisper Control Panel</h1>
+        <h1>GhostWhisper</h1>
+        
+        <div class="program-selector">
+            <h2>Radio Programs</h2>
+            <p>Current Program: <span id="currentProgram">Loading...</span></p>
+            <div class="program-buttons">
+                <button class="button program-button" id="shuffleBtn" onclick="setProgram('shuffle')">
+                     SHUFFLE<br>
+                </button>
+                <button class="button program-button" id="generativeBtn" onclick="setProgram('generative')">
+                     GENERATIVE<br>
+                </button>
+                <button class="button program-button" id="streamBtn" onclick="setProgram('stream')">
+                     STREAM<br>
+                </button>
+            </div>
+            
+            <!-- Program-specific controls -->
+            <div id="shuffleControls" class="program-controls" style="display:none;">
+                <h3>Shuffle Controls</h3>
+                <button class="button" onclick="shuffleNext()">Next Track</button>
+                <input type="text" id="shuffleFolder" placeholder="/music" value="/music">
+                <button class="button" onclick="changeShuffleFolder()">Change Folder</button>
+                <br><br>
+                 <button class="button play-button" onclick="playRandomFile()">Play Random Song</button>
+                <br><br>
+                <button class="button pause-button" onclick="pausePlayback()">Pause</button>
+                <button class="button resume-button" onclick="resumePlayback()">Resume</button>
+                <button class="button stop-button" onclick="stopPlayback()">Stop</button>
+
+
+            </div>
+            
+            <div id="generativeControls" class="program-controls" style="display:none;">
+                <h3>Generative Controls</h3>
+                <p>Note-based soundfont generation</p>
+                <button class="button" onclick="regenerateSequence()">Regenerate Sequence</button>
+            </div>
+            
+            <div id="streamControls" class="program-controls" style="display:none;">
+                <h3>Stream Controls</h3>
+               
+            </div>
+        </div>
         
         <div class="volume-control">
             <h2>Volume Control</h2>
             <p>Current Volume: <span id="volume">%VOLUME%</span>%</p>
-            <button class="button" onclick="changeVolume(-10)">Volume Down</button>
-            <button class="button" onclick="changeVolume(10)">Volume Up</button>
+            <button class="button" onclick="changeVolume(-1)">Volume Down</button>
+            <button class="button" onclick="changeVolume(1)">Volume Up</button>
             <br><br>
             <input type="range" id="volumeSlider" min="0" max="100" value="%VOLUME%" onchange="setVolume(this.value)">
         </div>
         
-        <div class="playback-control">
-            <h2>Playback Control</h2>
-            <button class="button play-button" onclick="playRandomFile()">🎲 Play Random Song</button>
-            <br><br>
-            <h3>System Info</h3>
-            <p>GhostWhisper Audio System</p>
-            <p>WiFi: %WIFI_IP%</p>
-            <button class="button" onclick="runVolumeTest()">Test Volume Control</button>
-        </div>
+        
         
         <div class="status" id="status">
             <h3>System Status</h3>
             <p>Loading status...</p>
         </div>
         
-        <div class="footer">
-            <p><small>Uptime: %UPTIME% seconds | Free Heap: %FREE_HEAP% bytes</small></p>
-            <p><small>Keyboard shortcuts: ↑/↓ Volume, T = Test, R = Random Play</small></p>
-        </div>
     </div>
     
     <script src="/app.js"></script>

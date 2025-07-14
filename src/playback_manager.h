@@ -1,57 +1,171 @@
 /**
  * @file playback_manager.h
- * @brief Header file for managing playback modes and logic.
+ * @brief Header file for managing radio program playback modes.
  */
 
 #pragma once
 
 #include "Arduino.h"
+#include <vector>
 
-// Playback modes
+// Radio program modes
 /**
- * @enum PlaybackMode
- * @brief Defines the playback modes.
- * @var SEQUENCE Play sequence of notes with gaps/timing.
- * @var DIRECT Play single file directly.
+ * @enum RadioProgram
+ * @brief Defines the radio program modes.
+ * @var SHUFFLE_PROGRAM Random shuffling of MP3 files from SD card.
+ * @var GENERATIVE_PROGRAM Note-based soundfont generation with sequences.
+ * @var STREAM_PROGRAM HTTP streaming from remote servers.
  */
-enum PlaybackMode {
-    SEQUENCE,  /**< Play sequence of notes with gaps/timing. */
-    DIRECT     /**< Play single file directly. */
+enum RadioProgram {
+    SHUFFLE_PROGRAM,    /**< Random shuffling of MP3 files from SD card. */
+    GENERATIVE_PROGRAM, /**< Note-based soundfont generation with sequences. */
+    STREAM_PROGRAM      /**< HTTP streaming from remote servers. */
 };
 
-// Playback management functions
+// Legacy enum for backward compatibility
+enum PlaybackMode {
+    SEQUENCE = GENERATIVE_PROGRAM,
+    DIRECT = SHUFFLE_PROGRAM
+};
+
+// Program state structure
 /**
- * @brief Sets the playback mode and initializes playback state.
- * @param mode The playback mode (SEQUENCE or DIRECT).
- * @param file The file to play in DIRECT mode (optional, can be SD card path or web URL).
+ * @struct ProgramState
+ * @brief Holds the state for all radio programs.
  */
-void setPlaybackMode(PlaybackMode mode, const String& file = "");
+struct ProgramState {
+    RadioProgram currentProgram;
+    bool programActive;
+    
+    // SHUFFLE state
+    std::vector<String> shuffleQueue;
+    std::vector<String> recentlyPlayed;
+    int currentSongIndex;
+    String musicFolder;
+    bool shuffleAutoAdvance;
+    
+    // GENERATIVE state (note-based system)
+    bool generativeActive;
+    unsigned long lastNoteTime;
+    unsigned long nextNoteDelay;
+    String currentNoteSequence;
+    int currentNoteIndex;
+    bool waitingForTransition;
+    String nextNoteUrl;
+    
+    // STREAM state
+    String currentStreamURL;
+    bool streamConnected;
+    int reconnectAttempts;
+    std::vector<String> availableStreams;
+};
+
+// Program management functions
+/**
+ * @brief Sets the radio program mode and initializes program state.
+ * @param program The radio program (SHUFFLE_PROGRAM, GENERATIVE_PROGRAM, or STREAM_PROGRAM).
+ * @param parameter Optional parameter (folder path for SHUFFLE, URL for STREAM).
+ */
+void setProgramMode(RadioProgram program, const String& parameter = "");
 
 /**
- * @brief Handles playback logic based on the current mode.
+ * @brief Handles playback logic based on the current program.
  */
-void handlePlayback();
+void handleProgramPlayback();
 
 /**
- * @brief Checks if playback is currently active.
- * @return True if playback is active, false otherwise.
+ * @brief Gets the current program state.
+ * @return Reference to the current program state.
+ */
+ProgramState& getProgramState();
+
+/**
+ * @brief Gets the current radio program.
+ * @return The current radio program.
+ */
+RadioProgram getCurrentProgram();
+
+// Program-specific functions
+/**
+ * @brief Handles SHUFFLE program logic.
+ */
+void handleShuffleProgram();
+
+/**
+ * @brief Handles GENERATIVE program logic.
+ */
+void handleGenerativeProgram();
+
+/**
+ * @brief Handles STREAM program logic.
+ */
+void handleStreamProgram();
+
+/**
+ * @brief Builds shuffle queue from music folder.
+ * @param musicFolder The folder path to scan for music files.
+ */
+void buildShuffleQueue(const String& musicFolder);
+
+/**
+ * @brief Plays the next track in shuffle mode.
+ */
+void playNextShuffleTrack();
+
+/**
+ * @brief Connects to a stream URL.
+ * @param url The stream URL to connect to.
+ */
+void connectToStream(const String& url);
+
+/**
+ * @brief Handles stream reconnection logic.
+ */
+void handleStreamReconnection();
+
+/**
+ * @brief Try the next available stream if current one has issues.
+ */
+void tryNextStream();
+
+// Legacy and compatibility functions
+/**
+ * @brief Checks if any program is currently active.
+ * @return True if any program is active, false otherwise.
  */
 bool isPlaybackActive();
 
 /**
- * @brief Stops the current playback and resets playback state.
+ * @brief Stops the current program and resets state.
  */
 void stopPlayback();
 
 /**
- * @brief Retrieves the current playback mode.
- * @return The current playback mode (SEQUENCE or DIRECT).
+ * @brief Force clear any cached stream configuration.
+ */
+void clearStreamCache();
+
+/**
+ * @brief Legacy function - sets playback mode (maps to new program system).
+ * @param mode The playback mode (SEQUENCE or DIRECT).
+ * @param file The file to play in DIRECT mode (optional).
+ */
+void setPlaybackMode(PlaybackMode mode, const String& file = "");
+
+/**
+ * @brief Legacy function - handles playback (maps to new program system).
+ */
+void handlePlayback();
+
+/**
+ * @brief Legacy function - gets current playback mode.
+ * @return The current playback mode.
  */
 PlaybackMode getCurrentPlaybackMode();
 
-// Legacy functions for compatibility
+// Legacy GENERATIVE program functions (formerly SEQUENCE mode)
 /**
- * @brief Handles transitions between notes in sequence playback.
+ * @brief Handles transitions between notes in generative playback.
  */
 void handleTransitions();
 
@@ -73,9 +187,9 @@ void startTransition(const String& url);
  */
 bool isWaitingForTransition();
 
-// Convenience functions for easy mode switching
+// Convenience functions
 /**
- * @brief Convenience function to start sequence playback.
+ * @brief Convenience function to start generative (sequence) playback.
  */
 void playSequence();
 
