@@ -19,9 +19,8 @@ void setup() {
     // Initialize web control interface (after hardware setup)
     initializeWebControl();
     
-    // Set default program mode to shuffle (random MP3 playback)
-    setProgramMode(SHUFFLE_PROGRAM, MUSIC_FOLDER);
-    
+    // Set default program mode to generative (ambient music playback)
+    setProgramMode(GENERATIVE_PROGRAM, "");
     
     Serial.println("Setup complete, starting program in loop...");
 }

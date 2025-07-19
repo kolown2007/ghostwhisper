@@ -27,13 +27,13 @@ void handleGenerativeProgram() {
     if (generativeState.generativeActive && 
         (millis() - generativeState.lastNoteTime >= generativeState.nextNoteDelay || !audio.isRunning())) {
         
-        // Get bell sounds from musicbox folder
-        const std::vector<String>& bellSounds = getBellSounds();
+        // Get soundfont files from a random subfolder
+        const std::vector<String>& soundfontFiles = getSoundfontFiles();
         
-        if (bellSounds.size() > 0) {
-            // Pick a random bell sound
-            int randomIndex = random(0, bellSounds.size());
-            String selectedSound = bellSounds[randomIndex];
+        if (soundfontFiles.size() > 0) {
+            // Pick a random soundfont file
+            int randomIndex = random(0, soundfontFiles.size());
+            String selectedSound = soundfontFiles[randomIndex];
             
             Serial.println("Playing generative note: " + selectedSound);
             
@@ -51,7 +51,7 @@ void handleGenerativeProgram() {
                 generativeState.nextNoteDelay = 500;
             }
         } else {
-            Serial.println("No bell sounds found in /musicbox folder");
+            Serial.println("No soundfont files found in the selected folder");
             // Check again in 5 seconds
             generativeState.lastNoteTime = millis();
             generativeState.nextNoteDelay = 5000;
@@ -67,7 +67,7 @@ void playSequence() {
     generativeState.lastNoteTime = 0;
     generativeState.nextNoteDelay = 2000;
     
-    // Load bell sounds to make sure they're available
-    const std::vector<String>& bellSounds = getBellSounds();
-    Serial.println("Generative program activated with " + String(bellSounds.size()) + " bell sounds");
+    // Load soundfont files to make sure they're available
+    const std::vector<String>& soundfontFiles = getSoundfontFiles();
+    Serial.println("Generative program activated with " + String(soundfontFiles.size()) + " soundfont files");
 }
