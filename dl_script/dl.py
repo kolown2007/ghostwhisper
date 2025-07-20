@@ -1,14 +1,46 @@
 import os
 import requests
 
-#https://gleitz.github.io/midi-js-soundfonts/FatBoy/names.json go to this and select and replace the
-#last part of the url and add -mp3
+#run this script directly and input the number based on the options
 
-base_url = 'https://gleitz.github.io/midi-js-soundfonts/FatBoy/soprano_sax-mp3/'
+# Fetch and display available soundfont options
+print("Fetching available soundfont options...")
+try:
+    response = requests.get('https://gleitz.github.io/midi-js-soundfonts/FatBoy/names.json')
+    response.raise_for_status()
+    soundfont_names = response.json()
+    
+    print("\nAvailable soundfont options:")
+    for i, name in enumerate(soundfont_names, 1):
+        print(f"{i:2d}. {name}")
+    
+    print()
+except requests.RequestException as e:
+    print(f"Could not fetch soundfont list: {e}")
+    print("Please enter the folder name manually.")
+    soundfont_names = []
 
-# Extract folder name from the base URL (e.g., fx_8_scifi-mp3)
-folder_name = base_url.rstrip('/').split('/')[-1]
-save_dir = os.path.join(os.path.dirname(__file__), folder_name)
+# Ask user for folder name or number
+if soundfont_names:
+    choice = input("Enter the number or folder name: ")
+    try:
+        # Try to parse as number
+        index = int(choice) - 1
+        if 0 <= index < len(soundfont_names):
+            folder_name = soundfont_names[index]
+            print(f"Selected: {folder_name}")
+        else:
+            print("Invalid number. Please enter the folder name manually.")
+            folder_name = input("Enter the soundfont folder name: ")
+    except ValueError:
+        # Not a number, use as folder name
+        folder_name = choice
+else:
+    folder_name = input("Enter the soundfont folder name: ")
+base_url = f'https://gleitz.github.io/midi-js-soundfonts/FatBoy/{folder_name}-mp3/'
+
+# Create directory name with -mp3 suffix
+save_dir = os.path.join(os.path.dirname(__file__), f"{folder_name}-mp3")
 
 # 1. Make sure the save directory exists
 if not os.path.isdir(save_dir):
