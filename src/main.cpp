@@ -7,9 +7,6 @@
 #include <esp_task_wdt.h>
 #include <esp_random.h>
 
-unsigned long lastSoundTime = 0;
-int soundCounter = 0;
-bool inAmbientMode = true;
 
 void setup() {
     initializeHardware();
@@ -37,9 +34,6 @@ void loop() {
     
     // Handle program playback (new system)
     handleProgramPlayback();
-    
-    // Handle legacy playback for backward compatibility
-    handlePlayback();
     
     // Reduced frequency debug and health checks
     static unsigned long lastDebugTime = 0;

@@ -40,7 +40,12 @@ void handleGenerativeProgram() {
             // Play the sound from SD card
             if (audio.connecttoFS(SD, selectedSound.c_str())) {
                 generativeState.lastNoteTime = millis();
-                
+
+                // Wait for the sound to finish playing
+                while (audio.isRunning()) {
+                    delay(100);
+                }
+
                 // Random delay between 1-5 seconds for next note
                 generativeState.nextNoteDelay = random(1000, 5000);
                 
