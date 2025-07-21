@@ -8,6 +8,7 @@ src/secrets.h
 /lib
 .vscode
 /test
+/sd
 
 src/realtime_manager.cpp
 src/realtime_manager.h
