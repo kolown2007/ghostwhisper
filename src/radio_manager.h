@@ -75,11 +75,6 @@ bool isPlaybackActive();
 void stopPlayback();
 
 /**
- * @brief Legacy function - sets playback mode (maps to new program system).
- */
-void setPlaybackMode(PlaybackMode mode, const String& file = "");
-
-/**
  * @brief Legacy function - gets current playback mode.
  */
 PlaybackMode getCurrentPlaybackMode();

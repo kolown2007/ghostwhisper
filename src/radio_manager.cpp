@@ -18,7 +18,12 @@ static ProgramState programState = {
     .programActive = false
 };
 
-// Removed legacy variables - no longer needed
+
+
+// Declare helper functions for program modes
+void handleShuffleProgramMode(const String& parameter);
+void handleGenerativeProgramMode();
+void handleStreamProgramMode(const String& parameter);
 
 /**
  * @brief Sets the radio program mode and initializes program state.
@@ -26,39 +31,26 @@ static ProgramState programState = {
 void setProgramMode(RadioProgram program, const String& parameter) {
     // Stop current program
     stopPlayback();
-    
+
     // Set new program
     programState.currentProgram = program;
     programState.programActive = false;
-    
+
     Serial.print("Program mode set to: ");
     switch (program) {
         case SHUFFLE_PROGRAM:
-            Serial.println("SHUFFLE");
-            buildShuffleQueue(parameter.length() > 0 ? parameter : "/music");
-            programState.programActive = true;
+            handleShuffleProgramMode(parameter);
             break;
-            
-        case GENERATIVE_PROGRAM: {
-            Serial.println("GENERATIVE");
-            playSequence(); // This sets generativeActive and programActive
-            programState.programActive = true;
+
+        case GENERATIVE_PROGRAM:
+            handleGenerativeProgramMode();
             break;
-        }
-            
+
         case STREAM_PROGRAM:
-            Serial.println("STREAM");
-            if (parameter.length() > 0) {
-                connectToStream(parameter);
-            } else {
-                String defaultURL = getDefaultStreamURL();
-                Serial.println("DEBUG: Default stream URL from musicdata.h: " + defaultURL);
-                connectToStream(defaultURL);
-            }
-            programState.programActive = isStreamConnected();
+            handleStreamProgramMode(parameter);
             break;
     }
-    
+
     Serial.println("Program initialization complete");
 }
 
@@ -119,45 +111,6 @@ void stopPlayback() {
     getStreamState().streamConnected = false;
 }
 
-// Legacy compatibility functions
-
-/**
- * @brief Legacy function - sets playback mode (maps to new program system).
- */
-void setPlaybackMode(PlaybackMode mode, const String& file) {
-    if (mode == SEQUENCE) {
-        setProgramMode(GENERATIVE_PROGRAM);
-    } else if (mode == DIRECT) {
-        if (file.length() > 0) {
-            if (file.startsWith("/")) {
-                setProgramMode(SHUFFLE_PROGRAM);
-                // Play the specific file directly
-                audio.connecttoFS(SD, file.c_str());
-                programState.programActive = true;
-            } else {
-                setProgramMode(STREAM_PROGRAM, file);
-            }
-        }
-    }
-    
-    Serial.print("Legacy playback mode set to: ");
-    Serial.println(mode == SEQUENCE ? "SEQUENCE" : "DIRECT");
-}
-
-/**
- * @brief Legacy function - gets current playback mode.
- */
-PlaybackMode getCurrentPlaybackMode() {
-    switch (programState.currentProgram) {
-        case GENERATIVE_PROGRAM:
-            return SEQUENCE;
-        case SHUFFLE_PROGRAM:
-        case STREAM_PROGRAM:
-        default:
-            return DIRECT;
-    }
-}
-
 // Convenience functions
 
 /**
@@ -174,4 +127,28 @@ void playDirectFile(const String& filename) {
         // Web URL - use stream program
         setProgramMode(STREAM_PROGRAM, filename);
     }
+}
+
+void handleShuffleProgramMode(const String& parameter) {
+    Serial.println("SHUFFLE");
+    buildShuffleQueue(parameter.length() > 0 ? parameter : "/music");
+    programState.programActive = true;
+}
+
+void handleGenerativeProgramMode() {
+    Serial.println("GENERATIVE");
+    playSequence(); // This sets generativeActive and programActive
+    programState.programActive = true;
+}
+
+void handleStreamProgramMode(const String& parameter) {
+    Serial.println("STREAM");
+    if (parameter.length() > 0) {
+        connectToStream(parameter);
+    } else {
+        String defaultURL = getDefaultStreamURL();
+        Serial.println("DEBUG: Default stream URL from musicdata.h: " + defaultURL);
+        connectToStream(defaultURL);
+    }
+    programState.programActive = isStreamConnected();
 }

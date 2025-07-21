@@ -16,6 +16,8 @@ void setup() {
     // Initialize web control interface (after hardware setup)
     initializeWebControl();
     
+  
+
     // Set default program mode to generative (ambient music playback)
     setProgramMode(GENERATIVE_PROGRAM, "");
     

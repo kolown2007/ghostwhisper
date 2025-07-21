@@ -8,56 +8,132 @@
 #include "musicdata.h"
 #include <SD.h>
 
-// Generative state
+// Generative state with sequence management
 static GenerativeState generativeState = {
     .generativeActive = false,
     .lastNoteTime = 0,
     .nextNoteDelay = 2000
 };
 
+// Sequence management
+static std::vector<String> currentSequence;
+static size_t currentSequenceIndex = 0;
+
 GenerativeState& getGenerativeState() {
     return generativeState;
+}
+
+
+/**
+ * @brief Encapsulate note playback logic
+ */
+bool playNote(const String& soundFile) {
+    // Serial.println("Playing generative note: " + soundFile);
+    if (audio.connecttoFS(SD, soundFile.c_str())) {
+        return true;
+    } else {
+        Serial.println("Failed to play: " + soundFile);
+        return false;
+    }
+}
+
+/**
+ * @brief Encapsulate timing logic
+ */
+void setNextNoteDelay(bool success) {
+    if (success) {
+        // Random delay between 1-5 seconds for next note
+        generativeState.nextNoteDelay = random(5000, 50000);
+        Serial.println("Next note in " + String(generativeState.nextNoteDelay / 1000) + " seconds");
+    } else {
+        // Try again sooner if failed
+        generativeState.nextNoteDelay = 500;
+    }
+    generativeState.lastNoteTime = millis();
+}
+
+/**
+ * @brief Encapsulate error handling
+ */
+void handleNoFilesError() {
+    Serial.println("No soundfont files found. Retrying in 5 seconds.");
+    generativeState.lastNoteTime = millis();
+    generativeState.nextNoteDelay = 5000;
 }
 
 /**
  * @brief Handles GENERATIVE program logic.
  */
 void handleGenerativeProgram() {
-    // Check if it's time to play the next note
-    if (generativeState.generativeActive && 
+    if (generativeState.generativeActive &&
         (millis() - generativeState.lastNoteTime >= generativeState.nextNoteDelay || !audio.isRunning())) {
-        
-        // Get soundfont files from a random subfolder
-        const std::vector<String>& soundfontFiles = getSoundfontFiles();
-        
-        if (soundfontFiles.size() > 0) {
-            // Pick a random soundfont file
-            int randomIndex = random(0, soundfontFiles.size());
-            String selectedSound = soundfontFiles[randomIndex];
-            
-            Serial.println("Playing generative note: " + selectedSound);
-            
-            // Play the sound from SD card
-            if (audio.connecttoFS(SD, selectedSound.c_str())) {
-                generativeState.lastNoteTime = millis();
 
-             
-
-                // Random delay between 1-5 seconds for next note
-                generativeState.nextNoteDelay = random(1000, 5000);
-                
-                Serial.println("Next note in " + String(generativeState.nextNoteDelay/1000) + " seconds");
-            } else {
-                Serial.println("Failed to play: " + selectedSound);
-                // Try again sooner if failed
-                generativeState.nextNoteDelay = 500;
+        // Check if we need to generate a new sequence
+        if (currentSequence.empty() || currentSequenceIndex >= currentSequence.size()) {
+            // Retrieve soundfont files from SD card
+            const std::vector<String>& soundfontFiles = getSoundfontFilesFromSD();
+            if (soundfontFiles.empty()) {
+                handleNoFilesError();
+                return;
             }
-        } else {
-            Serial.println("No soundfont files found in the selected folder");
-            // Check again in 5 seconds
-            generativeState.lastNoteTime = millis();
-            generativeState.nextNoteDelay = 5000;
+
+            // Generate a harmonious sequence instead of random notes
+            currentSequence.clear();
+            currentSequenceIndex = 0;
+            Serial.println("Generating harmonious sequence with " + String(soundfontFiles.size()) + " available files:");
+            
+            // Start with a random root note as the foundation of our harmony
+            int rootNote = random(0, soundfontFiles.size());
+            
+            for (int i = 0; i < 200; ++i) {
+                int noteIndex;
+                
+                // Create simple harmonic progression using musical intervals
+                int progressionStep = i % 8; // Create an 8-note repeating pattern
+                switch (progressionStep) {
+                    case 0: case 4: 
+                        noteIndex = rootNote; // Root note - foundation of the chord
+                        break;                    
+                    case 1: case 5: 
+                        noteIndex = (rootNote + 4) % soundfontFiles.size(); // Major 3rd - adds sweetness
+                        break;  
+                    case 2: case 6: 
+                        noteIndex = (rootNote + 7) % soundfontFiles.size(); // Perfect 5th - strong harmonic
+                        break;  
+                    case 3: case 7: 
+                        noteIndex = (rootNote + 2) % soundfontFiles.size(); // Major 2nd - adds movement
+                        break;  
+                    default: 
+                        noteIndex = rootNote; // Fallback to root
+                        break;
+                }
+                
+                currentSequence.push_back(soundfontFiles[noteIndex]);
+                Serial.println("  [" + String(i + 1) + "] Harmonic index: " + String(noteIndex) + 
+                              " (pattern step: " + String(progressionStep) + ")");
+                
+                // Change key every 32 notes for musical variety and progression
+                if (i > 0 && i % 32 == 0) {
+                    // Modulate to a nearby key (within 3 semitones up or down)
+                    rootNote = (rootNote + random(-3, 4)) % soundfontFiles.size();
+                    // Handle negative indices by wrapping around
+                    if (rootNote < 0) rootNote += soundfontFiles.size();
+                    Serial.println("  >>> Key change to root note: " + String(rootNote));
+                }
+            }
+            Serial.println("Generated harmonious sequence of " + String(currentSequence.size()) + " notes");
         }
+
+        // Play the current note in the sequence
+        String selectedSound = currentSequence[currentSequenceIndex];
+        Serial.println("Sequence [" + String(currentSequenceIndex + 1) + "/" + String(currentSequence.size()) + "]");
+        bool success = playNote(selectedSound);
+        
+        // Move to next note in sequence
+        currentSequenceIndex++;
+
+        // Set the delay for the next note
+        setNextNoteDelay(success);
     }
 }
 
