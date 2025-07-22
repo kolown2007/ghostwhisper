@@ -5,6 +5,7 @@
 // Generative playback functions
 void handleGenerativeProgram();
 void playSequence();
+void regenerateSequence(); // Force regeneration of current sequence
 
 // Generative state management
 struct GenerativeState {

@@ -7,6 +7,7 @@
 #include "control.h"
 #include "config.h"
 #include "hardware_setup.h"
+#include "connection_manager.h"
 #include "radio_manager.h"
 #include "stream_manager.h"
 #include "shuffle_manager.h"
@@ -17,10 +18,66 @@
 
 // Web server instance
 static WebServer server(WEB_SERVER_PORT);
+// Meme soundboard file list
+#include <vector>
+std::vector<String> memeFiles;
+
+void scanMemeFiles() {
+    memeFiles.clear();
+    Serial.println("Scanning for meme files...");
+    File dir = SD.open("/meme");
+    if (!dir) {
+        Serial.println("/meme folder not found on SD card");
+        Serial.println("Make sure you have a 'meme' folder at the root of your SD card");
+        return;
+    }
+    Serial.println("Found /meme folder, scanning for .mp3 files...");
+    while (true) {
+        File entry = dir.openNextFile();
+        if (!entry) break;
+        if (!entry.isDirectory()) {
+            String fname = String(entry.name());
+            if (fname.endsWith(".mp3")) {
+                memeFiles.push_back("/meme/" + fname);
+            }
+        }
+        entry.close();
+    }
+    dir.close();
+    Serial.printf("Found %d meme files\n", memeFiles.size());
+}
+
+void handleMemeList() {
+    String json = "{\"files\":[";
+    for (size_t i = 0; i < memeFiles.size(); ++i) {
+        if (i > 0) json += ",";
+        json += "\"" + memeFiles[i] + "\"";
+    }
+    json += "]}";
+    server.send(200, "application/json", json);
+}
+
+void handleMemePlay() {
+    if (!server.hasArg("n")) {
+        server.send(400, "text/plain", "Missing meme number");
+        return;
+    }
+    int memeNum = server.arg("n").toInt();
+    if (memeNum < 1 || memeNum > memeFiles.size()) {
+        server.send(404, "text/plain", "Meme file not found");
+        return;
+    }
+    String memePath = memeFiles[memeNum - 1];
+    audio.stopSong();
+    audio.connecttoFS(SD, memePath.c_str());
+    server.send(200, "text/plain", "Playing meme " + String(memeNum));
+}
 static bool webServerActive = false;
 static int currentVolume = DEFAULT_VOLUME; // Default volume - safer startup level
+static bool isPaused = false; // Track pause state for proper pause/resume handling
 
 // Forward declarations
+void handleMemePage();
 void handleRoot();
 void handleVolumeUp();
 void handleVolumeDown();
@@ -45,9 +102,11 @@ void handleGenerativeSequence();
 void handleGenerativeRegenerate();
 void handleStreamConnect();
 void handleStreamReset();
+void handleWiFiConfig(); // New forward declaration
 void checkMemoryLimits();
 String generateMainPage();
 String generateStatusJson();
+String loadHTMLFromSD(const char* filename);
 
 // Helper function to sync volume with audio library
 void syncVolumeWithAudio() {
@@ -61,8 +120,9 @@ void syncVolumeWithAudio() {
  * @brief Initialize the web server control interface.
  */
 void initializeWebControl() {
-    if (WiFi.status() != WL_CONNECTED) {
-        Serial.println("WiFi not connected. Web server not started.");
+    // Check if WiFi is in station mode (connected to network) or AP mode (serving as access point)
+    if (WiFi.status() != WL_CONNECTED && WiFi.getMode() != WIFI_AP && WiFi.getMode() != WIFI_AP_STA) {
+        Serial.println("WiFi not connected and not in AP mode. Web server not started.");
         return;
     }
 
@@ -73,6 +133,7 @@ void initializeWebControl() {
 
     // Define HTTP routes
     server.on("/", handleRoot);
+    server.on("/meme", handleMemePage); // Serve meme soundboard page
     server.on("/volume/up", handleVolumeUp);
     server.on("/volume/down", handleVolumeDown);
     server.on("/volume/set", handleSetVolume);
@@ -97,7 +158,13 @@ void initializeWebControl() {
     server.on("/generative/sequence", handleGenerativeSequence);
     server.on("/generative/regenerate", handleGenerativeRegenerate);
     server.on("/stream/connect", handleStreamConnect);
+    server.on("/wifi/reset", handleWiFiReset); // New route for WiFi reset
+    server.on("/wifi/config", handleWiFiConfig); // New route for WiFi config portal
     server.on("/stream/reset", handleStreamReset);
+
+    // Meme soundboard endpoints
+    server.on("/meme/list", handleMemeList);
+    server.on("/meme/play", handleMemePlay);
     
     // Handle static files from SD card
     server.on("/style.css", handleStaticFile);
@@ -109,11 +176,23 @@ void initializeWebControl() {
     // Start the web server
     server.begin();
     webServerActive = true;
+
+    // Scan meme files at startup
+    scanMemeFiles();
     
     Serial.println("Web server started successfully!");
-    Serial.print("Access the control interface at: http://");
-    Serial.print(WiFi.localIP());
-    Serial.println(":" + String(WEB_SERVER_PORT));
+    Serial.println("Access the control interface at:");
+    
+    // Display correct IP based on connection mode
+    if (getConnectionMode() == OFFLINE) {
+        // In AP mode, show the AP IP address
+        Serial.println("  http://" + WiFi.softAPIP().toString());
+        Serial.println("  http://ghostwhisper.local (if mDNS works)");
+    } else {
+        // In ONLINE mode, show the WiFi IP address
+        Serial.println("  http://" + WiFi.localIP().toString());
+        Serial.println("  http://ghostwhisper.local");
+    }
     
     // Check memory usage and limits
     checkMemoryLimits();
@@ -176,6 +255,13 @@ void restartWebServer() {
  */
 void handleRoot() {
     server.send(200, "text/html", generateMainPage());
+}
+
+/**
+ * @brief Handle meme soundboard page request.
+ */
+void handleMemePage() {
+    server.send(200, "text/html", loadHTMLFromSD("/meme.html"));
 }
 
 /**
@@ -354,6 +440,9 @@ void handleStop() {
     // Stop the audio
     audio.stopSong();
     
+    // Reset pause state
+    isPaused = false;
+    
     // Reset playback manager state
     stopPlayback();
     
@@ -367,11 +456,15 @@ void handleStop() {
 void handlePause() {
     Serial.println("Pause playback requested via web interface");
     
-    // Check if audio is currently running
-    if (audio.isRunning()) {
+    // Check if audio is currently running and not paused
+    if (audio.isRunning() && !isPaused) {
         audio.pauseResume();
+        isPaused = true;
         server.send(200, "application/json", 
             "{\"status\":\"success\",\"message\":\"Playback paused\"}");
+    } else if (isPaused) {
+        server.send(200, "application/json", 
+            "{\"status\":\"info\",\"message\":\"Playback is already paused\"}");
     } else {
         server.send(200, "application/json", 
             "{\"status\":\"info\",\"message\":\"No active playback to pause\"}");
@@ -384,11 +477,16 @@ void handlePause() {
 void handleResume() {
     Serial.println("Resume playback requested via web interface");
     
-    // Resume audio playback
-    audio.pauseResume();
-    
-    server.send(200, "application/json", 
-        "{\"status\":\"success\",\"message\":\"Playback resumed\"}");
+    // Resume audio playback only if currently paused
+    if (isPaused) {
+        audio.pauseResume();
+        isPaused = false;
+        server.send(200, "application/json", 
+            "{\"status\":\"success\",\"message\":\"Playback resumed\"}");
+    } else {
+        server.send(200, "application/json", 
+            "{\"status\":\"info\",\"message\":\"Playback is not paused\"}");
+    }
 }
 
 /**
@@ -675,8 +773,11 @@ void handleGenerativeRegenerate() {
         return;
     }
     
+    // Actually regenerate the sequence
+    regenerateSequence();
+    
     server.send(200, "application/json", 
-        "{\"status\":\"success\",\"message\":\"New generative sequence generated\"}");
+        "{\"status\":\"success\",\"message\":\"New generative sequence generated and will start shortly\"}");
 }
 
 /**
@@ -742,7 +843,8 @@ String generateStatusJson() {
     json += "\"audioRunning\":" + String(audio.isRunning() ? "true" : "false") + ",";
     json += "\"playbackActive\":" + String(isPlaybackActive() ? "true" : "false") + ",";
     json += "\"currentProgram\":\"" + programName + "\",";
-    json += "\"programActive\":" + String(state.programActive ? "true" : "false");
+    json += "\"programActive\":" + String(state.programActive ? "true" : "false") + ",";
+    json += "\"connectionMode\":\"" + String(getConnectionMode() == ONLINE ? "ONLINE" : "OFFLINE") + "\"";
     json += "}";
     
     return json;
@@ -847,4 +949,30 @@ void testVolumeControl() {
     Serial.println("3. Check if audio stream needs to be restarted for volume changes");
     Serial.println("4. Consider using external volume control hardware");
     Serial.println("============================");
+}
+
+/**
+ * @brief Handle WiFi settings reset request
+ */
+void handleWiFiReset() {
+    Serial.println("WiFi reset requested via web interface");
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"WiFi settings will be reset. Device will restart.\"}");
+    
+    delay(1000); // Give time for response to be sent
+    resetWiFiSettings(); // This will restart the device
+}
+
+/**
+ * @brief Handle WiFi configuration portal request
+ */
+void handleWiFiConfig() {
+    Serial.println("WiFi config portal requested via web interface");
+    
+    server.send(200, "application/json", 
+        "{\"status\":\"success\",\"message\":\"WiFi configuration portal starting. Connect to device AP to configure.\"}");
+    
+    delay(1000); // Give time for response to be sent
+    startWiFiConfigPortal(); // Start the configuration portal
 }

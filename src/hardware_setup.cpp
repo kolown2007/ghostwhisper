@@ -1,7 +1,5 @@
 #include "hardware_setup.h"
 #include "config.h"
-#include "secrets.h" // For WiFi credentials
-#include <WiFiManager.h>
 #include <SPI.h>
 #include <SD.h>
 #include <esp_task_wdt.h>
@@ -17,23 +15,7 @@ void initializeHardware() {
         ; // Wait for Serial to initialize
     }
 
-    // Initialize WiFi with WiFiManager for better UX
-    Serial.println("Initializing WiFi...");
-    WiFiManager wifiManager;
-    
-    // Set timeout for configuration mode
-    wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT_SEC); // 3 minutes
-    
-    // Try to connect with saved credentials, or start config portal
-    if (!wifiManager.autoConnect("GhostWhisper-Setup")) {
-        Serial.println("Failed to connect to WiFi, restarting...");
-        delay(3000);
-        ESP.restart();
-    }
-    
-    Serial.println("WiFi connected successfully!");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
+    Serial.println("=== Hardware Initialization ===");
 
     // Initialize SD card with SPI pins
     Serial.println("Initializing SD card...");

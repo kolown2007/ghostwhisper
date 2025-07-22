@@ -70,8 +70,8 @@ void handleGenerativeProgram() {
 
         // Check if we need to generate a new sequence
         if (currentSequence.empty() || currentSequenceIndex >= currentSequence.size()) {
-            // Retrieve soundfont files from SD card
-            const std::vector<String>& soundfontFiles = getSoundfontFilesFromSD();
+            // Retrieve soundfont files from SD card (using cached version)
+            const std::vector<String>& soundfontFiles = getSoundfontFiles();
             if (soundfontFiles.empty()) {
                 handleNoFilesError();
                 return;
@@ -148,4 +148,22 @@ void playSequence() {
     // Load soundfont files to make sure they're available
     const std::vector<String>& soundfontFiles = getSoundfontFiles();
     Serial.println("Generative program activated with " + String(soundfontFiles.size()) + " soundfont files");
+}
+
+/**
+ * @brief Force regeneration of the current sequence.
+ * @details Clears the current sequence and resets the index, forcing a new sequence to be generated on the next playback cycle.
+ */
+void regenerateSequence() {
+    Serial.println("Forcing regeneration of generative sequence...");
+    
+    // Clear the current sequence to force regeneration
+    currentSequence.clear();
+    currentSequenceIndex = 0;
+    
+    // Reset timing to trigger immediate regeneration
+    generativeState.lastNoteTime = 0;
+    generativeState.nextNoteDelay = 500; // Short delay to start new sequence quickly
+    
+    Serial.println("Sequence cleared - new harmonious sequence will be generated on next cycle");
 }

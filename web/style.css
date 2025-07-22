@@ -386,6 +386,24 @@ input:focus {
     color: #ffffff;
 }
 
+.error-message {
+    background: #2a1410;
+    border: 1px solid #e22134;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px 0;
+    color: #ffffff;
+}
+
+.error-message p {
+    margin: 8px 0;
+}
+
+.error-message p:first-child {
+    color: #e22134;
+    font-weight: 600;
+}
+
 @keyframes slideIn {
     from {
         transform: translateX(100%);

@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "config.h"
 #include "hardware_setup.h"
+#include "connection_manager.h"
 #include "radio_manager.h"
 #include "debug_manager.h"
 #include "control.h"
@@ -9,11 +10,15 @@
 
 
 void setup() {
+    // clearWiFiCredentials(); // Commented out - causes restart loop
+    initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
+    
     initializeHardware();
     randomSeed(esp_random()); // Seed with ESP32 hardware random generator
     setupAudioCallbacks();
     
-    // Initialize web control interface (after hardware setup)
+    // Initialize web control interface for both ONLINE and OFFLINE modes
+    // In OFFLINE mode, it creates local AP for web access
     initializeWebControl();
     
   
@@ -31,7 +36,7 @@ void loop() {
     // CRITICAL: Audio processing must be first and frequent
     audio.loop();
     
-    // Handle web server requests (lightweight)
+    // Handle web server requests for both ONLINE and OFFLINE modes
     handleWebControl();
     
     // Handle program playback (new system)

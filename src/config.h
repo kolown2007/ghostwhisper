@@ -15,6 +15,9 @@
 #define I2S_BCLK 27
 #define I2S_LRC 26
 
+// LED Configuration
+#define STATUS_LED_PIN LED_BUILTIN  // Use built-in LED for status indication
+
 // System Configuration
 #define SERIAL_BAUD_RATE 9600
 #define WATCHDOG_TIMEOUT_SEC 30
@@ -38,9 +41,10 @@
 #define HEALTH_CHECK_INTERVAL_MS 30000
 #define LOW_MEMORY_THRESHOLD 10000
 
-// Sequence Configuration
-#define DEFAULT_SEQUENCE_LENGTH 24
-#define MIN_NOTE_DURATION_MS 2000
-#define MAX_NOTE_DURATION_MS 4000
-#define MIN_GAP_DURATION_MS 1000
-#define MAX_GAP_DURATION_MS 3000
+// Connection Configuration
+#define DEFAULT_CONNECTION_MODE OFFLINE  // ONLINE or OFFLINE
+#define CLEAR_WIFI_ON_STARTUP false      // Set to true to clear WiFi credentials on startup
+
+// WiFi Configuration
+#define WIFI_SSID_NAME "GhostWhisper"
+#define OFFLINE_AP_PASSWORD "qcb2025"

@@ -54,3 +54,15 @@ void testVolumeControl();
  * @details Web endpoint to trigger volume diagnostic tests.
  */
 void handleVolumeTest();
+
+/**
+ * @brief Handle WiFi settings reset request.
+ * @details Web endpoint to reset WiFi credentials and restart device.
+ */
+void handleWiFiReset();
+
+/**
+ * @brief Handle WiFi configuration portal request.
+ * @details Web endpoint to start WiFi configuration portal on demand.
+ */
+void handleWiFiConfig();

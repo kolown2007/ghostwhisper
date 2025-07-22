@@ -27,9 +27,7 @@
             <!-- Program-specific controls -->
             <div id="shuffleControls" class="program-controls" style="display:none;">
                 <h3>Shuffle Controls</h3>
-                <button class="button" onclick="shuffleNext()">Next Track</button>
-                <input type="text" id="shuffleFolder" placeholder="/music" value="/music">
-                <button class="button" onclick="changeShuffleFolder()">Change Folder</button>
+            
                 <br><br>
                  <button class="button play-button" onclick="playRandomFile()">Play Random Song</button>
                 <br><br>
@@ -41,14 +39,21 @@
             </div>
             
             <div id="generativeControls" class="program-controls" style="display:none;">
-                <h3>Generative Controls</h3>
-                <p>Note-based soundfont generation</p>
+               
                 <button class="button" onclick="regenerateSequence()">Regenerate Sequence</button>
             </div>
             
             <div id="streamControls" class="program-controls" style="display:none;">
                 <h3>Stream Controls</h3>
-               
+                <div id="streamOfflineError" class="error-message" style="display:none;">
+                    <p><strong>Stream Mode Not Available</strong></p>
+                    <p>Streaming features are only available in ONLINE mode.</p>
+                    <p>Please connect to a network to use streaming capabilities.</p>
+                </div>
+                <div id="streamOnlineControls">
+                    <!-- Stream controls will be added here when implemented -->
+                   
+                </div>
             </div>
         </div>
         
@@ -67,6 +72,8 @@
             <h3>System Status</h3>
             <p>Loading status...</p>
         </div>
+
+       
         
     </div>
     

@@ -2,7 +2,34 @@
 
 ----
 
-Internet Radi- **`radio_manager.h/.cpp`** - Radio program coordination Project for QC Biennale 2025
+Sound Installation for QC Biennale 2025
+
+## Key Features (2025 Update)
+
+- **#### Audio Processing
+- **Library**: ESP32-audioI2S (Schreibfähig/esphome)
+- **Streaming**: Real-time HTTP/HTTPS streaming and local SD playback
+- **Buffer Management**: Built-in buffering for seamless playback
+- **Volume Control**: Web-based volume adjustment (0-100%)
+- **Pause/Resume/Stop**: Full playback control with proper state trackingle WiFi Connection Management**: Supports ONLINE (connects to network) and OFFLINE (local AP) modes. If WiFi fails, device automatically starts a configuration portal (visit `ghostwhisper.local` or `192.168.4.1`).
+- **mDNS Hostname**: Access the web control panel via `ghostwhisper.local` instead of IP addresses.
+- **Web Control Panel**: Select program, adjust volume, regenerate generative sequences, and control playback (pause/resume/stop) from your browser.
+- **Generative Sequence Regeneration**: Instantly create a new generative melody via the web UI.
+- **Pause/Resume/Stop Logic**: Fully supported via web UI and backend state tracking (ESP32-audioI2S library).
+- **Error Handling**: Web UI displays clear error messages (e.g., stream mode only available in ONLINE mode).
+- **Hardware Pins**: I2S and SD card pin assignments remain unchanged.
+
+## Usage
+
+1. **Power On**: ESP32 starts in configured mode (ONLINE/OFFLINE)
+2. **WiFi Connection**: 
+   - ONLINE mode: Connects to network or starts config portal
+   - OFFLINE mode: Creates local AP at `192.168.4.1`
+3. **Web Access**: Navigate to `ghostwhisper.local` (or IP address)
+4. **Program Selection**: Choose SHUFFLE, GENERATIVE, or STREAM mode
+5. **Playback Control**: Use web UI for play, pause, resume, stop, volume
+6. **Sequence Regeneration**: Click "Regenerate Sequence" for new generative melodies
+7. **WiFi Management**: Use `/wifi/reset` or `/wifi/config` routes as needed
 
 ## Overview
 GhostWhisper is an ambient music generation system that creates real-time generative soundscapes using ESP32 hardware and online sound libraries. The system streams musical notes from remote servers and uses Markov chain algorithms to create evolving ambient compositions.
@@ -20,7 +47,7 @@ GhostWhisper is an ambient music generation system that creates real-time genera
   - MISO: Pin 19
   - CLK: Pin 18
   - CS: Pin 5
-- **WiFi Connectivity** - For streaming audio from remote sources
+- **WiFi Connectivity** - For streaming audio from remote sources and web control interface
 
 ### Software Components
 
@@ -28,89 +55,102 @@ GhostWhisper is an ambient music generation system that creates real-time genera
 
 **`main.cpp`** - *Application Entry Point*
 - High-level application flow orchestration
-- Delegates to specialized manager modules
-- Minimal, clean implementation focused on coordination
+- Connection mode selection (ONLINE/OFFLINE)
+- Hardware initialization and radio program management
+
+**Connection Management:**
+- **`connection_manager.h/.cpp`** - WiFi connection handling
+  - ONLINE/OFFLINE mode support
+  - WiFiManager configuration portal
+  - mDNS hostname setup (`ghostwhisper.local`)
+  - LED status indicators
 
 **Hardware Layer:**
 - **`hardware_setup.h/.cpp`** - Hardware initialization and configuration
-  - WiFi connection management
-  - I2S audio interface setup
+  - I2S audio interface setup (ESP32-audioI2S)
   - SD card initialization
   - Pin definitions and hardware abstraction
+- **`config.h`** - System configuration constants
+  - WiFi settings, timeouts, pin definitions
 
-**Manager Layer:**
-- **`playback_manager.h/.cpp`** - Audio playback coordination
-  - Transition timing and gap management
-  - Audio streaming control
-  - Note advancement logic
+**Program Management:**
+- **`radio_manager.h/.cpp`** - Main program coordination
+  - Handles shuffle, generative, and stream programs
+  - Program state management and transitions
   
+- **`shuffle_manager.h/.cpp`** - Random audio file playback
+  - SD card file scanning and random selection
+  - Folder-based music organization
+  
+- **`generative_manager.h/.cpp`** - Algorithmic music generation
+  - Harmonious sequence generation from soundfont files
+  - Markov-chain style note progression
+  - On-demand sequence regeneration
+  
+- **`stream_manager.h/.cpp`** - Online audio streaming
+  - Remote URL streaming (requires ONLINE mode)
+  - HTTP/HTTPS audio stream handling
+
+**Control Interface:**
+- **`control.h/.cpp`** - Web server and HTTP endpoints
+  - Volume control, program switching, playback control
+  - WiFi management routes (/wifi/reset, /wifi/config)
+  - Pause/resume/stop with proper state tracking
+  - Status reporting and system monitoring
+
+**Utilities:**
 - **`debug_manager.h/.cpp`** - Logging and diagnostics
   - Audio status monitoring
   - Error detection and reporting
   - Debug output management
-  
-- **`url_filter.h/.cpp`** - URL processing and caching
-  - Problematic URL filtering
-  - Validated URL caching
-  - Filter criteria management
 
 **Data Layer:**
 - **`musicdata.h`** - Sound library definitions
-  - Bell sounds URL collection
-  - Access functions `getBellSounds()` and `getBellSoundsCount()`
-  - External soundfont library connections
-
-**Algorithm Layer:**
-- **`note_generator.h/.cpp`** - Musical note URL generation
-  - Note patterns from A0 to Gb7
-  - URL construction for soundfont servers
-  - Functions: `generateNoteUrls()`, `getNoteUrl()`
-
-- **`sequencer.h/.cpp`** - Generative music composition
-  - Markov chain algorithms for musical progression
-  - Timing and duration management
-  - Key structures: `NoteEvent`, `generateSequence()`
+  - Soundfont file references for generative mode
+  - Access functions `getSoundfontFiles()` and `getSoundfontFilesCount()`
+  - Local SD card audio file management
 
 **Configuration:**
-- **`secrets.h`** - Sensitive configuration
+- **`secrets.h`** - Sensitive configuration (not in repo)
   - WiFi credentials and server endpoints
   - Not committed to version control for security
 
 ### Audio System
 
 #### Sound Sources
-- **Remote Soundfonts**: Streams from `gleitz.github.io/midi-js-soundfonts`
-- **Instrument**: Music box samples (warm, ambient character)
-- **Format**: MP3 audio files at 44.1kHz, 128kbps
+- **Local SD Card**: WAV files for shuffle mode (random playback)
+- **Generative Soundfont**: Local soundfont samples for algorithmic composition
+- **Remote Streams**: Online audio streams (ONLINE mode only)
+- **Format**: WAV audio files (ESP32-audioI2S library)
 
 #### Audio Processing
-- **Streaming**: Real-time HTTP/HTTPS streaming
-- **Buffer Management**: Automatic audio buffer handling
-- **Gap Control**: 200ms gaps between notes to prevent audio artifacts
-- **Volume**: Configurable output level (default: 80%)
+- **Library**: Arduino Audio Tools (replaced ESP32-audioI2S)
+- **Streaming**: Real-time HTTP/HTTPS streaming and local SD playback
+- **Buffer Management**: StreamCopy for WAV playback
+- **Volume Control**: Web-based volume adjustment (0-100%)
+- **Pause/Resume/Stop**: Full playback control with proper state tracking
 
 ### Generative Algorithm
 
-#### Markov Chain Implementation
-The sequencer uses Markov chains to create musically coherent progressions:
+#### Harmonious Sequence Generation
+The generative manager creates musically coherent sequences using local soundfont files:
 
 ```cpp
-// Example transition probabilities
-{0, {{1, 0.4f}, {2, 0.6f}}}, // From note 0: 40% to note 1, 60% to note 2
-{1, {{0, 0.5f}, {2, 0.5f}}}, // From note 1: 50% to note 0, 50% to note 2
+// Creates sequences with 3-12 notes from available soundfont files
+// Uses random selection with timing intervals of 5-50 seconds
+// Generates new sequence when current one completes
 ```
 
-#### Sequence Parameters
-- **Sequence Length**: 24 notes per cycle
-- **Note Duration**: 2-4 seconds per note
-- **Gap Between Notes**: 1-3 seconds
-- **Total Cycle Time**: ~72-168 seconds (1.2-2.8 minutes)
+#### Program Modes
+- **SHUFFLE**: Random playback of SD card audio files
+- **GENERATIVE**: Algorithmic composition using soundfont samples  
+- **STREAM**: Online audio stream playback (ONLINE mode required)
 
-#### URL Filtering
-Basic filtering removes problematic note combinations:
-- Excludes non-existent notes (Cb, Fb)
-- Filters out very low octaves (octave 0)
-- Prevents 404 errors that cause audio artifacts
+#### Sequence Parameters
+- **Sequence Length**: 3-12 notes per cycle (dynamic)
+- **Note Duration**: 5-50 seconds per note (random intervals)
+- **Regeneration**: On-demand via web UI "Regenerate Sequence" button
+- **Source Files**: Local soundfont samples from SD card
 
 ## Configuration
 
@@ -121,17 +161,23 @@ const char* WIFI_ssid = "your_network";
 const char* WIFI_password = "your_password";
 ```
 
+**WiFiManager Portal:**
+- If WiFi connection fails, device automatically starts a configuration portal
+- Access via `ghostwhisper.local` or `192.168.4.1`
+- Web UI provides `/wifi/reset` and `/wifi/config` routes
+
 ### Audio Settings
 ```cpp
 audio.setVolume(80);           // Volume level (0-100)
-audio.setPinout(BCLK, LRC, DOUT); // I2S pin configuration
+audio.setPinout(I2S_BCLK, I2S_LRC, I2S_DOUT); // I2S pin configuration
 ```
 
-### Sequence Tuning
-Modify in `sequence_manager.cpp`:
+### Connection Modes
+Configure in `main.cpp`:
 ```cpp
-generateSequence(urlVec, 24, 2000, 4000, 1000, 3000);
-//               notes^  duration^   gaps^
+initializeConnection(OFFLINE); // Local AP mode
+// or
+initializeConnection(ONLINE);  // Connect to WiFi network
 ```
 
 ### Hardware Pin Configuration
@@ -153,9 +199,12 @@ Modify in `hardware_setup.cpp`:
 
 ### Build System
 - **Platform**: PlatformIO with ESP32 framework
-- **Dependencies**: WiFi, Audio, SD libraries for ESP32
+- **Dependencies**: 
+  - ESP32-audioI2S library
+  - WiFiManager for configuration portal
+  - WiFi, SD, and WebServer libraries for ESP32
 - **Configuration**: `platformio.ini`
-- **Architecture**: Modular design with separation of concerns
+- **Architecture**: Modular design with manager pattern
 
 ### Code Organization
 - **Manager Pattern**: Specialized modules for different responsibilities
@@ -176,10 +225,15 @@ Modify in `hardware_setup.cpp`:
 
 ## Usage
 
-1. **Power On**: ESP32 connects to WiFi automatically
-2. **Initialization**: System loads and filters note URLs
-3. **Playback**: Begins ambient sequence generation
-4. **Continuous Operation**: Generates new sequences when current ones complete
+1. **Power On**: ESP32 starts in configured mode (ONLINE/OFFLINE)
+2. **WiFi Connection**: 
+   - ONLINE mode: Connects to network or starts config portal
+   - OFFLINE mode: Creates local AP at `192.168.4.1`
+3. **Web Access**: Navigate to `ghostwhisper.local` (or IP address)
+4. **Program Selection**: Choose SHUFFLE, GENERATIVE, or STREAM mode
+5. **Playback Control**: Use web UI for play, pause, resume, stop, volume
+6. **Sequence Regeneration**: Click "Regenerate Sequence" for new generative melodies
+7. **WiFi Management**: Use `/wifi/reset` or `/wifi/config` routes as needed
 
 ## Troubleshooting
 
@@ -206,57 +260,91 @@ Watch for:
 │    main.cpp     │ ← Application Entry Point
 └─────────┬───────┘
           │
-    ┌─────▼─────┐
-    │ Managers  │ ← Coordination Layer
-    └─────┬─────┘
+┌─────────▼─────────┐
+│ connection_manager│ ← WiFi & mDNS Setup
+└─────────┬─────────┘
           │
 ┌─────────▼─────────┐
-│   Data Sources    │ ← Information Layer
+│ hardware_setup    │ ← I2S Audio & SD Card
+└─────────┬─────────┘
+          │
+┌─────────▼─────────┐
+│  radio_manager    │ ← Program Coordination
+└─────────┬─────────┘
+          │
+┌─────────▼─────────┐
+│Program Managers   │ ← shuffle/generative/stream
 └───────────────────┘
 ```
 
 ### Detailed Dependency Map
 ```
 main.cpp
+├── connection_manager.h/.cpp
+│   ├── WiFiManager (configuration portal)
+│   ├── ESPmDNS (hostname resolution)
+│   └── config.h (WiFi settings)
+│
 ├── hardware_setup.h/.cpp
-│   ├── secrets.h (WiFi credentials)
-│   └── Audio (external library)
+│   ├── Audio (Arduino Audio Tools)
+│   ├── SD (card interface)
+│   └── secrets.h (WiFi credentials)
 │
 ├── radio_manager.h/.cpp
-│   ├── hardware_setup.h (audio object)
-│   └── sequence_manager.h (note progression)
+│   ├── shuffle_manager.h/.cpp
+│   ├── generative_manager.h/.cpp
+│   ├── stream_manager.h/.cpp
+│   └── hardware_setup.h (audio object)
+│
+├── control.h/.cpp (Web Server)
+│   ├── WebServer (HTTP endpoints)
+│   ├── connection_manager.h (WiFi status)
+│   └── All program managers
 │
 └── debug_manager.h/.cpp
-    └── (audio callback functions)
+    └── Serial logging functions
 ```
 
 ### Data Flow Process
 ```
 1. INITIALIZATION
-   main.cpp → hardware_setup → WiFi/Audio/SD Card
-
-2. SEQUENCE CREATION
-   main.cpp → sequence_manager → musicdata.h
-                           ↓
-                        sequencer.h (Markov chains)
-                           ↓
-                  Generated sequence
-
-3. PLAYBACK CYCLE
-   main.cpp → playback_manager → audio.connecttohost()
-      ↓           ↓
-   sequence_manager (advance note)
+   main.cpp → connection_manager → WiFi/mDNS setup
       ↓
-   debug_manager (logging)
+   hardware_setup → Audio/SD initialization
+      ↓
+   radio_manager → Program state setup
+      ↓
+   control → Web server start
 
-4. REGENERATION
-   sequence complete → sequence_manager → (repeat from step 2)
+2. PROGRAM SELECTION (via Web UI)
+   Web UI → control.cpp → radio_manager
+      ↓
+   radio_manager → [shuffle/generative/stream]_manager
+      ↓
+   Program manager → hardware_setup (audio object)
+
+3. GENERATIVE PLAYBACK CYCLE
+   generative_manager → musicdata.h (soundfont files)
+      ↓
+   Generate harmonious sequence
+      ↓
+   Play sequence with timing intervals
+      ↓
+   On regeneration → clear sequence → repeat
+
+4. WEB CONTROL
+   Browser → ghostwhisper.local → control.cpp
+      ↓
+   HTTP endpoints → Program managers
+      ↓
+   Status updates → JSON responses
 ```
 
 ### Inter-Module Communication
-- **main.cpp** orchestrates high-level flow
-- **sequence_manager** provides current note state  
-- **playback_manager** handles audio timing
-- **url_filter** preprocesses data for sequence_manager
-- **debug_manager** monitors all operations
-- **hardware_setup** provides shared audio object
+- **main.cpp** orchestrates high-level initialization flow
+- **connection_manager** handles WiFi modes and mDNS setup
+- **radio_manager** coordinates program switching and state management  
+- **control.cpp** provides web interface and HTTP API endpoints
+- **[program]_managers** handle specific audio playback logic
+- **hardware_setup** provides shared audio object and SD access
+- **debug_manager** monitors operations across all modules

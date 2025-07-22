@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meme Soundboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Meme Soundboard</h1>
+        <div class="meme-buttons" id="memeButtons">
+            <!-- Meme buttons will be generated dynamically -->
+        </div>
+        <p>Click a button to play the corresponding meme audio from SD card (<code>/meme/</code>).</p>
+    </div>
+    <script src="/app.js"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', loadMemeButtons);
+    </script>
+</body>
+</html>
