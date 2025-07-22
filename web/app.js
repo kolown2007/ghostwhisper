@@ -497,54 +497,6 @@ function showNotification(message, type = 'success') {
     }, 3000);
 }
 
-// Keyboard shortcuts
-document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey || event.metaKey) {
-        switch(event.key) {
-            case 'ArrowUp':
-                event.preventDefault();
-                changeVolume(1);
-                break;
-            case 'ArrowDown':
-                event.preventDefault();
-                changeVolume(-1);
-                break;
-            case 't':
-                event.preventDefault();
-                runVolumeTest();
-                break;
-            case 'r':
-                event.preventDefault();
-                playRandomFile();
-                break;
-            case 's':
-                event.preventDefault();
-                stopPlayback();
-                break;
-            case 'p':
-                event.preventDefault();
-                pausePlayback();
-                break;
-            case 'Enter':
-                event.preventDefault();
-                resumePlayback();
-                break;
-            case '1':
-                event.preventDefault();
-                setProgram('shuffle');
-                break;
-            case '2':
-                event.preventDefault();
-                setProgram('generative');
-                break;
-            case '3':
-                event.preventDefault();
-                setProgram('stream');
-                break;
-        }
-    }
-});
-
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
     console.log('GhostWhisper Control Panel loaded');
