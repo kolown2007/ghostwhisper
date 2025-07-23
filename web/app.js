@@ -591,10 +591,10 @@ async function playMeme(number) {
     try {
         console.log('Playing meme:', number);
         const response = await fetch(`/meme/play?n=${number}`);
-        const data = await response.json();
+        const text = await response.text(); // Read response as plain text
         
-        if (data.success) {
-            showNotification(`Playing meme ${number}`);
+        if (text.includes('Playing meme')) {
+            showNotification(text); // Display the plain text message
         } else {
             showNotification('Error playing meme', 'error');
         }
