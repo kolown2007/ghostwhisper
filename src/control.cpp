@@ -15,11 +15,11 @@
 #include "musicdata.h"
 #include <WebServer.h>
 #include <WiFi.h>
+#include <vector>
 
 // Web server instance
 static WebServer server(WEB_SERVER_PORT);
 // Meme soundboard file list
-#include <vector>
 std::vector<String> memeFiles;
 
 void scanMemeFiles() {
