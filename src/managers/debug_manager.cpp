@@ -1,5 +1,5 @@
 #include "debug_manager.h"
-#include "config.h"
+#include "../config/config.h"
 
 void logAudioStatus() {
     // Add audio status debugging - reduced frequency

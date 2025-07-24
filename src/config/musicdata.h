@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <vector>
 #include <SD.h>
 
 // Stream configuration

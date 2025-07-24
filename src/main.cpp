@@ -1,10 +1,10 @@
 #include "Arduino.h"
-#include "config.h"
-#include "hardware_setup.h"
-#include "connection_manager.h"
-#include "radio_manager.h"
-#include "debug_manager.h"
-#include "control.h"
+#include "config/config.h"
+#include "hardware/hardware_setup.h"
+#include "managers/connection_manager.h"
+#include "managers/radio_manager.h"
+#include "managers/debug_manager.h"
+#include "web/control.h"
 #include <esp_task_wdt.h>
 #include <esp_random.h>
 

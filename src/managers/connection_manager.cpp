@@ -4,8 +4,8 @@
  */
 
 #include "connection_manager.h"
-#include "config.h"
-#include "secrets.h" // For WiFi credentials
+#include "../config/config.h"
+#include "../config/secrets.h" // For WiFi credentials
 #include <WiFiManager.h>
 #include <WiFi.h>
 #include <ESPmDNS.h>
