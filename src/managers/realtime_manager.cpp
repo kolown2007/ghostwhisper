@@ -1,5 +1,5 @@
 #include "realtime_manager.h"
-#include "secrets.h"
+#include "../config/secrets.h"
 #include <WebSocketsClient.h>
 
 WebSocketsClient webSocket;

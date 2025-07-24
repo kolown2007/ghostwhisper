@@ -4,7 +4,7 @@
  */
 
 #include "shuffle_manager.h"
-#include "hardware_setup.h"
+#include "../hardware/hardware_setup.h"
 #include <SD.h>
 
 // Shuffle state

@@ -4,8 +4,8 @@
  */
 
 #include "stream_manager.h"
-#include "hardware_setup.h"
-#include "musicdata.h"
+#include "../hardware/hardware_setup.h"
+#include "../config/musicdata.h"
 
 // Stream state
 static StreamState streamState = {

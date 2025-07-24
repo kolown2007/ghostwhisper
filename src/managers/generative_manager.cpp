@@ -4,8 +4,8 @@
  */
 
 #include "generative_manager.h"
-#include "hardware_setup.h"
-#include "musicdata.h"
+#include "../hardware/hardware_setup.h"
+#include "../config/musicdata.h"
 #include <SD.h>
 
 // Generative state with sequence management

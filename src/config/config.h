@@ -31,7 +31,7 @@
 
 // Web Server Configuration
 #define WEB_SERVER_PORT 80
-#define WEB_FILES_PATH "/web"
+#define WEB_FILES_PATH "/view"
 
 // Music Configuration
 #define MUSIC_FOLDER "/music"

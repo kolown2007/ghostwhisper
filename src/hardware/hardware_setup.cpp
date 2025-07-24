@@ -1,5 +1,5 @@
 #include "hardware_setup.h"
-#include "config.h"
+#include "../config/config.h"
 #include <SPI.h>
 #include <SD.h>
 #include <esp_task_wdt.h>
