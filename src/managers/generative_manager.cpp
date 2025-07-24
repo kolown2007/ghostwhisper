@@ -7,6 +7,7 @@
 #include "../hardware/hardware_setup.h"
 #include "../config/musicdata.h"
 #include <SD.h>
+#include "../config/json_data.h"
 
 // Generative state with sequence management
 static GenerativeState generativeState = {
@@ -28,6 +29,12 @@ GenerativeState& getGenerativeState() {
  * @brief Encapsulate note playback logic
  */
 bool playNote(const String& soundFile) {
+    Serial.println("Attempting to play file: " + soundFile);
+    if (!SD.exists(soundFile)) {
+        Serial.println("ERROR: File does not exist on SD card: " + soundFile);
+        return false;
+    }
+    
     // Serial.println("Playing generative note: " + soundFile);
     if (audio.connecttoFS(SD, soundFile.c_str())) {
         return true;
@@ -85,7 +92,7 @@ void handleGenerativeProgram() {
             // Start with a random root note as the foundation of our harmony
             int rootNote = random(0, soundfontFiles.size());
             
-            for (int i = 0; i < 200; ++i) {
+            for (int i = 0; i < 20; ++i) {
                 int noteIndex;
                 
                 // Create simple harmonic progression using musical intervals
@@ -134,6 +141,20 @@ void handleGenerativeProgram() {
 
         // Set the delay for the next note
         setNextNoteDelay(success);
+
+        // Check if we have reached the end of the sequence
+        if (currentSequenceIndex >= currentSequence.size()) {
+            // Play a random MP3 from the 'field' subsection
+            // Retrieve files directly from the 'field' section
+            std::vector<String> fieldFiles = getDataFilesFromJSON("field");
+            if (!fieldFiles.empty()) {
+                String randomFieldFile = fieldFiles[random(0, fieldFiles.size())];
+                Serial.println("Playing random field sound: " + randomFieldFile);
+                playNote("/field/" + randomFieldFile);
+            } else {
+                Serial.println("No files found in 'field' section");
+            }
+        }
     }
 }
 

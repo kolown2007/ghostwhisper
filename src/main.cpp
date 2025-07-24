@@ -15,8 +15,8 @@ void setup() {
     
     initializeHardware();
     randomSeed(esp_random()); // Seed with ESP32 hardware random generator
-    setupAudioCallbacks();
-    
+  
+
     // Initialize web control interface for both ONLINE and OFFLINE modes
     // In OFFLINE mode, it creates local AP for web access
     initializeWebControl();
