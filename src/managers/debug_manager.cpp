@@ -10,11 +10,6 @@ void logAudioStatus() {
     }
 }
 
-void setupAudioCallbacks() {
-    // Audio callbacks are automatically called by the Audio library
-    // No explicit setup needed, just defining the functions
-}
-
 /**
  * @brief Monitor system memory and log warnings if low.
  */

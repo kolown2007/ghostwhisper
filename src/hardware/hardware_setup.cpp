@@ -5,8 +5,23 @@
 #include <esp_task_wdt.h>
 #include <esp_system.h>
 
+
 // Remove duplicate pin definitions - now in config.h
 Audio audio;
+
+// Blink built-in LED (usually pin 2 on ESP32)
+void blinkBuiltinLED(int times, int delayMs) {
+    const int BUILTIN_LED = 2;
+    pinMode(BUILTIN_LED, OUTPUT);
+    for (int i = 0; i < times; ++i) {
+        digitalWrite(BUILTIN_LED, HIGH);
+        delay(delayMs);
+        digitalWrite(BUILTIN_LED, LOW);
+        delay(delayMs);
+    }
+}
+
+
 
 void initializeHardware() {
     // Initialize Serial for debugging
@@ -14,6 +29,9 @@ void initializeHardware() {
     while (!Serial) {
         ; // Wait for Serial to initialize
     }
+
+    // Blink built-in LED to indicate startup
+    blinkBuiltinLED(1, 200);
 
     Serial.println("=== Hardware Initialization ===");
 
@@ -29,6 +47,17 @@ void initializeHardware() {
         if (SD.begin(SD_CS)) {
             sdInitialized = true;
             Serial.println("SD card initialization successful!");
+            blinkBuiltinLED(1, 200);
+
+            // Check if data.json exists on SD card
+            if (SD.exists("/data.json")) {
+                Serial.println("data.json found on SD card.");
+            } else {
+                Serial.println("data.json NOT found on SD card.");
+            }
+
+
+
             break;
         } else {
             Serial.printf("Attempt %d failed, retrying...\n", attempt);
