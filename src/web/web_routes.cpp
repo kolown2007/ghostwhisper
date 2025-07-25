@@ -77,18 +77,6 @@ bool startWebServer() {
     server.begin();
     webServerActive = true;
     
-    Serial.println("Web server started successfully!");
-    Serial.println("Access the control interface at:");
-    
-    // Display correct IP based on connection mode
-    if (WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA) {
-        Serial.println("  http://" + WiFi.softAPIP().toString());
-        Serial.println("  http://ghostwhisper.local (if mDNS works)");
-    } else {
-        Serial.println("  http://" + WiFi.localIP().toString());
-        Serial.println("  http://ghostwhisper.local");
-    }
-    
     return true;
 }
 

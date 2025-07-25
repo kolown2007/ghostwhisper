@@ -45,6 +45,4 @@
 #define DEFAULT_CONNECTION_MODE OFFLINE  // ONLINE or OFFLINE
 #define CLEAR_WIFI_ON_STARTUP false      // Set to true to clear WiFi credentials on startup
 
-// WiFi Configuration
-#define WIFI_SSID_NAME "GhostWhisper"
-#define OFFLINE_AP_PASSWORD "qcb2025"
+// WiFi credentials are now defined in secrets.h
