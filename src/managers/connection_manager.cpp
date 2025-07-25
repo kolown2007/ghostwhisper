@@ -5,7 +5,7 @@
 
 #include "connection_manager.h"
 #include "../config/config.h"
-#include "../config/secrets.h" // For WiFi credentials
+#include "secrets.h" // For WiFi credentials
 #include <WiFiManager.h>
 #include <WiFi.h>
 #include <ESPmDNS.h>
