@@ -10,12 +10,13 @@
 
 
 void setup() {
-    // clearWiFiCredentials(); // Commented out - causes restart loop
-    initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
+  
+   
     
     initializeHardware();
     randomSeed(esp_random()); // Seed with ESP32 hardware random generator
-  
+    
+   initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
 
     // Initialize web control interface for both ONLINE and OFFLINE modes
     // In OFFLINE mode, it creates local AP for web access

@@ -4,6 +4,6 @@
 #define WIFI_ssid "flo"
 #define WIFI_password "birdyboo2019"
 
-// WiFi Configuration
+// WiFi Access Point Configuration
 #define WIFI_SSID_NAME "GhostWhisper"
-#define OFFLINE_AP_PASSWORD "qcb2025"
+#define OFFLINE_AP_PASSWORD "kolown123456789"

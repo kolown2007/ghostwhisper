@@ -20,6 +20,11 @@ bool wifiConnected = false;
 void initializeConnection(ConnectionMode mode) {
     currentConnectionMode = mode;
     
+    // Give serial monitor time to connect and ensure Serial is ready
+    delay(3000);
+    Serial.println(""); // Print blank line for clarity
+    Serial.println("==================================================");
+    
     // Initialize status LED
     pinMode(STATUS_LED_PIN, OUTPUT);
     
@@ -28,7 +33,7 @@ void initializeConnection(ConnectionMode mode) {
     
     if (mode == ONLINE) {
         Serial.println("=== ONLINE MODE ===");
-        Serial.println("Initializing WiFi...");
+        Serial.println("Connecting to existing WiFi network...");
         
         WiFiManager wifiManager;
         
@@ -39,67 +44,83 @@ void initializeConnection(ConnectionMode mode) {
         }
         
         // Set timeout for configuration mode
-        wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT_SEC); // 3 minutes
+        wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT_SEC);
         
         // Try to connect with saved credentials, or start config portal
         if (!wifiManager.autoConnect(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD)) {
-            Serial.println("Failed to connect to WiFi.");
+            Serial.println("Failed to connect to existing WiFi.");
             Serial.println("Starting WiFiManager configuration portal...");
-            Serial.println("Connect to WiFi network: " + String(WIFI_SSID_NAME));
-            Serial.println("Password: " + String(OFFLINE_AP_PASSWORD));
+            Serial.println("Connect to: " + String(WIFI_SSID_NAME) + " (Password: " + String(OFFLINE_AP_PASSWORD) + ")");
             Serial.println("Then open: http://ghostwhisper.local to configure WiFi");
             
-            // WiFiManager will have created an AP for configuration
-            wifiConnected = true; // Consider connected for portal access
-            setConnectionStatusLED(false); // Red LED for configuration mode
+            wifiConnected = true;
+            setConnectionStatusLED(false);
         } else {
             Serial.println("WiFi connected successfully!");
             Serial.print("IP address: ");
             Serial.println(WiFi.localIP());
+            Serial.println("Access web interface at: http://" + WiFi.localIP().toString());
             wifiConnected = true;
-            setConnectionStatusLED(true); // Blue LED for successful connection
+            setConnectionStatusLED(true);
             
             // Initialize mDNS
             if (MDNS.begin("ghostwhisper")) {
                 Serial.println("mDNS responder started");
-                Serial.println("Device accessible at: http://ghostwhisper.local");
+                MDNS.addService("http", "tcp", 80);
+                Serial.println("Also accessible at: http://ghostwhisper.local");
             } else {
-                Serial.println("Error setting up mDNS responder!");
+                Serial.println("mDNS failed to start - use IP address only");
             }
         }
     } else {
         Serial.println("=== OFFLINE MODE ===");
-        Serial.println("Creating WiFi Access Point for local web interface...");
+        Serial.println("Creating secure WiFi Access Point...");
         
         // Create Access Point
         WiFi.mode(WIFI_AP);
-        bool apStarted = WiFi.softAP(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD); // Use config password
+        WiFi.disconnect(true);
+        delay(100);
+        
+        // Create secure Access Point
+        Serial.println("Attempting softAP with:");
+        Serial.println("  SSID length: " + String(strlen(WIFI_SSID_NAME)));
+        Serial.println("  Password length: " + String(strlen(OFFLINE_AP_PASSWORD)));
+        Serial.println("  Password: '" + String(OFFLINE_AP_PASSWORD) + "'");
+        
+        bool apStarted = WiFi.softAP(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD, 1, 0, 4);
+        
+        if (!apStarted) {
+            // Try simpler method if first fails
+            apStarted = WiFi.softAP(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD);
+        }
         
         if (apStarted) {
-            Serial.println("Access Point created successfully!");
-            Serial.print("AP IP address: ");
-            Serial.println(WiFi.softAPIP());
-            Serial.println("Connect to WiFi network: " + String(WIFI_SSID_NAME));
+            Serial.println("Secure Access Point created: " + String(WIFI_SSID_NAME));
             Serial.println("Password: " + String(OFFLINE_AP_PASSWORD));
-            Serial.println("Then open: http://192.168.4.1 in your browser");
-            Serial.println("Or open: http://ghostwhisper.local in your browser");
+            Serial.println("IP: " + WiFi.softAPIP().toString());
+            Serial.println("Web interface: http://192.168.4.1");
             
             // Initialize mDNS for Access Point mode
+            WiFi.softAPsetHostname("ghostwhisper");
+            delay(100);
             if (MDNS.begin("ghostwhisper")) {
-                Serial.println("mDNS responder started for AP mode");
+                Serial.println("mDNS responder started");
+                MDNS.addService("http", "tcp", 80);
+                Serial.println("Also accessible at: http://ghostwhisper.local");
             } else {
-                Serial.println("Error setting up mDNS responder for AP mode!");
+                Serial.println("mDNS failed - use IP address only");
             }
             
-            wifiConnected = true; // Set as connected for AP mode
-            setConnectionStatusLED(true); // Blue LED for AP mode
+            wifiConnected = true;
+            setConnectionStatusLED(true);
         } else {
             Serial.println("Failed to create Access Point");
             wifiConnected = false;
-            setConnectionStatusLED(false); // Red LED for failure
+            setConnectionStatusLED(false);
         }
     }
     
+    Serial.println("==================================================");
     Serial.println("Connection initialization complete.");
 }
 
