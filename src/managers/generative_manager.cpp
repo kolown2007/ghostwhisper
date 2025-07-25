@@ -19,6 +19,7 @@ static GenerativeState generativeState = {
 // Sequence management
 static std::vector<String> currentSequence;
 static size_t currentSequenceIndex = 0;
+static bool playingFieldSound = false;
 
 GenerativeState& getGenerativeState() {
     return generativeState;
@@ -75,85 +76,108 @@ void handleGenerativeProgram() {
     if (generativeState.generativeActive &&
         (millis() - generativeState.lastNoteTime >= generativeState.nextNoteDelay || !audio.isRunning())) {
 
-        // Check if we need to generate a new sequence
-        if (currentSequence.empty() || currentSequenceIndex >= currentSequence.size()) {
-            // Retrieve soundfont files from SD card (using cached version)
-            const std::vector<String>& soundfontFiles = getSoundfontFiles();
-            if (soundfontFiles.empty()) {
-                handleNoFilesError();
+        // If we're currently playing a field sound, wait for it to complete
+        if (playingFieldSound) {
+            if (!audio.isRunning()) {
+                // Field sound finished, reset state and prepare for new sequence
+                playingFieldSound = false;
+                currentSequence.clear();
+                currentSequenceIndex = 0;
+                Serial.println("Field sound completed, generating new sequence...");
+            } else {
+                // Field sound still playing, don't do anything
                 return;
             }
-
-            // Generate a harmonious sequence instead of random notes
-            currentSequence.clear();
-            currentSequenceIndex = 0;
-            Serial.println("Generating harmonious sequence with " + String(soundfontFiles.size()) + " available files:");
-            
-            // Start with a random root note as the foundation of our harmony
-            int rootNote = random(0, soundfontFiles.size());
-            
-            for (int i = 0; i < 20; ++i) {
-                int noteIndex;
-                
-                // Create simple harmonic progression using musical intervals
-                int progressionStep = i % 8; // Create an 8-note repeating pattern
-                switch (progressionStep) {
-                    case 0: case 4: 
-                        noteIndex = rootNote; // Root note - foundation of the chord
-                        break;                    
-                    case 1: case 5: 
-                        noteIndex = (rootNote + 4) % soundfontFiles.size(); // Major 3rd - adds sweetness
-                        break;  
-                    case 2: case 6: 
-                        noteIndex = (rootNote + 7) % soundfontFiles.size(); // Perfect 5th - strong harmonic
-                        break;  
-                    case 3: case 7: 
-                        noteIndex = (rootNote + 2) % soundfontFiles.size(); // Major 2nd - adds movement
-                        break;  
-                    default: 
-                        noteIndex = rootNote; // Fallback to root
-                        break;
-                }
-                
-                currentSequence.push_back(soundfontFiles[noteIndex]);
-                Serial.println("  [" + String(i + 1) + "] Harmonic index: " + String(noteIndex) + 
-                              " (pattern step: " + String(progressionStep) + ")");
-                
-                // Change key every 32 notes for musical variety and progression
-                if (i > 0 && i % 32 == 0) {
-                    // Modulate to a nearby key (within 3 semitones up or down)
-                    rootNote = (rootNote + random(-3, 4)) % soundfontFiles.size();
-                    // Handle negative indices by wrapping around
-                    if (rootNote < 0) rootNote += soundfontFiles.size();
-                    Serial.println("  >>> Key change to root note: " + String(rootNote));
-                }
-            }
-            Serial.println("Generated harmonious sequence of " + String(currentSequence.size()) + " notes");
         }
 
-        // Play the current note in the sequence
-        String selectedSound = currentSequence[currentSequenceIndex];
-        Serial.println("Sequence [" + String(currentSequenceIndex + 1) + "/" + String(currentSequence.size()) + "]");
-        bool success = playNote(selectedSound);
-        
-        // Move to next note in sequence
-        currentSequenceIndex++;
-
-        // Set the delay for the next note
-        setNextNoteDelay(success);
-
-        // Check if we have reached the end of the sequence
-        if (currentSequenceIndex >= currentSequence.size()) {
-            // Play a random MP3 from the 'field' subsection
-            // Retrieve files directly from the 'field' section
-            std::vector<String> fieldFiles = getDataFilesFromJSON("field");
-            if (!fieldFiles.empty()) {
-                String randomFieldFile = fieldFiles[random(0, fieldFiles.size())];
-                Serial.println("Playing random field sound: " + randomFieldFile);
-                playNote("/field/" + randomFieldFile);
-            } else {
-                Serial.println("No files found in 'field' section");
+        // Check if we need to generate a new sequence
+        if (currentSequence.empty() || currentSequenceIndex >= currentSequence.size()) {
+            // Check if we just finished a sequence and need to play a field sound
+            if (currentSequenceIndex >= currentSequence.size() && !currentSequence.empty()) {
+                // Play a random MP3 from the 'field' subsection
+                std::vector<String> fieldFiles = getDataFilesFromJSON("field");
+                if (!fieldFiles.empty()) {
+                    String randomFieldFile = fieldFiles[random(0, fieldFiles.size())];
+                    Serial.println("Playing random field sound: " + randomFieldFile);
+                    bool fieldSuccess = playNote("/field/" + randomFieldFile);
+                    if (fieldSuccess) {
+                        playingFieldSound = true;
+                        setNextNoteDelay(true); // Set a proper delay
+                        return; // Exit and wait for field sound to complete
+                    }
+                } else {
+                    Serial.println("No files found in 'field' section");
+                }
             }
+            
+            // Generate new sequence (only if not playing field sound)
+            if (!playingFieldSound) {
+                // Retrieve soundfont files from SD card (using cached version)
+                const std::vector<String>& soundfontFiles = getSoundfontFiles();
+                if (soundfontFiles.empty()) {
+                    handleNoFilesError();
+                    return;
+                }
+
+                // Generate a harmonious sequence instead of random notes
+                currentSequence.clear();
+                currentSequenceIndex = 0;
+                Serial.println("Generating harmonious sequence with " + String(soundfontFiles.size()) + " available files:");
+                
+                // Start with a random root note as the foundation of our harmony
+                int rootNote = random(0, soundfontFiles.size());
+                
+                for (int i = 0; i < 20; ++i) {
+                    int noteIndex;
+                    
+                    // Create simple harmonic progression using musical intervals
+                    int progressionStep = i % 8; // Create an 8-note repeating pattern
+                    switch (progressionStep) {
+                        case 0: case 4: 
+                            noteIndex = rootNote; // Root note - foundation of the chord
+                            break;                    
+                        case 1: case 5: 
+                            noteIndex = (rootNote + 4) % soundfontFiles.size(); // Major 3rd - adds sweetness
+                            break;  
+                        case 2: case 6: 
+                            noteIndex = (rootNote + 7) % soundfontFiles.size(); // Perfect 5th - strong harmonic
+                            break;  
+                        case 3: case 7: 
+                            noteIndex = (rootNote + 2) % soundfontFiles.size(); // Major 2nd - adds movement
+                            break;  
+                        default: 
+                            noteIndex = rootNote; // Fallback to root
+                            break;
+                    }
+                    
+                    currentSequence.push_back(soundfontFiles[noteIndex]);
+                    Serial.println("  [" + String(i + 1) + "] Harmonic index: " + String(noteIndex) + 
+                                  " (pattern step: " + String(progressionStep) + ")");
+                    
+                    // Change key every 32 notes for musical variety and progression
+                    if (i > 0 && i % 32 == 0) {
+                        // Modulate to a nearby key (within 3 semitones up or down)
+                        rootNote = (rootNote + random(-3, 4)) % soundfontFiles.size();
+                        // Handle negative indices by wrapping around
+                        if (rootNote < 0) rootNote += soundfontFiles.size();
+                        Serial.println("  >>> Key change to root note: " + String(rootNote));
+                    }
+                }
+                Serial.println("Generated harmonious sequence of " + String(currentSequence.size()) + " notes");
+            }
+        }
+
+        // Play the current note in the sequence (only if not playing field sound)
+        if (!playingFieldSound && !currentSequence.empty() && currentSequenceIndex < currentSequence.size()) {
+            String selectedSound = currentSequence[currentSequenceIndex];
+            Serial.println("Sequence [" + String(currentSequenceIndex + 1) + "/" + String(currentSequence.size()) + "]");
+            bool success = playNote(selectedSound);
+            
+            // Move to next note in sequence
+            currentSequenceIndex++;
+
+            // Set the delay for the next note
+            setNextNoteDelay(success);
         }
     }
 }
