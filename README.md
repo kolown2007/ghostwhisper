@@ -1,7 +1,10 @@
 # GhostWhisper
 
 mp3 player + generative sequencer + internet radio player
-for QCB 2025
+developed by KoloWn and Roan Alvarez for QCB 2025
+
+
+the project is under development and we will be presenting a bare-bones setup for QCB 2025
 
 ## Program 
 
