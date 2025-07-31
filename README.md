@@ -1,10 +1,19 @@
 # GhostWhisper
+![GhostWhisper Logo](assets/ghostwhisper.png)
 
 mp3 player + generative sequencer + internet radio player
+
 developed by KoloWn and Roan Alvarez for QCB 2025
 
+**Disclaimer**: GhostWhisper is a platform for artists to present their own sound files and generative content. All audio and materials used are the sole responsibility and artistic expression of each artist. The platform itself does not claim ownership or legal responsibility for any content; future artists using GhostWhisper are fully responsible for the legality and originality of their works.
 
-the project is under development and we will be presenting a bare-bones setup for QCB 2025
+**Note**: This project is under active development. A detailed roadmap and feature plan will be published soon.
+
+**Project Structure**
+- src - c++ / arduino flavor on esp32 platform io 
+- scripts - python / automation scripts
+- view - html/css/javascript
+- assets - png/svg
 
 ## Program 
 
