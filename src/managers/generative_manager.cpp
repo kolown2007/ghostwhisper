@@ -127,7 +127,7 @@ void handleGenerativeProgram() {
                 // Start with a random root note as the foundation of our harmony
                 int rootNote = random(0, soundfontFiles.size());
                 
-                for (int i = 0; i < 20; ++i) {
+                for (int i = 0; i < 120; ++i) {
                     int noteIndex;
                     
                     // Create simple harmonic progression using musical intervals
