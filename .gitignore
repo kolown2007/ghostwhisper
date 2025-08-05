@@ -11,5 +11,7 @@ src/secrets.h
 /sd
 src/config/secrets.h
 
+
 src/realtime_manager.cpp
 src/realtime_manager.h
+data.json
