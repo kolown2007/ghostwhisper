@@ -29,9 +29,11 @@ developed by KoloWn and Roan Alvarez for QCB 2025
 for QCB, the default mode is OFFLINE and GENERATIVE program 
 
 ## Access
+- **ONLINE MODE**: ESP32 will connect to your WiFi network and you can access the web interface at http://ghostwhisper.local.
+  If not connected to a WiFi network, the ESP32 will create its own WiFi hotspot (SSID). Connect to this hotspot and open http://192.168.4.1 in your browser to enter your WiFi credentials.
+- **OFFLINE MODE**: ESP32 will create its own WiFi hotspot (SSID). Connect to it using the provided password and access the web interface at http://ghostwhisper.local.
 
-- **URL**: `ghostwhisper.local` 
-- **Controls**: Volume, program selection, playback control via web UI
+- Web Interface Controls: Volume, program selection, playback control
 
 
 ## Hardware Pins
