@@ -10,22 +10,39 @@
 
 
 void setup() {
-  
-   
+    // Configure watchdog with longer timeout for setup
+    esp_task_wdt_init(30, true); // 30 second timeout during setup
+    esp_task_wdt_add(NULL);
     
     initializeHardware();
     randomSeed(esp_random()); // Seed with ESP32 hardware random generator
     
-   initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
+    // Reset watchdog before connection init
+    esp_task_wdt_reset();
+    
+    initializeConnection(ONLINE);  // Change to OFFLINE for no WiFi
+
+    // Reset watchdog before web init
+    esp_task_wdt_reset();
 
     // Initialize web control interface for both ONLINE and OFFLINE modes
     // In OFFLINE mode, it creates local AP for web access
     initializeWebControl();
     
-  
+    // Reset watchdog before stream data fetch
+    esp_task_wdt_reset();
+    
+    // Stream data initialization removed for now
+    
+    // Reset watchdog before program init
+    esp_task_wdt_reset();
 
     // Set default program mode to generative (ambient music playback)
     setProgramMode(GENERATIVE_PROGRAM, "");
+    
+    // Reconfigure watchdog for normal operation (shorter timeout)
+    esp_task_wdt_init(10, true); // 10 second timeout during normal operation
+    esp_task_wdt_add(NULL);
     
     Serial.println("Setup complete, starting program in loop...");
 }

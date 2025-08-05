@@ -9,6 +9,7 @@
 #include <WiFiManager.h>
 #include <WiFi.h>
 #include <ESPmDNS.h>
+#include <esp_task_wdt.h>
 
 // Global connection state
 ConnectionMode currentConnectionMode = DEFAULT_CONNECTION_MODE; // Use config default
@@ -35,6 +36,10 @@ void initializeConnection(ConnectionMode mode) {
         Serial.println("=== ONLINE MODE ===");
         Serial.println("Connecting to existing WiFi network...");
         
+        // DISABLE WATCHDOG BEFORE WIFI OPERATIONS
+        Serial.println("Temporarily disabling watchdog for WiFi configuration...");
+        esp_task_wdt_delete(NULL);
+        
         WiFiManager wifiManager;
         
         // Clear WiFi credentials if requested
@@ -43,8 +48,8 @@ void initializeConnection(ConnectionMode mode) {
             wifiManager.resetSettings();
         }
         
-        // Set timeout for configuration mode
-        wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT_SEC);
+        // Set timeout for configuration mode (can be longer now)
+        wifiManager.setConfigPortalTimeout(180); // 3 minutes since watchdog is disabled
         
         // Try to connect with saved credentials, or start config portal
         if (!wifiManager.autoConnect(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD)) {
@@ -53,7 +58,7 @@ void initializeConnection(ConnectionMode mode) {
             Serial.println("Connect to: " + String(WIFI_SSID_NAME) + " (Password: " + String(OFFLINE_AP_PASSWORD) + ")");
             Serial.println("Then open: http://ghostwhisper.local to configure WiFi");
             
-            wifiConnected = true;
+            wifiConnected = false;
             setConnectionStatusLED(false);
         } else {
             Serial.println("WiFi connected successfully!");
@@ -72,6 +77,11 @@ void initializeConnection(ConnectionMode mode) {
                 Serial.println("mDNS failed to start - use IP address only");
             }
         }
+        
+        // RE-ENABLE WATCHDOG AFTER WIFI OPERATIONS
+        Serial.println("Re-enabling watchdog timer...");
+        esp_task_wdt_init(10, true); // 10 second timeout for normal operation
+        esp_task_wdt_add(NULL);
     } else {
         Serial.println("=== OFFLINE MODE ===");
         Serial.println("Creating secure WiFi Access Point...");
@@ -183,10 +193,15 @@ void resetWiFiSettings() {
  */
 void startWiFiConfigPortal() {
     Serial.println("=== STARTING WIFI CONFIG PORTAL ===");
+    
+    // Disable watchdog during config portal
+    Serial.println("Disabling watchdog for config portal...");
+    esp_task_wdt_delete(NULL);
+    
     WiFiManager wifiManager;
     
-    // Set timeout for configuration mode
-    wifiManager.setConfigPortalTimeout(WIFI_TIMEOUT_SEC);
+    // Set timeout for configuration mode (can be longer now)
+    wifiManager.setConfigPortalTimeout(180); // 3 minutes since watchdog is disabled
     
     // Start configuration portal
     if (wifiManager.startConfigPortal(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD)) {
@@ -208,6 +223,11 @@ void startWiFiConfigPortal() {
         wifiConnected = false;
         setConnectionStatusLED(false);
     }
+    
+    // Re-enable watchdog
+    Serial.println("Re-enabling watchdog timer...");
+    esp_task_wdt_init(10, true);
+    esp_task_wdt_add(NULL);
 }
 
 /**
