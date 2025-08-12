@@ -13,9 +13,9 @@
         </div>
         <p>Click a button to play the corresponding meme audio from SD card (<code>/meme/</code>).</p>
     </div>
-    <script src="/app.js"></script>
-    <script>
-    window.addEventListener('DOMContentLoaded', loadMemeButtons);
+    <script type="module">
+        import { loadMemeButtons } from './js/meme.js';
+        window.addEventListener('DOMContentLoaded', loadMemeButtons);
     </script>
 </body>
 </html>

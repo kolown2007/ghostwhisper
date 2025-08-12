@@ -76,6 +76,54 @@
         
     </div>
     
-    <script src="/app.js"></script>
+    <script type="module">
+        import { changeVolume, setVolume, updateVolumeDisplay } from './js/volume.js';
+        import { updateStatus } from './js/status.js';
+        import { setProgram, updateProgramButtons, updateProgramControls } from './js/program.js';
+        import { showNotification } from './js/notifications.js';
+        import { formatUptime, formatBytes } from './js/utils.js';
+        import { playRandomFile, stopPlayback, pausePlayback, resumePlayback } from './js/playback.js';
+        import { regenerateSequence, shuffleNext, changeShuffleFolder } from './js/generative.js';
+        import { initializeApp, runVolumeTest, cleanupApp } from './js/main.js';
+        import { 
+            initializeStreamMode, 
+            startStream, 
+            nextStation, 
+            refreshStations,
+            getCurrentStation 
+        } from './js/stream.js';
+
+        // Expose functions globally for inline HTML event handlers
+        window.changeVolume = changeVolume;
+        window.setVolume = setVolume;
+        window.setProgram = setProgram;
+        window.updateStatus = updateStatus;
+        window.updateProgramButtons = updateProgramButtons;
+        window.updateProgramControls = updateProgramControls;
+        window.showNotification = showNotification;
+        window.formatUptime = formatUptime;
+        window.formatBytes = formatBytes;
+        window.playRandomFile = playRandomFile;
+        window.stopPlayback = stopPlayback;
+        window.pausePlayback = pausePlayback;
+        window.resumePlayback = resumePlayback;
+        window.regenerateSequence = regenerateSequence;
+        window.shuffleNext = shuffleNext;
+        window.changeShuffleFolder = changeShuffleFolder;
+        window.runVolumeTest = runVolumeTest;
+        
+        // Simplified stream functions
+        window.initializeStreamMode = initializeStreamMode;
+        window.startStream = startStream;
+        window.nextStation = nextStation;
+        window.refreshStations = refreshStations;
+        window.getCurrentStation = getCurrentStation;
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initializeApp);
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', cleanupApp);
+    </script>
 </body>
 </html>

@@ -59,6 +59,18 @@ void setupWebRoutes() {
     server.on("/app.js", handleStaticFile);
     server.on("/favicon.ico", handleStaticFile);
     
+    // JavaScript module endpoints
+    server.on("/js/volume.js", handleStaticFile);
+    server.on("/js/status.js", handleStaticFile);
+    server.on("/js/program.js", handleStaticFile);
+    server.on("/js/notifications.js", handleStaticFile);
+    server.on("/js/utils.js", handleStaticFile);
+    server.on("/js/playback.js", handleStaticFile);
+    server.on("/js/generative.js", handleStaticFile);
+    server.on("/js/main.js", handleStaticFile);
+    server.on("/js/stream.js", handleStaticFile);
+    server.on("/js/meme.js", handleStaticFile);
+    
     // 404 handler
     server.onNotFound(handleNotFound);
 }
