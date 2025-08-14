@@ -20,7 +20,7 @@ void setup() {
     // Reset watchdog before connection init
     esp_task_wdt_reset();
     
-    initializeConnection(ONLINE);  // Change to OFFLINE for no WiFi
+    initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
 
     // Reset watchdog before web init
     esp_task_wdt_reset();
