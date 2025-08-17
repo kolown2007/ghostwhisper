@@ -5,6 +5,8 @@ mp3 player + generative sequencer + internet radio player
 
 developed by KoloWn and Roan Alvarez for QCB 2025
 
+The developers would like to thank Corine San Jose and Tengal Drilon for the inputs during the research phase.
+
 **Disclaimer**: GhostWhisper is a platform for artists to present their own sound files and generative content. All audio and materials used are the sole responsibility and artistic expression of each artist. The platform itself does not claim ownership or legal responsibility for any content; future artists using GhostWhisper are fully responsible for the legality and originality of their works.
 
 **Note**: This project is under active development. A detailed roadmap and feature plan will be published soon.
