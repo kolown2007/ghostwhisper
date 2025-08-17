@@ -24,7 +24,7 @@
 #define WIFI_TIMEOUT_SEC 180
 
 // Audio Configuration
-#define DEFAULT_VOLUME 5
+#define DEFAULT_VOLUME 90
 #define MAX_VOLUME 100
 #define MIN_VOLUME 0
 #define VOLUME_STEP 1
