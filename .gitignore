@@ -10,6 +10,7 @@ src/secrets.h
 /test
 /sd
 src/config/secrets.h
+/scripts
 
 
 src/realtime_manager.cpp
