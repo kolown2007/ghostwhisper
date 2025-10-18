@@ -4,7 +4,7 @@
 #include "managers/connection_manager.h"
 #include "managers/radio_manager.h"
 #include "managers/debug_manager.h"
-#include "web/control.h"
+
 #include <esp_task_wdt.h>
 #include <esp_random.h>
 
@@ -27,7 +27,7 @@ void setup() {
 
     // Initialize web control interface for both ONLINE and OFFLINE modes
     // In OFFLINE mode, it creates local AP for web access
-    initializeWebControl();
+   
     
     // Reset watchdog before stream data fetch
     esp_task_wdt_reset();
