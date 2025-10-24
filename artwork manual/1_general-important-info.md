@@ -1,5 +1,6 @@
-# GhostWhisper 2025 - GENERAL IMPORTANT INFORMATION
-This short section must be read for proper operation.
+# GhostWhisper 2025 
+# GENERAL IMPORTANT INFORMATION
+*This short section must be read for proper operation.*
 
 ## Artwork Description
 a simplified online-mode build of GhostWhisper that streams audio and serves files from a remote server (no SD card). All device logic is moved to a separate server.
@@ -30,6 +31,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 ## Wiring Diagram (PER MODULE)
 
 ![Wiring Diagram](assets/ghostwhisper-ThB25.png)
+![Pinouts](assets/pinouts.png)
 
 ## Assembly Instructions
 
