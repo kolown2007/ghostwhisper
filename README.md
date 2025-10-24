@@ -107,7 +107,7 @@ WIP
 | ----- | :---: |
 | Description: | The processor board responsible for running code and connecting to WiFi. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/ESP32-WiFi-Node32s-ESP-32-ESP-32S-NodeMCU-ESP-WROOM-32-WiFi-Bluetooth-%E0%B8%A1%E0%B8%B5%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%AA%E0%B9%88%E0%B8%87%E0%B8%97%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5-i.117988183.2053436592?sp_atk=cfe1f287-e40d-45f5-94a5-bb42284281be&xptdk=cfe1f287-e40d-45f5-94a5-bb42284281be) |
-| | ![NodeMCU](images/NodeMCU-ESP32-C_01.png)![Shopee ESP32](images/ss-esp32.png) |
+| | ![NodeMCU](artwork-manual/images/NodeMCU-ESP32-C_01.png)![Shopee ESP32](artwork-manual/images/ss-esp32.png) |
 
 | Component Name :  | Max98357 3W Class D Amplifier Breakout Board Module |
 | ----- | :---: |
