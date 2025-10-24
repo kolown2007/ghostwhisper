@@ -1,3 +1,4 @@
+![Ghostwhisper Logo](images/ghostwhisper.png)
 # GENERAL IMPORTANT INFORMATION
 *This short section must be read for proper operation.*
 
@@ -29,8 +30,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 ## Wiring Diagram (PER MODULE)
 
-![Wiring Diagram](assets/ghostwhisper-ThB25.png)
-![Pinouts](assets/pinouts.png)
+![Wiring Diagram](images/ghostwhisper-ThB25.png)
+
+![Pinouts](images/pinouts.png)
 
 ## Assembly Instructions
 
