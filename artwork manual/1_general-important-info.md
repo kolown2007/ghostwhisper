@@ -1,6 +1,5 @@
-# GENERAL IMPORTANT INFORMATION
-
-GhostWhisper 2025
+# GhostWhisper 2025 - GENERAL IMPORTANT INFORMATION
+This short section must be read for proper operation.
 
 ## Artwork Description
 a simplified online-mode build of GhostWhisper that streams audio and serves files from a remote server (no SD card). All device logic is moved to a separate server.
