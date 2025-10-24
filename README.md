@@ -116,14 +116,14 @@ WIP
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: โอ.อาร์. เทคโนโลยี](https://shopee.co.th/โมดูลขยายเสียง-บัดกรี-ไม่บัดกรี-MAX98357-I2S-3W-Class-D-Amplifier-Breakout-Interface-Dac-Decoder-Module-Audio-Amplifi...-i.944231623.26560069128?sp_atk=ff5fc91a-9817-4f18-bcb5-3b17607cda59&xptdk=ff5fc91a-9817-4f18-bcb5-3b17607cda59) |
 |  | ![Amplifier](/artwork-manual/images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](/artwork-manual/images/ss-amplifier.png) |
 
-| Speaker Option A |  |
+| Speaker | **Option A** |
 | ----- | :---: |
 | Component Name :  | **Aiyima 8ohm 3watt Mini Full-Range Speakers** |
 | Description: | Set of two mini full-range speakers that can be daisy-chained together to create one GhostWhisper module. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AiyimaAudio.th](https://shopee.co.th/AIYIMA-2Pcs-MIni-Full-Range-Speaker-DIY-Audio-Portable-Bluetooth-Speaker-4-Ohm-3W-Home-Theater-Music-Sound-Loudspeaker-i.419982862.23102228411?sp_atk=46748790-1223-40bb-8875-37c026c24344&xptdk=46748790-1223-40bb-8875-37c026c24344) |
 | | ![Speakers](/artwork-manual/images/ss-fullrangespeakers.png)  |
 
-| Speaker Option B |  |
+| Speaker | **Option B** |
 | ----- | :---: |
 | Component Name :  | **8ohm 20watt Horn Speaker** |
 | Description: | An industrial horn speaker \[... add more\] |
