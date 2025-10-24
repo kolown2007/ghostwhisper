@@ -114,48 +114,48 @@ WIP
 | ----- | :---: |
 | Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol \[insert how this is used with the speakers here...\] |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: โอ.อาร์. เทคโนโลยี](https://shopee.co.th/โมดูลขยายเสียง-บัดกรี-ไม่บัดกรี-MAX98357-I2S-3W-Class-D-Amplifier-Breakout-Interface-Dac-Decoder-Module-Audio-Amplifi...-i.944231623.26560069128?sp_atk=ff5fc91a-9817-4f18-bcb5-3b17607cda59&xptdk=ff5fc91a-9817-4f18-bcb5-3b17607cda59) |
-|  | ![Amplifier](artwork-manual/images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](artwork-manual/images/ss-amplifier.png) |
+|  | ![Amplifier](/artwork-manual/images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](/artwork-manual/images/ss-amplifier.png) |
 
 | Speaker Option A |  |
 | ----- | :---: |
 | Component Name :  | **Aiyima 8ohm 3watt Mini Full-Range Speakers** |
 | Description: | Set of two mini full-range speakers that can be daisy-chained together to create one GhostWhisper module. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AiyimaAudio.th](https://shopee.co.th/AIYIMA-2Pcs-MIni-Full-Range-Speaker-DIY-Audio-Portable-Bluetooth-Speaker-4-Ohm-3W-Home-Theater-Music-Sound-Loudspeaker-i.419982862.23102228411?sp_atk=46748790-1223-40bb-8875-37c026c24344&xptdk=46748790-1223-40bb-8875-37c026c24344) |
-| | ![Speakers](artwork-manual/images/ss-fullrangespeakers.png)  |
+| | ![Speakers](/artwork-manual/images/ss-fullrangespeakers.png)  |
 
 | Speaker Option B |  |
 | ----- | :---: |
 | Component Name :  | **8ohm 20watt Horn Speaker** |
 | Description: | An industrial horn speaker \[... add more\] |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: fkrittapas](https://shopee.co.th/ลำโพงฮอร์น-\(Industrial-Horn-Speakers\)-PH20-8นิ้ว-15-20W-8โอห์ม-“PENTON”-i.81068829.25486787205?sp_atk=254f9e18-fd71-47cd-bea9-69da84c71e64&xptdk=254f9e18-fd71-47cd-bea9-69da84c71e64) |
-|  | ![Horn Speakers](artwork-manual/images/ss-hornspeaker.png)  Product Details: Industrial Horn Speakers PH20 15/20W 8ohms PENTON Brand Size: 20x20x26 cm Weight: 1400 grams  |
+|  | ![Horn Speakers](/artwork-manual/images/ss-hornspeaker.png)  Product Details: Industrial Horn Speakers PH20 15/20W 8ohms PENTON Brand Size: 20x20x26 cm Weight: 1400 grams  |
 
 | Component Name :  | Male to Female Dupont Wires |
 | ----- | :---: |
 | Description: | Used for connecting data pins to the microcontroller and amplifier module. Can also be connected to other Dupont Wire types. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/สายจัมป์-10-20-30-40-ซม.-\(แผงละ-40-เส้น\)-มีให้เลือก-3-แบบ-Jumper-Wire-40p-10-20-30-40-cm-พร้อมส่งทันที!!!!-i.117988183.1866546973) |
-|  | ![MF Dupont](artwork-manual/images/male-female_Dupont.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM ผู้-เมีย OPTION ![Shopee MF Dupont](artwork-manual/images/ss-dupontFM.png)** |
+|  | ![MF Dupont](/artwork-manual/images/male-female_Dupont.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM ผู้-เมีย OPTION ![Shopee MF Dupont](/artwork-manual/images/ss-dupontFM.png)** |
 
 | Component Name :  | Female to Female Dupont Wires |
 | ----- | :---: |
 | Description: | Used for connecting data pins to the microcontroller and amplifier module. Can also be connected to other Dupont Wire types. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/สายจัมป์-10-20-30-40-ซม.-\(แผงละ-40-เส้น\)-มีให้เลือก-3-แบบ-Jumper-Wire-40p-10-20-30-40-cm-พร้อมส่งทันที!!!!-i.117988183.1866546973) |
-|  | ![FF Dupont](artwork-manual/images/female-female_Dupont.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM เมีย-เมีย OPTION ![FF Dupont](artwork-manual/images/ss-dupontFF.png)** |
+|  | ![FF Dupont](/artwork-manual/images/female-female_Dupont.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM เมีย-เมีย OPTION ![FF Dupont](/artwork-manual/images/ss-dupontFF.png)** |
 
 | Component Name :  | Power Supply Unit (5V, 3A) |
 | ----- | :---: |
 | Description: | Used to power the microcontroller once the work is installed. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: Lantern IoT Maker](https://shopee.co.th/Adapter-5V-3A-แบบ-USB-type-C-USB-C-ใช้ได้กับ-Raspberry-PI-อแดปเตอร์-220VAC-to-5VDC-หัวไทป์ซี-Power-Supply-ราสเบอรี่พาย-i.270502312.4381642757?sp_atk=d52360ed-1b86-48e9-99bb-596ee63a3c07&xptdk=d52360ed-1b86-48e9-99bb-596ee63a3c07) |
-|  | ![Power Supply](artwork-manual/images/PowerSupplyUnit.png) Power Consumption: 15W Power Adapter Type: 220VAC Dimension (L x W x H): 6x10x5cm Cord Length: 1 meter |
+|  | ![Power Supply](/artwork-manual/images/PowerSupplyUnit.png) Power Consumption: 15W Power Adapter Type: 220VAC Dimension (L x W x H): 6x10x5cm Cord Length: 1 meter |
 
 | Component Name :  | Terminal Blocks |
 | ----- | :---: |
 | Description: | Screw-type insulated connectors that securely fasten several wires together for electrical circuits. |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: SmartP Store](https://shopee.co.th/TC100A-600V-เทอร์มินอล-บล็อกต่อสายไฟ-Terminal-Block-TC1002-TC1003-TC1004-i.29111487.29962853600?sp_atk=9f73954a-e6fc-41d9-b2ad-1cf31462ef14&xptdk=9f73954a-e6fc-41d9-b2ad-1cf31462ef14) |
-|  | ![Terminal Blocks](artwork-manual/images/TerminalBlock.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE TC-1004 OPTION, Quantity: 2pcs ![Shopee Terminal Block](artwork-manual/images/ss-terminalblock.png)** |
+|  | ![Terminal Blocks](/artwork-manual/images/TerminalBlock.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE TC-1004 OPTION, Quantity: 2pcs ![Shopee Terminal Block](/artwork-manual/images/ss-terminalblock.png)** |
 
 | Component Name :  | Heat-shrink Tubing |
 | ----- | :---: |
 | Description: | Heat activated tubing used to protect wire connections |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/ชุดท่อหด-set-Heat-Shrinkable-Tube-1-ชุด-มีหลายเส้น-พร้อมส่งทันที!!!!-i.117988183.28503560356) |
-|  | **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สีดำชุดท่อหด127 OPTION** ![Shopee Heatshrink](artwork-manual/images/ss-heatshrink.png) |
+|  | **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สีดำชุดท่อหด127 OPTION** ![Shopee Heatshrink](/artwork-manual/images/ss-heatshrink.png) |
