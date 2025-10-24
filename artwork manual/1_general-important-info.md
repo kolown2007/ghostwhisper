@@ -1,4 +1,3 @@
-# GhostWhisper 2025 
 # GENERAL IMPORTANT INFORMATION
 *This short section must be read for proper operation.*
 
