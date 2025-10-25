@@ -6,7 +6,9 @@ Please refer to the **General Important Information** section for detailed syste
 
 **Note**: The speakers, amplifier, and the ESP32 microcontroller should be assembled together. They will be referred to in this manual as a “**module.**”
 
+
 ## List of Materials Needed for Installation
+
 * Assembled module
 * Neodymium magnet with countersunk hole (1-2pcs for each speaker)  
 * Screws that will fit through the countersunk hole of the neodymium magnets
@@ -17,6 +19,7 @@ Please refer to the **General Important Information** section for detailed syste
     Carpenter’s measure
 
 ## Placement Instructions
+
 1. Test the module before installation by powering the ESP32 microcontroller using the Power Supply Unit. After testing, unplug the power supply before installing the module.
 2. Refer to the supplied template diagram for positioning the module.  
    The piece should be installed on a flat wall.  
@@ -26,4 +29,12 @@ Please refer to the **General Important Information** section for detailed syste
 6. \[TO BE UPDATED\]
 
 ## Maintenance
-\[TO BE UPDATED\]
+
+Always unplug the Power Supply Unit before cleaning the work.  
+Strictly no water or water-based solutions should be applied as it will damage the electronics. Please do not clean the module with Windex or soap. Use a lint-free cloth or anti-static wipes/dusters. 
+
+While cleaning the speakers, avoid applying too much pressure onto its surface, otherwise the speaker’s cone and dust cap may tear.
+
+The ESP32 microcontroller and amplifier module should be cleaned only with 99% Isopropyl Alcohol and anti-static cleanroom wipers. Alternatively, compressed air may be used to dust off debris on the microcontroller and amplifier module, these can be purchased in regular electronics stores.
+
+We recommend cleaning the piece at least every two months.

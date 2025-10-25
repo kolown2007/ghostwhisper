@@ -1,4 +1,5 @@
 # TECHNICAL INFORMATION
+
 \[TO BE UPDATED\]
 
 ## Artwork Operation
@@ -9,17 +10,30 @@
 5. To turn the piece ON or OFF, plug or unplug the Power Supply Unit from the outlet. Alternatively, the Power Supply Unit may be plugged into an adaptor with a switch or a powerstrip that has a switch.
 
 ## Software Operation
+
 \[Assigned to @kolown2007\]
 
 
 ## Troubleshooting
-\[TO BE UPDATED\]
+
+* If nothing happens after plugging the power supply unit (while connected to the ESP32 microcontroller):  
+  * Check if a red/blue LED light appears on the board of the ESP32 microcontroller.  
+      
+    If **not**, immediately unplug the power supply unit from the power source and double check the wiring to match the wiring diagram.  
+      
+* If the speakers do not play the same sound as the app:  
+  * There is an issue with the modules connecting the network router’s WiFi network.
+
+    Restart the router and then restart the piece. If the problem persists, either reconfigure the router or contact the studio.
+
+* If the app is unresponsive:
+    * \[Assigned to @kolown2007\]
 
 
 ## Contact Us
 
 **IMPORTANT:**
-For issues unresolved by the basic troubleshooting instructions provided, please collect and send the following information to the artist/s *(preferrably through email)*:
+For issues unresolved by the basic troubleshooting instructions provided, please collect and send the following information to the artist/s *(preferably through email)*:
 
 * Description of the problem;  
 * Date and time;  
