@@ -38,7 +38,7 @@ WIP
 - WiFi network, 
 - and custom software on a remote server.
 
-### List of components (per unit)
+### List of components (PER MODULE)
 
 - 1 × NodeMCU-32s (ESP32)
 - 1 × MAX98357 (I2S 3W amplifier)
@@ -59,8 +59,10 @@ WIP
 
 ## Wiring Diagram (PER MODULE)
 
+Wiring Diagram:
 ![Wiring Diagram](/artwork-manual/images/ghostwhisper-ThB25.png)
 
+ESP32 Pinouts:
 ![Pinouts](/artwork-manual/images/pinouts.png)
 
 
@@ -90,13 +92,13 @@ WIP
 
    Refer to the diagram below for the connections:
 
-	| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
-	| :---: | :---: |
-	| LRC | GPIO26 |
-	| BCLK | GPIO27 |
-	| DIN | GPIO25 |
-	| GND | GND |
-	| VCC | 5V |
+		| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
+		| :---: | :---: |
+		| LRC | GPIO26 |
+		| BCLK | GPIO27 |
+		| DIN | GPIO25 |
+		| GND | GND |
+		| VCC | 5V |
 
    Insert the male end of the dupont cable to the conductor insertion point of the terminal blocks and tighten screws. Attach the protective cover back to the terminal block.
 
