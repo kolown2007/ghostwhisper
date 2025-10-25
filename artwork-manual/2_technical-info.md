@@ -1,7 +1,7 @@
 # TECHNICAL INFORMATION
 \[TO BE UPDATED\]
 
-## Artwork Operation During Exhibition
+## Artwork Operation
 1. Connect the USB-C end of the Power Supply Unit to the ESP32 microcontroller.   
 2. Plug the Power Supply Unit into an outlet. The work will automatically boot in a few seconds.  
 3. \[Access the app through ...\] \[Assigned to @kolown2007\]  
