@@ -92,13 +92,13 @@ ESP32 Pinouts:
 
    Refer to the diagram below for the connections:
 
-		| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
-		| :---: | :---: |
-		| LRC | GPIO26 |
-		| BCLK | GPIO27 |
-		| DIN | GPIO25 |
-		| GND | GND |
-		| VCC | 5V |
+	| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
+	| :---: | :---: |
+	| LRC | GPIO26 |
+	| BCLK | GPIO27 |
+	| DIN | GPIO25 |
+	| GND | GND |
+	| VCC | 5V |
 
    Insert the male end of the dupont cable to the conductor insertion point of the terminal blocks and tighten screws. Attach the protective cover back to the terminal block.
 
