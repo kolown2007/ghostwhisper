@@ -74,7 +74,7 @@ WIP
 
 2. Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
 
-3. Connect the speaker wires to the amplifier module using terminal blocks on the amplifier module:  
+3. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module:  
 	 
    Unscrew the ground side of the green terminal block which is marked with a (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a (+) symbol.
 
