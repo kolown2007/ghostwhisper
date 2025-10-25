@@ -1,4 +1,4 @@
-# Technical Datasheets
+# APPENDIX II - Technical Datasheets
 
 ## NodeMCU-32S ESP32 Microcontroller
 ![Pinouts](images/pinouts.png)

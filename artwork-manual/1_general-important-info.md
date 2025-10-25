@@ -131,29 +131,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 |  | **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สีดำชุดท่อหด127 OPTION** ![Shopee Heatshrink](images/ss-heatshrink.png) |
 
 
-## Troubleshooting
-\[TO BE UPDATED\]
-
-
-## Basic Troubleshooting
-\[TO BE UPDATED\]
-
-
-## Contact Us
-
-For issues unresolved by the basic troubleshooting instructions provided, please collect and send the following information to the artist/s *(preferrably through email)*:
-
-* Description of the problem;  
-* Date and time;  
-* Detailed video of the whole artwork;  
-* Detailed photograph of the suspected faulty component w/ annotation/s;  
-* Detailed photograph of the circuitry;  
-* Resolutions made prior to contacting the artist/s;  
-* Personnel involved.
-
 ## Support (Contact Us)
 
-If you would like support for this work or for urgent concerns, kindly contact the artists in their studios in the Philippines:
+If you would like support during assembly, kindly contact the artists in their studios in the Philippines:
 
 **KOLOWN**  
 www.kolown.net  
