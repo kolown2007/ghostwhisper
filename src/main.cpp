@@ -2,10 +2,8 @@
 #include "Arduino.h"
 #include "config/config.h"
 #include "hardware/hardware_setup.h"
-#include "secrets.h"
+#include "managers/connection_manager.h"
 #include "managers/debug_manager.h"
-
-#include <WiFi.h>
 #include <esp_task_wdt.h>
 
 // Replace this URL with your HTTPS MP3 stream
@@ -25,23 +23,9 @@ void setup() {
     initializeHardware();
     audio.setVolume(DEFAULT_VOLUME);
 
-    // Connect to WiFi using credentials in secrets.h
-    Serial.println("Connecting to WiFi...");
-    WiFi.begin(WIFI_ssid, WIFI_password);
-
-    unsigned long start = millis();
-    const unsigned long wifiTimeout = 20000; // 20s
-    while (WiFi.status() != WL_CONNECTED && (millis() - start) < wifiTimeout) {
-        delay(200);
-        Serial.print('.');
-    }
-    Serial.println();
-
-    if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("WiFi connected: " + WiFi.localIP().toString());
-    } else {
-        Serial.println("WiFi not connected - continuing (local playback may still work)");
-    }
+    // Initialize network (online-only connection manager)
+    Serial.println("Initializing network connection...");
+    initializeConnection(ONLINE);
 
     // Attempt to connect to HTTPS stream
     Serial.println("Attempting to connect to stream: ");
@@ -64,6 +48,19 @@ void loop() {
 
     // Drive audio processing
     audio.loop();
+
+    // Auto-reconnect stream if it stops and we're online
+    static unsigned long lastStreamAttempt = 0;
+    const unsigned long streamRetryInterval = 5000; // ms
+    if (!audio.isRunning() && isOnline() && (millis() - lastStreamAttempt > streamRetryInterval)) {
+        Serial.println("Stream stopped — attempting reconnect...");
+        if (audio.connecttohost(STREAM_URL)) {
+            Serial.println("Reconnected to stream");
+        } else {
+            Serial.println("Reconnect failed, will retry...");
+        }
+        lastStreamAttempt = millis();
+    }
 
     // Occasional debug/health logging
     static unsigned long lastDebugTime = 0;

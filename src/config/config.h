@@ -6,6 +6,7 @@
 #pragma once
 
 // Hardware Configuration
+// SD card pins are kept for reference but SD usage is disabled in online mode.
 #define SD_MOSI 23
 #define SD_MISO 19
 #define SD_SCK 18
@@ -42,7 +43,14 @@
 #define LOW_MEMORY_THRESHOLD 10000
 
 // Connection Configuration
-#define DEFAULT_CONNECTION_MODE OFFLINE  // ONLINE or OFFLINE
+// Default to ONLINE mode for this branch (no local SD/offline AP usage)
+#define DEFAULT_CONNECTION_MODE ONLINE  // ONLINE or OFFLINE
 #define CLEAR_WIFI_ON_STARTUP false      // Set to true to clear WiFi credentials on startup
+
+// Feature toggles
+// Disable SD to reduce firmware size and remove SD-related runtime code paths
+#define ENABLE_SD 0
+// Disable offline AP/config portal in this online-only build
+#define ENABLE_OFFLINE_AP 0
 
 // WiFi credentials are now defined in secrets.h

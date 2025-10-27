@@ -1,145 +1,91 @@
 /**
  * @file connection_manager.cpp
- * @brief Manages WiFi connection modes (ONLINE/OFFLINE)
+ * @brief Manages WiFi connection (ONLINE only)
  */
 
 #include "connection_manager.h"
 #include "../config/config.h"
-#include "secrets.h" // For WiFi credentials
-#include <WiFiManager.h>
+#include "secrets.h" // WiFi credentials (WIFI_ssid / WIFI_password)
 #include <WiFi.h>
 #include <ESPmDNS.h>
 #include <esp_task_wdt.h>
 
-// Global connection state
-ConnectionMode currentConnectionMode = DEFAULT_CONNECTION_MODE; // Use config default
+// Global connection state (force online mode)
+ConnectionMode currentConnectionMode = ONLINE;
 bool wifiConnected = false;
 
 /**
- * @brief Initialize connection based on the specified mode
+ * @brief Initialize connection in ONLINE mode only
  */
 void initializeConnection(ConnectionMode mode) {
-    currentConnectionMode = mode;
-    
-    // Give serial monitor time to connect and ensure Serial is ready
-    delay(3000);
-    Serial.println(""); // Print blank line for clarity
+    (void)mode; // ignore requested mode; system is full online mode
+    currentConnectionMode = ONLINE;
+
+    delay(1000);
+    Serial.println("");
     Serial.println("==================================================");
-    
-    // Initialize status LED
+    Serial.println("=== ONLINE MODE (streaming only) ===");
+
+    // Status LED
     pinMode(STATUS_LED_PIN, OUTPUT);
-    
-    // Turn off LED initially
     digitalWrite(STATUS_LED_PIN, LOW);
-    
-    if (mode == ONLINE) {
-        Serial.println("=== ONLINE MODE ===");
-        Serial.println("Connecting to existing WiFi network...");
-        
-        // DISABLE WATCHDOG BEFORE WIFI OPERATIONS
-        Serial.println("Temporarily disabling watchdog for WiFi configuration...");
-        esp_task_wdt_delete(NULL);
-        
-        WiFiManager wifiManager;
-        
-        // Clear WiFi credentials if requested
-        if (CLEAR_WIFI_ON_STARTUP) {
-            Serial.println("Clearing stored WiFi credentials...");
-            wifiManager.resetSettings();
-        }
-        
-        // Set timeout for configuration mode (can be longer now)
-        wifiManager.setConfigPortalTimeout(180); // 3 minutes since watchdog is disabled
-        
-        // Try to connect with saved credentials, or start config portal
-        if (!wifiManager.autoConnect(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD)) {
-            Serial.println("Failed to connect to existing WiFi.");
-            Serial.println("Starting WiFiManager configuration portal...");
-            Serial.println("Connect to: " + String(WIFI_SSID_NAME) + " (Password: " + String(OFFLINE_AP_PASSWORD) + ")");
-            Serial.println("Then open: http://ghostwhisper.local to configure WiFi");
-            
-            wifiConnected = false;
-            setConnectionStatusLED(false);
-        } else {
-            Serial.println("WiFi connected successfully!");
-            Serial.print("IP address: ");
-            Serial.println(WiFi.localIP());
-            Serial.println("Access web interface at: http://" + WiFi.localIP().toString());
-            wifiConnected = true;
-            setConnectionStatusLED(true);
-            
-            // Initialize mDNS
-            if (MDNS.begin("ghostwhisper")) {
-                Serial.println("mDNS responder started");
-                MDNS.addService("http", "tcp", 80);
-                Serial.println("Also accessible at: http://ghostwhisper.local");
-            } else {
-                Serial.println("mDNS failed to start - use IP address only");
-            }
-        }
-        
-        // RE-ENABLE WATCHDOG AFTER WIFI OPERATIONS
-        Serial.println("Re-enabling watchdog timer...");
-        esp_task_wdt_init(10, true); // 10 second timeout for normal operation
-        esp_task_wdt_add(NULL);
-    } else {
-        Serial.println("=== OFFLINE MODE ===");
-        Serial.println("Creating secure WiFi Access Point...");
-        
-        // Create Access Point
-        WiFi.mode(WIFI_AP);
-        WiFi.disconnect(true);
-        delay(100);
-        
-        // Create secure Access Point
-        Serial.println("Attempting softAP with:");
-        Serial.println("  SSID length: " + String(strlen(WIFI_SSID_NAME)));
-        Serial.println("  Password length: " + String(strlen(OFFLINE_AP_PASSWORD)));
-        Serial.println("  Password: '" + String(OFFLINE_AP_PASSWORD) + "'");
-        
-        bool apStarted = WiFi.softAP(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD, 1, 0, 4);
-        
-        if (!apStarted) {
-            // Try simpler method if first fails
-            apStarted = WiFi.softAP(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD);
-        }
-        
-        if (apStarted) {
-            Serial.println("Secure Access Point created: " + String(WIFI_SSID_NAME));
-            Serial.println("Password: " + String(OFFLINE_AP_PASSWORD));
-            Serial.println("IP: " + WiFi.softAPIP().toString());
-            Serial.println("Web interface: http://192.168.4.1");
-            
-            // Initialize mDNS for Access Point mode
-            WiFi.softAPsetHostname("ghostwhisper");
-            delay(100);
-            if (MDNS.begin("ghostwhisper")) {
-                Serial.println("mDNS responder started");
-                MDNS.addService("http", "tcp", 80);
-                Serial.println("Also accessible at: http://ghostwhisper.local");
-            } else {
-                Serial.println("mDNS failed - use IP address only");
-            }
-            
-            wifiConnected = true;
-            setConnectionStatusLED(true);
-        } else {
-            Serial.println("Failed to create Access Point");
-            wifiConnected = false;
-            setConnectionStatusLED(false);
-        }
+
+    // Ensure watchdog is enabled for runtime
+    esp_task_wdt_init(10, true);
+    esp_task_wdt_add(NULL);
+
+    // Start WiFi station mode and connect using credentials from secrets.h
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect(true);
+    delay(100);
+
+    Serial.print("Connecting to WiFi SSID: ");
+    Serial.println(String(WIFI_ssid));
+
+    WiFi.begin(WIFI_ssid, WIFI_password);
+
+    // Wait for connection (timeout ~15 seconds)
+    int attempts = 0;
+    const int maxAttempts = 30;
+    while (WiFi.status() != WL_CONNECTED && attempts < maxAttempts) {
+        delay(500);
+        Serial.print('.');
+        attempts++;
     }
-    
+    Serial.println();
+
+    if (WiFi.status() == WL_CONNECTED) {
+        wifiConnected = true;
+        setConnectionStatusLED(true);
+
+        Serial.println("WiFi connected successfully!");
+        Serial.print("IP address: ");
+        Serial.println(WiFi.localIP());
+        Serial.println("Access web interface at: http://" + WiFi.localIP().toString());
+
+        // Start mDNS responder for discovery (non-blocking)
+        if (MDNS.begin("ghostwhisper")) {
+            Serial.println("mDNS responder started");
+            MDNS.addService("http", "tcp", 80);
+            Serial.println("Also accessible at: http://ghostwhisper.local");
+        } else {
+            Serial.println("mDNS failed to start - use IP address only");
+        }
+    } else {
+        wifiConnected = false;
+        setConnectionStatusLED(false);
+        Serial.println("Failed to connect to WiFi (timeout).");
+    }
+
     Serial.println("==================================================");
     Serial.println("Connection initialization complete.");
 }
 
 /**
- * @brief Check if the device is connected to WiFi or serving as AP
+ * @brief Check if the device is connected to WiFi
  */
 bool isOnline() {
-    return (currentConnectionMode == ONLINE && wifiConnected) || 
-           (currentConnectionMode == OFFLINE && wifiConnected);
+    return (currentConnectionMode == ONLINE && wifiConnected);
 }
 
 /**
@@ -150,10 +96,11 @@ ConnectionMode getConnectionMode() {
 }
 
 /**
- * @brief Set the connection mode
+ * @brief Set the connection mode (no-op: system is online-only)
  */
 void setConnectionMode(ConnectionMode mode) {
-    currentConnectionMode = mode;
+    // System is configured as online-only. Allow changing the variable for API compatibility.
+    currentConnectionMode = (mode == ONLINE) ? ONLINE : ONLINE;
 }
 
 /**
@@ -161,10 +108,8 @@ void setConnectionMode(ConnectionMode mode) {
  */
 void setConnectionStatusLED(bool connected) {
     if (connected) {
-        // Connected: LED ON (solid)
-        digitalWrite(STATUS_LED_PIN, HIGH);
+        digitalWrite(STATUS_LED_PIN, HIGH); // solid ON
     } else {
-        // Not connected: LED OFF (we could add blinking later)
         digitalWrite(STATUS_LED_PIN, LOW);
     }
 }
@@ -177,66 +122,22 @@ void turnOffAllLEDs() {
 }
 
 /**
- * @brief Reset WiFi settings and force configuration portal
+ * @brief Reset WiFi settings - no-op in online-only build
  */
 void resetWiFiSettings() {
-    Serial.println("=== RESETTING WIFI SETTINGS ===");
-    WiFiManager wifiManager;
-    wifiManager.resetSettings();
-    Serial.println("WiFi credentials cleared. Restarting...");
-    delay(1000);
-    ESP.restart();
+    Serial.println("resetWiFiSettings() called - no-op in online-only build");
 }
 
 /**
- * @brief Start WiFiManager configuration portal on demand
+ * @brief Start WiFi config portal - no-op in online-only build
  */
 void startWiFiConfigPortal() {
-    Serial.println("=== STARTING WIFI CONFIG PORTAL ===");
-    
-    // Disable watchdog during config portal
-    Serial.println("Disabling watchdog for config portal...");
-    esp_task_wdt_delete(NULL);
-    
-    WiFiManager wifiManager;
-    
-    // Set timeout for configuration mode (can be longer now)
-    wifiManager.setConfigPortalTimeout(180); // 3 minutes since watchdog is disabled
-    
-    // Start configuration portal
-    if (wifiManager.startConfigPortal(WIFI_SSID_NAME, OFFLINE_AP_PASSWORD)) {
-        Serial.println("WiFi configured successfully via config portal!");
-        Serial.print("New IP address: ");
-        Serial.println(WiFi.localIP());
-        wifiConnected = true;
-        setConnectionStatusLED(true);
-        
-        // Initialize mDNS after successful configuration
-        if (MDNS.begin("ghostwhisper")) {
-            Serial.println("mDNS responder started");
-            Serial.println("Device accessible at: http://ghostwhisper.local");
-        } else {
-            Serial.println("Error setting up mDNS responder!");
-        }
-    } else {
-        Serial.println("Config portal timed out or failed");
-        wifiConnected = false;
-        setConnectionStatusLED(false);
-    }
-    
-    // Re-enable watchdog
-    Serial.println("Re-enabling watchdog timer...");
-    esp_task_wdt_init(10, true);
-    esp_task_wdt_add(NULL);
+    Serial.println("startWiFiConfigPortal() called - no-op in online-only build");
 }
 
 /**
- * @brief Clear WiFi credentials stored on the ESP32
+ * @brief Clear WiFi credentials - no-op in online-only build
  */
 void clearWiFiCredentials() {
-    Serial.println("=== CLEARING WIFI CREDENTIALS ===");
-    WiFi.disconnect(true, true); // Erase WiFi credentials
-    delay(1000);
-    Serial.println("WiFi credentials cleared. Restarting...");
-    ESP.restart();
+    Serial.println("clearWiFiCredentials() called - no-op in online-only build");
 }
