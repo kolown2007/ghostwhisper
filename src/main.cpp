@@ -1,66 +1,71 @@
+
 #include "Arduino.h"
 #include "config/config.h"
 #include "hardware/hardware_setup.h"
-#include "managers/connection_manager.h"
-#include "managers/radio_manager.h"
+#include "secrets.h"
 #include "managers/debug_manager.h"
 
+#include <WiFi.h>
 #include <esp_task_wdt.h>
-#include <esp_random.h>
 
+// Replace this URL with your HTTPS MP3 stream
+const char* STREAM_URL = "https://kolown.net/storage/projects/whisper/Dayang%20Dayang.mp3";
 
 void setup() {
-    // Configure watchdog with longer timeout for setup
-    esp_task_wdt_init(30, true); // 30 second timeout during setup
+    // Basic serial + watchdog setup
+    Serial.begin(SERIAL_BAUD_RATE);
+    while (!Serial) { ; }
+
+    esp_task_wdt_init(30, true);
     esp_task_wdt_add(NULL);
-    
+
+    Serial.println("=== GhostWhisper - minimal stream player ===");
+
+    // Initialize hardware (audio object, SD optional)
     initializeHardware();
-    randomSeed(esp_random()); // Seed with ESP32 hardware random generator
-    
-    // Reset watchdog before connection init
-    esp_task_wdt_reset();
-    
-    initializeConnection(OFFLINE);  // Change to OFFLINE for no WiFi
+    audio.setVolume(DEFAULT_VOLUME);
 
-    // Reset watchdog before web init
-    esp_task_wdt_reset();
+    // Connect to WiFi using credentials in secrets.h
+    Serial.println("Connecting to WiFi...");
+    WiFi.begin(WIFI_ssid, WIFI_password);
 
-    // Initialize web control interface for both ONLINE and OFFLINE modes
-    // In OFFLINE mode, it creates local AP for web access
-   
-    
-    // Reset watchdog before stream data fetch
-    esp_task_wdt_reset();
-    
-    // Stream data initialization removed for now
-    
-    // Reset watchdog before program init
-    esp_task_wdt_reset();
+    unsigned long start = millis();
+    const unsigned long wifiTimeout = 20000; // 20s
+    while (WiFi.status() != WL_CONNECTED && (millis() - start) < wifiTimeout) {
+        delay(200);
+        Serial.print('.');
+    }
+    Serial.println();
 
-    // Set default program mode to generative (ambient music playback)
-    setProgramMode(GENERATIVE_PROGRAM, "");
-    
-    // Reconfigure watchdog for normal operation (shorter timeout)
-    esp_task_wdt_init(10, true); // 10 second timeout during normal operation
+    if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("WiFi connected: " + WiFi.localIP().toString());
+    } else {
+        Serial.println("WiFi not connected - continuing (local playback may still work)");
+    }
+
+    // Attempt to connect to HTTPS stream
+    Serial.println("Attempting to connect to stream: ");
+    Serial.println(STREAM_URL);
+
+    if (audio.connecttohost(STREAM_URL)) {
+        Serial.println("Stream started successfully");
+    } else {
+        Serial.println("Failed to start stream");
+    }
+
+    // Reduce watchdog timeout for normal operation
+    esp_task_wdt_init(10, true);
     esp_task_wdt_add(NULL);
-    
-    Serial.println("Setup complete, starting program in loop...");
 }
 
 void loop() {
     // Reset watchdog timer
     esp_task_wdt_reset();
-    
-    // CRITICAL: Audio processing must be first and frequent
+
+    // Drive audio processing
     audio.loop();
-    
-    // Handle web server requests for both ONLINE and OFFLINE modes
-    handleWebControl();
-    
-    // Handle program playback (new system)
-    handleProgramPlayback();
-    
-    // Reduced frequency debug and health checks
+
+    // Occasional debug/health logging
     static unsigned long lastDebugTime = 0;
     if (millis() - lastDebugTime > DEBUG_INTERVAL_MS) {
         logAudioStatus();
