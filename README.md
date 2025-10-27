@@ -1,15 +1,16 @@
 # GhostWhisper
 ![GhostWhisper Logo](assets/ghostwhisper.png)
 
-Short description: a simplified online-mode build of GhostWhisper that streams audio and serves files from a remote server (no SD card). All device logic is moved to a separate server.
 
 Contributors: KoloWn and Roan Alvarez
 
 Note: this repository is a work in progress — the codebase is being cleaned. Do not copy or deploy as-is.
 
-## Online mode
+This branch is for *GhostWhisper DropCall*.
 
-In online mode the ESP32 connects to WiFi and streams audio from a remote server. Local storage (SD card) is not used.
+**GhostWhisper_Dropcall** is a new iteration of GhostWhisper created for ESC Biennale and Thailand Biennale, inspired by the early 2000s "dropcall" practice—when you could call someone free of charge for 3 seconds.
+
+In this iteration, audiences use a web portal to send a 3-second audio message that is broadcast on the physical GhostWhisper installations. While today's internet allows us to transmit longer durations in real-time, this project invites us to look back and reflect: how technological limitations once brought us closer together, whereas today, despite our capabilities, we are more divided.
 
 
 ## Wiring guide (I2S)
