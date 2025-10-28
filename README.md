@@ -73,13 +73,13 @@ ESP32 Pinouts:
 	 
    Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO.  
 	 
-   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the reset button of the ESP32 while uploading the code.
+   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code.
 
 2. Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
 
 3. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module:  
 	 
-   Unscrew the ground side of the green terminal block which is marked with a (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a (+) symbol.
+   Unscrew the ground side of the green terminal block which is marked with a negative (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a positive (+) symbol.
 
 4. Prepare the connections:  
 	 
