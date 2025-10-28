@@ -32,10 +32,14 @@ String fetchStreamUrl(const char* apiUrl) {
         return String();
     }
 
-    // Parse JSON directly from the stream
-    // Using JsonDocument instead of deprecated DynamicJsonDocument
-    JsonDocument doc;
-    DeserializationError err = deserializeJson(doc, http.getStream());
+    // Read the whole response into a String so we can log and inspect it
+    String body = http.getString();
+    Serial.println("API response body:");
+    Serial.println(body);
+
+    // Parse JSON from the body string
+    DynamicJsonDocument doc(512);
+    DeserializationError err = deserializeJson(doc, body);
     http.end();
 
     if (err) {
@@ -103,7 +107,7 @@ void loop() {
     // Auto-reconnect stream if it stops and we're online
     static unsigned long lastStreamAttempt = 0;
     const unsigned long streamRetryInterval = 5000; // ms
-    if (!audio.isRunning() && isOnline() && (millis() - lastStreamAttempt > streamRetryInterval)) {
+    if (!audio.isRunning() && isOnline() && currentStreamUrl.length() > 0 && (millis() - lastStreamAttempt > streamRetryInterval)) {
         Serial.println("Stream stopped — attempting reconnect...");
         if (audio.connecttohost(currentStreamUrl.c_str())) {
             Serial.println("Reconnected to stream");
