@@ -36,6 +36,8 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 ## Assembly Instructions
 
+![giftest](images/1.gif)
+
 1. Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable):  
      
    Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO.  
