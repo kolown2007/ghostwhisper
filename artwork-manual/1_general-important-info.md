@@ -36,7 +36,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 ## Assembly Instructions
 
-![giftest](images/1.gif)
+   ![giftest](images/1.gif)
 
 1. Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable):  
      
@@ -71,17 +71,17 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    Refer to the diagram below for the connections:
 
-| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
-| :---: | :---: |
-| LRC | GPIO26 |
-| BCLK | GPIO27 |
-| DIN | GPIO25 |
-| GND | GND |
-| VCC | 5V |
+   | Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
+   | :---: | :---: |
+   | LRC | GPIO26 |
+   | BCLK | GPIO27 |
+   | DIN | GPIO25 |
+   | GND | GND |
+   | VCC | 5V |
 
    Insert the male end of the dupont cable to the conductor insertion point of the terminal blocks and tighten screws. Attach the protective cover back to the terminal block.
 
-![step 5](images/5.gif)
+   ![step 5](images/5.gif)
 
 6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
 
