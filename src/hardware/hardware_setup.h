@@ -2,8 +2,6 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
-#include <SPI.h>
-#include <SD.h>
 #include <Audio.h>
 
 // Function to initialize hardware components

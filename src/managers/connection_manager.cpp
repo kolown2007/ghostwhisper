@@ -71,6 +71,7 @@ void initializeConnection(ConnectionMode mode) {
         } else {
             Serial.println("mDNS failed to start - use IP address only");
         }
+    // MQTT manager removed; skip starting MQTT
     } else {
         wifiConnected = false;
         setConnectionStatusLED(false);

@@ -1,7 +1,5 @@
 #include "hardware_setup.h"
 #include "../config/config.h"
-#include <SPI.h>
-#include <SD.h>
 #include <esp_task_wdt.h>
 #include <esp_system.h>
 
@@ -34,76 +32,7 @@ void initializeHardware() {
     blinkBuiltinLED(1, 200);
 
     Serial.println("=== Hardware Initialization ===");
-
-    // Initialize SD card with SPI pins
-    Serial.println("Initializing SD card...");
-    delay(1000); // Longer delay for SD card to stabilize
-    
-    // Try multiple initialization attempts
-    bool sdInitialized = false;
-    for (int attempt = 1; attempt <= 3; attempt++) {
-        Serial.printf("SD init attempt %d/3...\n", attempt);
-        
-        if (SD.begin(SD_CS)) {
-            sdInitialized = true;
-            Serial.println("SD card initialization successful!");
-            blinkBuiltinLED(1, 200);
-
-            // Check if data.json exists on SD card
-            if (SD.exists("/data.json")) {
-                Serial.println("data.json found on SD card.");
-            } else {
-                Serial.println("data.json NOT found on SD card.");
-            }
-
-
-
-            break;
-        } else {
-            Serial.printf("Attempt %d failed, retrying...\n", attempt);
-            delay(1000);
-        }
-    }
-    
-    if (!sdInitialized) {
-        Serial.println("SD card initialization failed after 3 attempts!");
-        Serial.println("Hardware troubleshooting:");
-        Serial.println("1. Check ALL connections:");
-        Serial.println("   CS   -> Pin 5");
-        Serial.println("   MOSI -> Pin 23");
-        Serial.println("   MISO -> Pin 19"); 
-        Serial.println("   SCK  -> Pin 18");
-        Serial.println("2. Power supply:");
-        Serial.println("   VCC -> 3.3V (NOT 5V!)");
-        Serial.println("   GND -> Ground");
-        Serial.println("3. SD card format: FAT32");
-        Serial.println("4. SD card size: ≤32GB");
-        Serial.println("Trying to format SD card...");
-        // Note: ESP32 SD library doesn't have format function
-        // Card must be formatted on computer as FAT32
-        Serial.println("Continuing without SD card...");
-    } else {
-        // Test SD card functionality
-        Serial.println("Testing SD card read/write...");
-        File testFile = SD.open("/test.txt", FILE_WRITE);
-        if (testFile) {
-            testFile.println("GhostWhisper SD Test");
-            testFile.close();
-            Serial.println("SD card test write successful.");
-            
-            // Try reading back
-            testFile = SD.open("/test.txt");
-            if (testFile) {
-                Serial.println("SD card test read successful:");
-                while (testFile.available()) {
-                    Serial.write(testFile.read());
-                }
-                testFile.close();
-            }
-        } else {
-            Serial.println("SD card write test failed - card may be read-only or corrupted.");
-        }
-    }
+    Serial.println("SD card initialization skipped (not used in this system)");
 
     // Initialize audio with I2S pinout
     Serial.println("Initializing audio...");
