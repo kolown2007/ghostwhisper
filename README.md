@@ -115,7 +115,7 @@ ESP32 Pinouts:
 
 | Component Name :  | Max98357 3W Class D Amplifier Breakout Board Module |
 | ----- | :---: |
-| Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol \[insert how this is used with the speakers here...\] |
+| Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: โอ.อาร์. เทคโนโลยี](https://shopee.co.th/โมดูลขยายเสียง-บัดกรี-ไม่บัดกรี-MAX98357-I2S-3W-Class-D-Amplifier-Breakout-Interface-Dac-Decoder-Module-Audio-Amplifi...-i.944231623.26560069128?sp_atk=ff5fc91a-9817-4f18-bcb5-3b17607cda59&xptdk=ff5fc91a-9817-4f18-bcb5-3b17607cda59) |
 |  | ![Amplifier](/artwork-manual/images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](/artwork-manual/images/ss-amplifier.png) |
 
@@ -129,7 +129,7 @@ ESP32 Pinouts:
 | Speaker | **Option B** |
 | ----- | :---: |
 | Component Name :  | **8ohm 20watt Horn Speaker** |
-| Description: | An industrial horn speaker \[... add more\] |
+| Description: | An industrial horn speaker that can be used as an alternative to the speakers above  |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: fkrittapas](https://shopee.co.th/ลำโพงฮอร์น-\(Industrial-Horn-Speakers\)-PH20-8นิ้ว-15-20W-8โอห์ม-“PENTON”-i.81068829.25486787205?sp_atk=254f9e18-fd71-47cd-bea9-69da84c71e64&xptdk=254f9e18-fd71-47cd-bea9-69da84c71e64) |
 |  | ![Horn Speakers](/artwork-manual/images/ss-hornspeaker.png)  Product Details: Industrial Horn Speakers PH20 15/20W 8ohms PENTON Brand Size: 20x20x26 cm Weight: 1400 grams  |
 

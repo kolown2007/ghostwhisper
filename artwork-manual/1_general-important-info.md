@@ -46,15 +46,24 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 2. Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
 
+   ![step 2](images/2.gif)
+
 3. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module:  
-     
+   
+
    Unscrew the ground side of the green terminal block which is marked with a negative (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a positive (+) symbol.
 
-4. Prepare the connections:  
-     
+   ![step 3](images/3.gif)
+
+4. Prepare the connections:
+
    Connect the female end of the male to female dupont wires to the LRC, BCLK, DIN, GND, and VCC pins of the amplifier module.
 
+   ![step 4a](images/4a.gif) ![step 4b](images/4b.gif)
+
    Next, connect the female end of the male to female dupont wires to the GPIO25, GPIO26, GPIO27, GND, and 5V pins of the ESP32 microcontroller.
+
+   ![step 4c ](images/4c.gif)
 
 5. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:  
      
@@ -72,6 +81,8 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    Insert the male end of the dupont cable to the conductor insertion point of the terminal blocks and tighten screws. Attach the protective cover back to the terminal block.
 
+![step 5](images/5.gif)
+
 6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
 
 **Images of Components (with Links for Material Procurement)**
@@ -84,7 +95,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 | Component Name :  | Max98357 3W Class D Amplifier Breakout Board Module |
 | ----- | :---: |
-| Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol \[insert how this is used with the speakers here...\] |
+| Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: โอ.อาร์. เทคโนโลยี](https://shopee.co.th/โมดูลขยายเสียง-บัดกรี-ไม่บัดกรี-MAX98357-I2S-3W-Class-D-Amplifier-Breakout-Interface-Dac-Decoder-Module-Audio-Amplifi...-i.944231623.26560069128?sp_atk=ff5fc91a-9817-4f18-bcb5-3b17607cda59&xptdk=ff5fc91a-9817-4f18-bcb5-3b17607cda59) |
 |  | ![Amplifier](images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](images/ss-amplifier.png) |
 
@@ -98,7 +109,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 | Speaker | **Option B** |
 | ----- | :---: |
 | Component Name :  | **8ohm 20watt Horn Speaker** |
-| Description: | An industrial horn speaker \[... add more\] |
+| Description: | An industrial horn speaker that can be used as an alternative to the speakers above |
 | Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: fkrittapas](https://shopee.co.th/ลำโพงฮอร์น-\(Industrial-Horn-Speakers\)-PH20-8นิ้ว-15-20W-8โอห์ม-“PENTON”-i.81068829.25486787205?sp_atk=254f9e18-fd71-47cd-bea9-69da84c71e64&xptdk=254f9e18-fd71-47cd-bea9-69da84c71e64) |
 |  | ![Horn Speakers](images/ss-hornspeaker.png)  Product Details: Industrial Horn Speakers PH20 15/20W 8ohms PENTON Brand Size: 20x20x26 cm Weight: 1400 grams  |
 
