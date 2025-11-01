@@ -3,7 +3,7 @@
 *This short section must be read for proper operation.*
 
 ## Artwork Description
-a simplified online-mode build of GhostWhisper that streams audio and serves files from a remote server (no SD card). All device logic is moved to a separate server.
+A simplified online-mode build of GhostWhisper that streams audio and serves files from a remote server (no SD card). All device logic is moved to a separate server.
 
 ## Medium 
 Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
@@ -85,7 +85,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
 
-**Images of Components (with Links for Material Procurement)**
+## Images of Components (with Links for Material Procurement)
 
 | Component Name :  | NodeMCU-32s ESP-32 Microcontroller (38pins) |
 | ----- | :---: |
