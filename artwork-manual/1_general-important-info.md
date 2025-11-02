@@ -37,7 +37,6 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 ## Assembly Instructions
 
    ![giftest](images/1.gif)
-   **Full video instructions (no audio) can be accessed here: https://youtu.be/pFi20m0UNg8**
 
 1. Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable):  
      
@@ -88,6 +87,10 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
    ![step 6](images/6.gif)
+
+
+**Full video instructions (no audio) can be accessed here: https://youtu.be/pFi20m0UNg8**
+
 
 ## Images of Components (with Links for Material Procurement)
 
