@@ -19,7 +19,10 @@ bool wifiConnected = false;
 
 // Internal helper: launch WiFiManager portal (blocks until configured or timeout)
 static void startWiFiConfigPortalImpl() {
-    Serial.println("Launching WiFiManager config portal: SSID='ghostwhisper'");
+    const char* apName = "ghostwhisper";
+    Serial.print("No WiFi: launching config portal. AP SSID: ");
+    Serial.println(apName);
+    Serial.println("Connect a phone or laptop to this AP and open http://192.168.4.1 to configure Wi-Fi");
 
     // Increase watchdog timeout while portal is active so device doesn't reset
     esp_task_wdt_init(300, true);
@@ -29,7 +32,7 @@ static void startWiFiConfigPortalImpl() {
     WiFiManager wm;
     // Optionally set a portal timeout: wm.setTimeout(300); // seconds
 
-    bool res = wm.autoConnect("ghostwhisper");
+    bool res = wm.autoConnect(apName);
     if (res) {
         Serial.println("WiFiManager: connected and credentials saved.");
     } else {
@@ -93,10 +96,12 @@ void initializeConnection(ConnectionMode mode) {
         Serial.println("WiFi connected using stored credentials!");
         Serial.print("IP address: ");
         Serial.println(WiFi.localIP());
-        Serial.println("Access web interface at: http://" + WiFi.localIP().toString());
 
+        // Start mDNS responder for local name discovery. Note: mDNS advertises
+        // the hostname but does not by itself start an HTTP server. To serve a
+        // web UI you must start a WebServer separately.
         if (MDNS.begin("ghostwhisper")) {
-            Serial.println("mDNS responder started");
+            Serial.println("mDNS responder started (host: ghostwhisper.local)");
             MDNS.addService("http", "tcp", 80);
             Serial.println("Also accessible at: http://ghostwhisper.local");
         } else {
@@ -120,7 +125,7 @@ void initializeConnection(ConnectionMode mode) {
             Serial.println(WiFi.localIP());
 
             if (MDNS.begin("ghostwhisper")) {
-                Serial.println("mDNS responder started");
+                Serial.println("mDNS responder started (host: ghostwhisper.local)");
                 MDNS.addService("http", "tcp", 80);
                 Serial.println("Also accessible at: http://ghostwhisper.local");
             }
