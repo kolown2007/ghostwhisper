@@ -18,19 +18,21 @@ Please refer to the **General Important Information** section for detailed syste
     Spirit level / Laser level
     Carpenter’s measure
 
-## Placement Instructions
+
+## Placement Instructions \[TO BE UPDATED\]
 
 1. Test the module before installation by powering the ESP32 microcontroller using the Power Supply Unit. After testing, unplug the power supply before installing the module.
 2. Refer to the supplied template diagram for positioning the module.  
    The piece should be installed on a flat wall.  
-3. Mark and pre-drill where the screws will be placed.  
+3. Mark and pre-drill where the screws will be placed.
 4. Insert the screw through the countersunk hole of the neodymium magnet. Secure the magnet onto the wall using the screws  
-5. Attach the magnetic back of the speakers to the installed neodymium magnet.  
-6. \[TO BE UPDATED\]
+5. Attach the magnetic back of the speakers to the installed neodymium magnet.
+
 
 ## Maintenance
 
 Always unplug the Power Supply Unit before cleaning the work.  
+
 Strictly no water or water-based solutions should be applied as it will damage the electronics. Please do not clean the module with Windex or soap. Use a lint-free cloth or anti-static wipes/dusters. 
 
 While cleaning the speakers, avoid applying too much pressure onto its surface, otherwise the speaker’s cone and dust cap may tear.

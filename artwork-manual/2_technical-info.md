@@ -5,13 +5,9 @@
 ## Artwork Operation
 1. Connect the USB-C end of the Power Supply Unit to the ESP32 microcontroller.   
 2. Plug the Power Supply Unit into an outlet. The work will automatically boot in a few seconds.  
-3. Access the app through **kolown.net/dropcall** to create a recording. Tap the record button then tap send.
-4. Wait for the sound to play in real time.  
+3. Access the app through **kolown.net/dropcall** to create a recording. Tap the record button, record your message, and tap send.
+4. Wait for the sound to play in real time.
 5. To turn the piece ON or OFF, plug or unplug the Power Supply Unit from the outlet. Alternatively, the Power Supply Unit may be plugged into an adaptor with a switch or a powerstrip that has a switch.
-
-## Software Operation
-
-\[Assigned to @kolown2007\]
 
 
 ## Troubleshooting
