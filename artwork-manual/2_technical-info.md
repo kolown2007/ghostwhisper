@@ -23,7 +23,10 @@
     Restart the router and then restart the piece. If the problem persists, either reconfigure the router or contact the studio.
 
 * If the app is unresponsive:
-    * \[Assigned to @kolown2007\]
+    Check the audio recording permission in your browser settings and make sure it is enabled. If restrictions are enabled, click the "Reduce Restrictions" option.
+    Refresh the webpage and try to capture and send a recording.
+
+    If it still does not work, try using a different browser application. If the problem persists, contact the studio.
 
 
 ## Contact Us
