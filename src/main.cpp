@@ -4,7 +4,6 @@
 #include "hardware/hardware_setup.h"
 #include "managers/connection_manager.h"
 #include "managers/debug_manager.h"
-#include "secrets.h"
 #include <esp_task_wdt.h>
 #include <WiFi.h>
 #include "managers/mqtt_manager.h"

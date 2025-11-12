@@ -6,7 +6,8 @@
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 #include "../hardware/hardware_setup.h"
-#include "../secrets.h"
+// ABLY token URL is hardcoded here so `secrets.h` is not required for runtime.
+static const char* ABLY_TOKEN_URL = "https://kolown.net/api/ghost_auth_esp32";
 
 static WiFiClientSecure mqttNet;
 static PubSubClient mqttClient(mqttNet);

@@ -1,12 +1,15 @@
 /**
  * @file connection_manager.cpp
- * @brief Manages WiFi connection (ONLINE only)
+ * @brief Manages WiFi connection (ONLINE only). Uses WiFiManager as a
+ * fallback config portal when no stored credentials are available.
  */
 
 #include "connection_manager.h"
 #include "../config/config.h"
-#include "secrets.h" // WiFi credentials (WIFI_ssid / WIFI_password)
+
+// Use WiFiManager instead of secrets.h for runtime configuration
 #include <WiFi.h>
+#include <WiFiManager.h> // tzapu/WiFiManager
 #include <ESPmDNS.h>
 #include <esp_task_wdt.h>
 
@@ -14,11 +17,42 @@
 ConnectionMode currentConnectionMode = ONLINE;
 bool wifiConnected = false;
 
+// Internal helper: launch WiFiManager portal (blocks until configured or timeout)
+static void startWiFiConfigPortalImpl() {
+    Serial.println("Launching WiFiManager config portal: SSID='ghostwhisper'");
+
+    // Increase watchdog timeout while portal is active so device doesn't reset
+    esp_task_wdt_init(300, true);
+    esp_task_wdt_add(NULL);
+
+    WiFi.mode(WIFI_AP_STA); // keep STA available while hosting AP
+    WiFiManager wm;
+    // Optionally set a portal timeout: wm.setTimeout(300); // seconds
+
+    bool res = wm.autoConnect("ghostwhisper");
+    if (res) {
+        Serial.println("WiFiManager: connected and credentials saved.");
+    } else {
+        Serial.println("WiFiManager: failed or timed out.");
+    }
+
+    // restore reasonable watchdog timeout for normal operation
+    esp_task_wdt_init(10, true);
+    esp_task_wdt_add(NULL);
+}
+
 /**
  * @brief Initialize connection in ONLINE mode only
+ *
+ * Behavior:
+ * - Attempt to connect using stored credentials (WiFi.begin()).
+ * - If that fails within the timeout, launch WiFiManager config portal
+ *   (AP SSID: "ghostwhisper") which blocks until credentials are
+ *   provided (or WiFiManager times out if configured). After portal
+ *   returns we re-check connectivity and start mDNS if connected.
  */
 void initializeConnection(ConnectionMode mode) {
-    (void)mode; // ignore requested mode; system is full online mode
+    (void)mode; // ignore requested mode; system is online-only
     currentConnectionMode = ONLINE;
 
     delay(1000);
@@ -34,17 +68,15 @@ void initializeConnection(ConnectionMode mode) {
     esp_task_wdt_init(10, true);
     esp_task_wdt_add(NULL);
 
-    // Start WiFi station mode and connect using credentials from secrets.h
+    // Attempt to connect using stored credentials first
     WiFi.mode(WIFI_STA);
-    WiFi.disconnect(true);
+    WiFi.disconnect(false); // keep stored credentials
     delay(100);
 
-    Serial.print("Connecting to WiFi SSID: ");
-    Serial.println(String(WIFI_ssid));
+    Serial.println("Attempting WiFi connect using stored credentials (if any)...");
+    WiFi.begin(); // try previously saved credentials
 
-    WiFi.begin(WIFI_ssid, WIFI_password);
-
-    // Wait for connection (timeout ~15 seconds)
+    // Wait for connection (~15s)
     int attempts = 0;
     const int maxAttempts = 30;
     while (WiFi.status() != WL_CONNECTED && attempts < maxAttempts) {
@@ -58,12 +90,11 @@ void initializeConnection(ConnectionMode mode) {
         wifiConnected = true;
         setConnectionStatusLED(true);
 
-        Serial.println("WiFi connected successfully!");
+        Serial.println("WiFi connected using stored credentials!");
         Serial.print("IP address: ");
         Serial.println(WiFi.localIP());
         Serial.println("Access web interface at: http://" + WiFi.localIP().toString());
 
-        // Start mDNS responder for discovery (non-blocking)
         if (MDNS.begin("ghostwhisper")) {
             Serial.println("mDNS responder started");
             MDNS.addService("http", "tcp", 80);
@@ -71,11 +102,33 @@ void initializeConnection(ConnectionMode mode) {
         } else {
             Serial.println("mDNS failed to start - use IP address only");
         }
-    // MQTT manager removed; skip starting MQTT
     } else {
+        // No stored creds or failed -> launch WiFiManager portal (blocks until done)
         wifiConnected = false;
         setConnectionStatusLED(false);
-        Serial.println("Failed to connect to WiFi (timeout).");
+        Serial.println("No stored WiFi or connect timed out. Launching config portal...");
+
+        startWiFiConfigPortalImpl();
+
+        // After portal returns, check connection
+        if (WiFi.status() == WL_CONNECTED) {
+            wifiConnected = true;
+            setConnectionStatusLED(true);
+
+            Serial.println("WiFi connected after config portal!");
+            Serial.print("IP address: ");
+            Serial.println(WiFi.localIP());
+
+            if (MDNS.begin("ghostwhisper")) {
+                Serial.println("mDNS responder started");
+                MDNS.addService("http", "tcp", 80);
+                Serial.println("Also accessible at: http://ghostwhisper.local");
+            }
+        } else {
+            Serial.println("Still not connected after config portal. Restarting device.");
+            delay(2000);
+            ESP.restart();
+        }
     }
 
     Serial.println("==================================================");
@@ -123,22 +176,25 @@ void turnOffAllLEDs() {
 }
 
 /**
- * @brief Reset WiFi settings - no-op in online-only build
+ * @brief Reset WiFi settings - clears WiFiManager stored creds and WiFi stack
  */
 void resetWiFiSettings() {
-    Serial.println("resetWiFiSettings() called - no-op in online-only build");
+    Serial.println("resetWiFiSettings() called - clearing WiFiManager settings and WiFi stack");
+    WiFiManager wm;
+    wm.resetSettings();
+    WiFi.disconnect(true); // remove stored credentials from WiFi stack
 }
 
 /**
- * @brief Start WiFi config portal - no-op in online-only build
+ * @brief Start WiFi config portal (public wrapper)
  */
 void startWiFiConfigPortal() {
-    Serial.println("startWiFiConfigPortal() called - no-op in online-only build");
+    startWiFiConfigPortalImpl();
 }
 
 /**
- * @brief Clear WiFi credentials - no-op in online-only build
+ * @brief Clear WiFi credentials - wrapper around reset
  */
 void clearWiFiCredentials() {
-    Serial.println("clearWiFiCredentials() called - no-op in online-only build");
+    resetWiFiSettings();
 }
