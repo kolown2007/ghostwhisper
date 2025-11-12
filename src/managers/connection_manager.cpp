@@ -67,8 +67,8 @@ void initializeConnection(ConnectionMode mode) {
     pinMode(STATUS_LED_PIN, OUTPUT);
     digitalWrite(STATUS_LED_PIN, LOW);
 
-    // Ensure watchdog is enabled for runtime
-    esp_task_wdt_init(10, true);
+    // Ensure watchdog is enabled for runtime — set to 30s to allow connect attempts
+    esp_task_wdt_init(30, true);
     esp_task_wdt_add(NULL);
 
     // Attempt to connect using stored credentials first
@@ -83,6 +83,8 @@ void initializeConnection(ConnectionMode mode) {
     int attempts = 0;
     const int maxAttempts = 30;
     while (WiFi.status() != WL_CONNECTED && attempts < maxAttempts) {
+        // feed watchdog while blocking
+        esp_task_wdt_reset();
         delay(500);
         Serial.print('.');
         attempts++;
@@ -113,7 +115,14 @@ void initializeConnection(ConnectionMode mode) {
         setConnectionStatusLED(false);
         Serial.println("No stored WiFi or connect timed out. Launching config portal...");
 
-        startWiFiConfigPortalImpl();
+    // Increase WDT timeout before launching the blocking portal so it
+    // doesn't reset the device while waiting for user input.
+    esp_task_wdt_init(300, true);
+    esp_task_wdt_add(NULL);
+    startWiFiConfigPortalImpl();
+    // Restore a reasonable watchdog timeout after the portal returns
+    esp_task_wdt_init(30, true);
+    esp_task_wdt_add(NULL);
 
         // After portal returns, check connection
         if (WiFi.status() == WL_CONNECTED) {
