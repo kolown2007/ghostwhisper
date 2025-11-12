@@ -10,7 +10,7 @@ Please refer to the **General Important Information** section for detailed syste
 ## List of Materials Needed for Installation
 
 * Assembled module
-* Neodymium magnet with countersunk hole (1-2pcs for each speaker)  
+* Neodymium magnet with countersunk hole (1-2pcs for each speaker) \[See Related Images below for recommended types\]
 * Screws that will fit through the countersunk hole of the neodymium magnets
 * Screwdriver (depends on the type of screws to be used)
 * Drill & drill bit with a smaller diameter than the screws
@@ -25,7 +25,7 @@ Please refer to the **General Important Information** section for detailed syste
 2. Refer to the supplied template diagram for positioning the module.  
    The piece should be installed on a flat wall.  
 3. Mark and pre-drill where the screws will be placed.
-4. Insert the screw through the countersunk hole of the neodymium magnet. Secure the magnet onto the wall using the screws  
+4. Insert the screw through the countersunk hole of the neodymium magnet. Secure the magnet onto the wall using screws.
 5. Attach the magnetic back of the speakers to the installed neodymium magnet.
 
 
@@ -40,3 +40,9 @@ While cleaning the speakers, avoid applying too much pressure onto its surface, 
 The ESP32 microcontroller and amplifier module should be cleaned only with 99% Isopropyl Alcohol and anti-static cleanroom wipers. Alternatively, compressed air may be used to dust off debris on the microcontroller and amplifier module, these can be purchased in regular electronics stores.
 
 We recommend cleaning the piece at least every two months.
+
+
+## Related Images
+Examples of Neodymium Magnet with Countersunk Hole
+![Rectangular Magnet](images/rectangular-countersunk-magnet.png)
+![Round Magnet](images/round-countersunk-magnet.png)
