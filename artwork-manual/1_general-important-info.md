@@ -38,7 +38,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![giftest](images/1.gif)
 
-1. Install the required software on your computer:
+**1. Install the required software on your computer:**
 
    |  | MacOS | Windows |
    | ----- | ----- | ----- |
@@ -59,7 +59,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
    https://learn.adafruit.com/how-to-install-drivers-for-wch-usb-to-serial-chips-ch9102f-ch9102
 
 
-2. Upload code to ESP32 microcontroller (Requirements: computer with the installed software mentioned above & data cable):  
+**2. Upload code to ESP32 microcontroller (Requirements: computer with the installed software mentioned above & data cable):**  
      
    Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO by clicking the PlatformIO icon on the left panel. Under "Quick Access" open "PIO Home" and click "Open", this will lead you to the PlatformIO homepage. Click "Import Arduino Project" and select **"NodeMCU-32S"** as your board. Click on the directory that contains the **ghostwhisper** folder downloaded from the github link above. Open the **ghostwhisper** folder and click **IMPORT**.
    
@@ -69,7 +69,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
    
    Keep the ESP32 plugged into your computer for the next step.
 
-3. Configure the ESP32 to access the WiFi. You may use your computer or phone for this step.
+**3. Configure the ESP32 to access the WiFi. You may use your computer or phone for this step.**
 
    Open your WiFi Settings and connect to the SSID name **ghostwhisper**, this will redirect you to the **WiFiManager** landing page of ghostwhisper.
 
@@ -79,19 +79,19 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    Unplug the ESP32 from your computer once the connection is successful.
 
-3. Start assembling the circuit:
+**4. Start assembling the circuit:**
 
    Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
 
    ![step 2](images/2.gif)
 
-4. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module.
+**5. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module.**
 
    Unscrew the ground side of the green terminal block which is marked with a negative (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a positive (+) symbol.
 
    ![step 3](images/3.gif)
 
-5. Prepare the connections:
+**6. Prepare the connections:**
 
    Connect the female end of the male to female dupont wires to the LRC, BCLK, DIN, GND, and VCC pins of the amplifier module.
 
@@ -101,7 +101,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![step 4c ](images/4c.gif)
 
-6. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:  
+**7. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:**
      
    Remove the protective lid of the terminal block. Unscrew the top and bottom screw using a phillips screwdriver. It is best to start with one column at a time to avoid mismatching the pins. Use the same color for each individual connection.
 
@@ -121,7 +121,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![step 5b](images/5b.gif)
 
-7. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
+**8. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.**
    ![step 6](images/6.gif)
 
 
