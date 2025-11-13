@@ -59,13 +59,13 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
    https://learn.adafruit.com/how-to-install-drivers-for-wch-usb-to-serial-chips-ch9102f-ch9102
 
 
-2. Upload code to ESP32 microcontroller (required: computer with the installed software mentioned above & data cable):  
+2. Upload code to ESP32 microcontroller (Requirements: computer with the installed software mentioned above & data cable):  
      
    Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO by clicking the PlatformIO icon on the left panel. Under "Quick Access" open "PIO Home" and click "Open", this will lead you to the PlatformIO homepage. Click "Import Arduino Project" and select **"NodeMCU-32S"** as your board. Click on the directory that contains the **ghostwhisper** folder downloaded from the github link above. Open the **ghostwhisper** folder and click **IMPORT**.
    
    On the second to the left panel of your workspace, under "GHOSTWHISPER", open the **"src"** folder and open **"main.cpp"**.
      
-   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code, do not release until the code has been fully uploaded. Once the upload is done, press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
+   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the **BOOT** button of the ESP32 while uploading the code, do not release the button until the code has been fully uploaded. Once the upload is done, press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
    
    Keep the ESP32 plugged into your computer for the next step.
 
@@ -73,7 +73,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    Open your WiFi Settings and connect to the SSID name **ghostwhisper**, this will redirect you to the **WiFiManager** landing page of ghostwhisper.
 
-   Click on the Configure WiFi button and enter the WiFi credentials (SSID and Password). Once done this will save the WiFi credentials and connect the ESP32 to the network.
+   Click on the **Configure WiFi** button and enter the WiFi credentials (SSID and Password). Once done this will save the WiFi credentials and connect the ESP32 to the network.
 
    Once connected to the WiFi, you will hear a sound indicating that the connection was successful. If the sound doesn't play, there might be a problem with the credentials entered–– troubleshoot this by reconfiguring the WiFi Settings.
 
