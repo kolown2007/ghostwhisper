@@ -38,24 +38,47 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![giftest](images/1.gif)
 
-1. Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable):  
-     
-   Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO.  
-     
-   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code.
+1. Install the required software on your computer:
 
-2. Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
+   |  | MacOS | Windows |
+   | ----- | ----- | ----- |
+   | Visual Studio Code (VS Code) | [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download) |  |
+   | PlatformIO (installed within VSCode) | [https://platformio.org/platformio-ide](https://platformio.org/platformio-ide) |  |
+   | CH340 Driver | https://github.com/WCHSoftGroup/ch34xser\_macos  | [https://www.wch-ic.com/downloads/CH343SER\_ZIP.html](https://www.wch-ic.com/downloads/CH343SER_ZIP.html) |
+
+2. Upload code to ESP32 microcontroller (required: computer with the installed software mentioned above & data cable):  
+     
+   Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO by clicking the PlatformIO icon on the left panel. Under "Quick Access" open "PIO Home" and click "Open", this will lead you to the PlatformIO homepage. Click "Import Arduino Project" and select **"NodeMCU-32S"** as your board. Click on the directory that contains the **ghostwhisper** folder downloaded from the github link above. Open the **ghostwhisper** folder and click **IMPORT**.
+   
+   On the second to the left panel of your workspace, under "GHOSTWHISPER", open the **"src"** folder and open **"main.cpp"**.
+     
+   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code, do not release until the code has been fully uploaded. Press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
+   
+   Keep the ESP32 plugged into your computer.
+
+3. Configure the ESP32 to access the WiFi. You may use your computer or phone for this step.
+
+   Open your WiFi Settings and connect to the SSID name **ghostwhisper**, this will redirect you to the **WiFiManager** landing page of ghostwhisper.
+
+   Click on the Configure WiFi button and enter the WiFi credentials (SSID and Password). Once done this will save the WiFi credentials and connect the ESP32 to the network.
+
+   Once connected to the WiFi, you will hear a sound indicating that the connection was successful.
+
+   Unplug the ESP32 from your computer.
+
+3. Start assembling the circuit:
+
+   Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
 
    ![step 2](images/2.gif)
 
-3. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module:  
-   
+4. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module.
 
    Unscrew the ground side of the green terminal block which is marked with a negative (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a positive (+) symbol.
 
    ![step 3](images/3.gif)
 
-4. Prepare the connections:
+5. Prepare the connections:
 
    Connect the female end of the male to female dupont wires to the LRC, BCLK, DIN, GND, and VCC pins of the amplifier module.
 
@@ -65,7 +88,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![step 4c ](images/4c.gif)
 
-5. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:  
+6. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:  
      
    Remove the protective lid of the terminal block. Unscrew the top and bottom screw using a phillips screwdriver. It is best to start with one column at a time to avoid mismatching the pins. Use the same color for each individual connection.
 
@@ -85,7 +108,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![step 5b](images/5b.gif)
 
-6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
+7. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
    ![step 6](images/6.gif)
 
 
