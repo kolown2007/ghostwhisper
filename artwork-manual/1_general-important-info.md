@@ -42,12 +42,20 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    |  | MacOS | Windows |
    | ----- | ----- | ----- |
-   | Visual Studio Code (VS Code) | [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download)  |
-   | PlatformIO (installed within VSCode) | [https://platformio.org/platformio-ide](https://platformio.org/platformio-ide)  |
+   | Visual Studio Code (VS Code) | [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download) | [https://code.visualstudio.com/Download](https://code.visualstudio.com/Download) |
+   | PlatformIO (installed within VSCode) | [https://platformio.org/platformio-ide](https://platformio.org/platformio-ide) |[https://platformio.org/platformio-ide](https://platformio.org/platformio-ide) |
    | CH340 Driver | https://github.com/WCHSoftGroup/ch34xser\_macos  | [https://www.wch-ic.com/downloads/CH343SER\_ZIP.html](https://www.wch-ic.com/downloads/CH343SER_ZIP.html) |
 
    Related links:
+   How to install VSCode:
+   https://www.youtube.com/watch?v=cu_ykIfBprI
+
+   How to install the PlatformIO extension:
+   https://youtu.be/5edPOlQQKmo?si=uzvZJf_vuab7KCFq
+
+   How to install CH34x drivers:
    https://learn.adafruit.com/how-to-install-drivers-for-wch-usb-to-serial-chips-ch9102f-ch9102
+
 
 2. Upload code to ESP32 microcontroller (required: computer with the installed software mentioned above & data cable):  
      
