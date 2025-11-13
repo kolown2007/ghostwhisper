@@ -53,4 +53,8 @@
 // Disable offline AP/config portal in this online-only build
 #define ENABLE_OFFLINE_AP 0
 
+// mDNS responder: set to 1 to enable printing/starting mDNS (ghostwhisper.local).
+// Default is 0 to avoid confusing users on platforms that don't resolve .local names.
+#define ENABLE_MDNS 0
+
 // WiFi credentials are now defined in secrets.h

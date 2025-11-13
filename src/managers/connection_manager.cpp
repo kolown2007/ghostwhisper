@@ -20,9 +20,10 @@ bool wifiConnected = false;
 // Internal helper: launch WiFiManager portal (blocks until configured or timeout)
 static void startWiFiConfigPortalImpl() {
     const char* apName = "ghostwhisper";
-    Serial.print("No WiFi: launching config portal. AP SSID: ");
+    Serial.println("=== CONFIG PORTAL (AP mode) ===");
+    Serial.print("AP SSID: ");
     Serial.println(apName);
-    Serial.println("Connect a phone or laptop to this AP and open http://192.168.4.1 to configure Wi-Fi");
+    Serial.println("Connect a phone or laptop to this AP and open http://192.168.4.1 to configure Wi‑Fi");
 
     // Increase watchdog timeout while portal is active so device doesn't reset
     esp_task_wdt_init(300, true);
@@ -34,9 +35,9 @@ static void startWiFiConfigPortalImpl() {
 
     bool res = wm.autoConnect(apName);
     if (res) {
-        Serial.println("WiFiManager: connected and credentials saved.");
+        Serial.println("WiFiManager: credentials saved and device attempted to connect to the configured network.");
     } else {
-        Serial.println("WiFiManager: failed or timed out.");
+        Serial.println("WiFiManager: failed or timed out (returning to application).");
     }
 
     // restore reasonable watchdog timeout for normal operation
@@ -95,20 +96,17 @@ void initializeConnection(ConnectionMode mode) {
         wifiConnected = true;
         setConnectionStatusLED(true);
 
-        Serial.println("WiFi connected using stored credentials!");
-        Serial.print("IP address: ");
+        Serial.println("=== STA MODE (connected) ===");
+        Serial.print("Assigned IP address: ");
         Serial.println(WiFi.localIP());
 
-        // Start mDNS responder for local name discovery. Note: mDNS advertises
-        // the hostname but does not by itself start an HTTP server. To serve a
-        // web UI you must start a WebServer separately.
+        // Optionally start/announce mDNS if enabled in config
+#if ENABLE_MDNS
         if (MDNS.begin("ghostwhisper")) {
-            Serial.println("mDNS responder started (host: ghostwhisper.local)");
             MDNS.addService("http", "tcp", 80);
-            Serial.println("Also accessible at: http://ghostwhisper.local");
-        } else {
-            Serial.println("mDNS failed to start - use IP address only");
+            Serial.println("mDNS responder started (ghostwhisper.local).");
         }
+#endif
     } else {
         // No stored creds or failed -> launch WiFiManager portal (blocks until done)
         wifiConnected = false;
@@ -129,15 +127,17 @@ void initializeConnection(ConnectionMode mode) {
             wifiConnected = true;
             setConnectionStatusLED(true);
 
-            Serial.println("WiFi connected after config portal!");
-            Serial.print("IP address: ");
+            Serial.println("=== STA MODE (connected) ===");
+            Serial.print("Assigned IP address: ");
             Serial.println(WiFi.localIP());
 
+            // Optionally start/announce mDNS if enabled in config
+#if ENABLE_MDNS
             if (MDNS.begin("ghostwhisper")) {
-                Serial.println("mDNS responder started (host: ghostwhisper.local)");
                 MDNS.addService("http", "tcp", 80);
-                Serial.println("Also accessible at: http://ghostwhisper.local");
+                Serial.println("mDNS responder started (ghostwhisper.local).");
             }
+#endif
         } else {
             Serial.println("Still not connected after config portal. Restarting device.");
             delay(2000);
