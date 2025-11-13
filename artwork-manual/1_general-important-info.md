@@ -46,7 +46,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
    | PlatformIO (installed within VSCode) | [https://platformio.org/platformio-ide](https://platformio.org/platformio-ide) |[https://platformio.org/platformio-ide](https://platformio.org/platformio-ide) |
    | CH340 Driver | https://github.com/WCHSoftGroup/ch34xser\_macos  | [https://www.wch-ic.com/downloads/CH343SER\_ZIP.html](https://www.wch-ic.com/downloads/CH343SER_ZIP.html) |
 
+
    Related links:
+
    How to install VSCode:
    https://www.youtube.com/watch?v=cu_ykIfBprI
 
