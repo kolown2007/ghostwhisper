@@ -1,6 +1,5 @@
 # TECHNICAL INFORMATION
 
-\[TO BE UPDATED\]
 
 ## Artwork Operation
 1. Connect the USB-C end of the Power Supply Unit to the ESP32 microcontroller.   
@@ -43,6 +42,9 @@ For issues unresolved by the basic troubleshooting instructions provided, please
 * Personnel involved.
 
 ## Support (Contact Us)
+
+**GhostWhisper Telegram**
+https://t.me/+sA8IyItxqhZlY2I1
 
 **KOLOWN**  
 www.kolown.net  

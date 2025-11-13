@@ -191,6 +191,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
 If you would like support during assembly, kindly contact the artists in their studios in the Philippines:
 
+**GhostWhisper Telegram**
+https://t.me/+sA8IyItxqhZlY2I1
+
 **KOLOWN**  
 www.kolown.net  
 [kolown@gmail.com](mailto:kolown@gmail.com)  

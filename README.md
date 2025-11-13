@@ -67,43 +67,15 @@ ESP32 Pinouts:
 ![Pinouts](/artwork-manual/images/pinouts.png)
 
 
-## Assembly Instructions
+## Artwork and Software Operation
 
-1. Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable):  
-	 
-   Clone the repository from [https://github.com/kolown2007/ghostwhisper](https://github.com/kolown2007/ghostwhisper) and open it in PlatformIO.  
-	 
-   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code.
+Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable) and assemble the circuit by following the **Assembly Instructions** in the [General Important Info](https://github.com/kolown2007/ghostwhisper/blob/onlinemode/artwork-manual/1_general-important-info.md#assembly-instructions) section of the Artwork Manual.
 
-2. Strip the end of the wires of speaker modules or solder wires to the anode and cathode pins of the speaker/s if it did not come with pre-soldered wires.
+Connect the USB-C end of the Power Supply Unit to the ESP32 microcontroller. Plug the Power Supply Unit into an outlet. The work will automatically boot in a few seconds.
 
-3. Connect the speaker wires to the amplifier module using the green terminal blocks on the amplifier module:  
-	 
-   Unscrew the ground side of the green terminal block which is marked with a negative (-) symbol. Insert both ground wires (black wire) of the speaker into the conductor insertion point then tighten back the screw to secure the connection. Do the same method for the power wires (red wire) and connect them to the power side of the terminal block which is marked with a positive (+) symbol.
+Access the GhostWhisper app through **kolown.net/dropcall** to create a recording. Tap the record button, record your message, and tap send. Wait for the sound to play in near real time.
 
-4. Prepare the connections:  
-	 
-   Connect the female end of the male to female dupont wires to the LRC, BCLK, DIN, GND, and VCC pins of the amplifier module.
-
-   Next, connect the female end of the male to female dupont wires to the GPIO25, GPIO26, GPIO27, GND, and 5V pins of the ESP32 microcontroller.
-
-5. Connect the amplifier module pins to the ESP32 using a 5-pin terminal block:  
-	 
-   Remove the protective lid of the terminal block. Unscrew the top and bottom screw using a phillips screwdriver. It is best to start with one column at a time to avoid mismatching the pins. Use the same color for each individual connection.
-
-   Refer to the diagram below for the connections:
-
-	| Max98357 Amplifier | NodeMCU-32s ESP32 microcontroller |
-	| :---: | :---: |
-	| LRC | GPIO26 |
-	| BCLK | GPIO27 |
-	| DIN | GPIO25 |
-	| GND | GND |
-	| VCC | 5V |
-
-   Insert the male end of the dupont cable to the conductor insertion point of the terminal blocks and tighten screws. Attach the protective cover back to the terminal block.
-
-6. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.
+To turn the piece ON or OFF, plug or unplug the Power Supply Unit from the outlet. Alternatively, the Power Supply Unit may be plugged into an adaptor with a switch or a powerstrip that has a switch.
 
 ## Images of Components (with Links for Material Procurement)
 
