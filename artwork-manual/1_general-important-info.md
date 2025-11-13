@@ -65,9 +65,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
    
    On the second to the left panel of your workspace, under "GHOSTWHISPER", open the **"src"** folder and open **"main.cpp"**.
      
-   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code, do not release until the code has been fully uploaded. Press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
+   Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the BOOT button of the ESP32 while uploading the code, do not release until the code has been fully uploaded. Once the upload is done, press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
    
-   Keep the ESP32 plugged into your computer.
+   Keep the ESP32 plugged into your computer for the next step.
 
 3. Configure the ESP32 to access the WiFi. You may use your computer or phone for this step.
 
@@ -75,9 +75,9 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    Click on the Configure WiFi button and enter the WiFi credentials (SSID and Password). Once done this will save the WiFi credentials and connect the ESP32 to the network.
 
-   Once connected to the WiFi, you will hear a sound indicating that the connection was successful.
+   Once connected to the WiFi, you will hear a sound indicating that the connection was successful. If the sound doesn't play, there might be a problem with the credentials entered–– troubleshoot this by reconfiguring the WiFi Settings.
 
-   Unplug the ESP32 from your computer.
+   Unplug the ESP32 from your computer once the connection is successful.
 
 3. Start assembling the circuit:
 
