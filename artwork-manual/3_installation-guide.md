@@ -1,5 +1,4 @@
 # APPENDIX I - INSTALLATION
-\[TO BE UPDATED\]
 
 **IMPORTANT:**  
 Please refer to the **General Important Information** section for detailed system information, list of components, and wiring diagram.
