@@ -150,10 +150,6 @@ WIP
 
 **1. Assemble the Hardware**: *you are here*
 
-**2. Install the Firmware**:
+**2. Install the Firmware**: [firmware installation](/artwork-manual/firmware-upload.md)
 
-[firmware installation](/artwork-manual/firmware-upload.md)
-
-**3. Connect the ESP32 to WiFi**:
-
- [connecting to wifi](/artwork-manual/wifi-connect.md)
+**3. Connect the ESP32 to WiFi**: [connecting to wifi](/artwork-manual/wifi-connect.md)

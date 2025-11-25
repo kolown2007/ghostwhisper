@@ -9,12 +9,8 @@
 
 ## Ghostwhisper Assembly Links:
 
-**1. Assemble the Hardware**:
+**1. Assemble the Hardware**: [wiring-guide](/artwork-manual/wiring-guide.md)
 
-[wiring-guide](/artwork-manual/wiring-guide.md)
-
-**2. Install the Firmware**:
-
-[firmware installation](/artwork-manual/firmware-upload.md)
+**2. Install the Firmware**: [firmware installation](/artwork-manual/firmware-upload.md)
 
 **3. Connect the ESP32 to WiFi**: *you are here*

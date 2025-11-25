@@ -12,17 +12,14 @@ In this iteration, audiences use a web portal to send a 3-second audio message t
 
 To summarize there are 3 steps:
 
-**1. Assemble the Hardware**:
-
+**1. Assemble the Hardware**: 
 [wiring-guide](/artwork-manual/wiring-guide.md)
 
-**2. Install the Firmware**:
-
+**2. Install the Firmware**: 
 [firmware installation](/artwork-manual/firmware-upload.md)
 
 **3. Connect the ESP32 to WiFi**:
-
- [connecting to wifi](/artwork-manual/wifi-connect.md)
+[connecting to wifi](/artwork-manual/wifi-connect.md)
 
 
 -------
