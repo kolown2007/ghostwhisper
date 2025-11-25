@@ -1,4 +1,11 @@
+## Firmware Upload
 
+
+1. go to this website: https://esptool.spacehuhn.com/ , insert your esp32 and press connect
+2. download the necessary firmware, it should have 4 files
+3. upload the firmwares
+
+note: if you want to upload the source code via VScode we have also instructions [here](/artwork-manual/firmware-upload-vscode.md)
 
 -------
 
