@@ -1,13 +1,14 @@
-1. open your phone/laptop
-2. open wifi sources
-3. connect to ghostwhisper
-4. open your web browser and go to ghostwhisper.local
-5. select the your wifi and enter credentials
-6. press save
-7. If connected the blue led from esp32 will light up
+1. Open your phone/laptop
+2. Open WiFi sources
+3. Connect to *ghostwhisper*
+4. Open your web browser and go to "**ghostwhisper.local**"
+5. Select your WiFi name and enter credentials
+6. Press "Save"
+7. If connected the blue led from ESP32 will light up.
 
+-------
 
-## Ghostwhisper Assembly Links:
+## GhostWhisper Assembly Links:
 
 **1. Assemble the Hardware**: [wiring-guide](/artwork-manual/wiring-guide.md)
 

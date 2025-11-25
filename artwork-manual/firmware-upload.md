@@ -1,4 +1,8 @@
-## Ghostwhisper Assembly Links:
+
+
+-------
+
+## GhostWhisper Assembly Links:
 
 **1. Assemble the Hardware**: [wiring-guide](/artwork-manual/wiring-guide.md)
 

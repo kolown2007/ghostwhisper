@@ -8,7 +8,7 @@ Contributors: KoloWn and Roan Alvarez
 In this iteration, audiences use a web portal to send a 3-second audio message that is broadcasted on the physical GhostWhisper installations. While today's internet allows us to transmit longer durations in real-time, this project invites us to look back and reflect: how technological limitations once brought us closer together, whereas today, despite our capabilities, we are more divided.
 
 ---
-**How to Assemble the GhostWhiper**
+**How to Assemble the GhostWhisper**
 
 To summarize there are 3 steps:
 

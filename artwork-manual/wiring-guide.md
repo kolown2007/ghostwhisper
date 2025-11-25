@@ -146,7 +146,7 @@ WIP
 
 -------
 
-## Ghostwhisper Assembly Links:
+## GhostWhisper Assembly Links:
 
 **1. Assemble the Hardware**: *you are here*
 
