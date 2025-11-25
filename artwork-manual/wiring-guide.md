@@ -1,0 +1,120 @@
+## Wiring guide (I2S)
+
+Connect the I2S amplifier to the ESP32 using the following pins (example mapping):
+
+```text
+DOUT -> GPIO25
+BCLK -> GPIO27
+LRC  -> GPIO26
+3.3V / 5V -> VCC (match amplifier voltage)
+GND -> GND
+```
+
+Adjust pin numbers in code if you use different ESP32 boards or custom wiring.
+
+## Usage / Instructions
+
+### Artwork description
+WIP
+
+### Medium
+- Speaker units, 
+- amplifier, 
+- ESP32 microcontroller, 
+- WiFi network, 
+- and custom software on a remote server.
+
+### List of components (PER MODULE)
+
+- 1 × NodeMCU-32s (ESP32)
+- 1 × MAX98357 (I2S 3W amplifier)
+- 1 set × Speakers
+	- Option A: two × 4Ω 3W full-range speakers
+	- Option B: one × 8Ω 20W horn speaker
+- 1 × 5V power supply (match current requirements)
+- 1 set × Dupont jumper wires (≈30 cm)
+
+### Other important tools
+
+- Micro-USB or USB-C cable for uploading code to the microcontroller
+- Computer with VS Code and PlatformIO IDE installed
+- Soldering tools (soldering iron and solder) / jumper wires
+
+---
+
+## Wiring Diagram (PER MODULE)
+
+Wiring Diagram:
+![Wiring Diagram](/artwork-manual/images/ghostwhisper-ThB25.png)
+
+ESP32 Pinouts:
+![Pinouts](/artwork-manual/images/pinouts.png)
+
+
+## Artwork and Software Operation
+
+Upload code to ESP32 microcontroller (required: computer with VS Code \+ PlatformIO & data cable) and assemble the circuit by following the **Assembly Instructions** in the [General Important Info](https://github.com/kolown2007/ghostwhisper/blob/onlinemode/artwork-manual/1_general-important-info.md#assembly-instructions) section of the Artwork Manual.
+
+Connect the USB-C end of the Power Supply Unit to the ESP32 microcontroller. Plug the Power Supply Unit into an outlet. The work will automatically boot in a few seconds.
+
+Access the GhostWhisper app through **kolown.net/dropcall** to create a recording. Tap the record button, record your message, and tap send. Wait for the sound to play in near real time.
+
+To turn the piece ON or OFF, plug or unplug the Power Supply Unit from the outlet. Alternatively, the Power Supply Unit may be plugged into an adaptor with a switch or a powerstrip that has a switch.
+
+## Images of Components (with Links for Material Procurement)
+
+| Component Name :  | NodeMCU-32s ESP-32 Microcontroller (38pins) |
+| ----- | :---: |
+| Description: | The processor board responsible for running code and connecting to WiFi. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/ESP32-WiFi-Node32s-ESP-32-ESP-32S-NodeMCU-ESP-WROOM-32-WiFi-Bluetooth-%E0%B8%A1%E0%B8%B5%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%9E%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A1%E0%B8%AA%E0%B9%88%E0%B8%87%E0%B8%97%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B8%B5-i.117988183.2053436592?sp_atk=cfe1f287-e40d-45f5-94a5-bb42284281be&xptdk=cfe1f287-e40d-45f5-94a5-bb42284281be) |
+| | ![NodeMCU](/artwork-manual/images/NodeMCU-ESP32-C_01.png)![Shopee ESP32](/artwork-manual/images/ss-esp32.png) |
+
+| Component Name :  | Max98357 3W Class D Amplifier Breakout Board Module |
+| ----- | :---: |
+| Description: | The MAX98357 is an amplifier module that uses an Inter-Integrated Circuit Sound (I2S) serial interface protocol |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: โอ.อาร์. เทคโนโลยี](https://shopee.co.th/โมดูลขยายเสียง-บัดกรี-ไม่บัดกรี-MAX98357-I2S-3W-Class-D-Amplifier-Breakout-Interface-Dac-Decoder-Module-Audio-Amplifi...-i.944231623.26560069128?sp_atk=ff5fc91a-9817-4f18-bcb5-3b17607cda59&xptdk=ff5fc91a-9817-4f18-bcb5-3b17607cda59) |
+|  | ![Amplifier](/artwork-manual/images/amplifier.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE MAX98357-S บัดกรีขา *(soldered)* OPTION** ![Shopee](/artwork-manual/images/ss-amplifier.png) |
+
+| Speaker | **Option A** |
+| ----- | :---: |
+| Component Name :  | **Aiyima 8ohm 3watt Mini Full-Range Speakers** |
+| Description: | Set of two mini full-range speakers that can be daisy-chained together to create one GhostWhisper module. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AiyimaAudio.th](https://shopee.co.th/AIYIMA-2Pcs-MIni-Full-Range-Speaker-DIY-Audio-Portable-Bluetooth-Speaker-4-Ohm-3W-Home-Theater-Music-Sound-Loudspeaker-i.419982862.23102228411?sp_atk=46748790-1223-40bb-8875-37c026c24344&xptdk=46748790-1223-40bb-8875-37c026c24344) |
+| | ![Speakers](/artwork-manual/images/ss-fullrangespeakers.png)  |
+
+| Speaker | **Option B** |
+| ----- | :---: |
+| Component Name :  | **8ohm 20watt Horn Speaker** |
+| Description: | An industrial horn speaker that can be used as an alternative to the speakers above  |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: fkrittapas](https://shopee.co.th/ลำโพงฮอร์น-\(Industrial-Horn-Speakers\)-PH20-8นิ้ว-15-20W-8โอห์ม-“PENTON”-i.81068829.25486787205?sp_atk=254f9e18-fd71-47cd-bea9-69da84c71e64&xptdk=254f9e18-fd71-47cd-bea9-69da84c71e64) |
+|  | ![Horn Speakers](/artwork-manual/images/ss-hornspeaker.png)  Product Details: Industrial Horn Speakers PH20 15/20W 8ohms PENTON Brand Size: 20x20x26 cm Weight: 1400 grams  |
+
+| Component Name :  | Male to Female Dupont Wires |
+| ----- | :---: |
+| Description: | Used for connecting data pins to the microcontroller and amplifier module. Can also be connected to other Dupont Wire types. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/สายจัมป์-10-20-30-40-ซม.-\(แผงละ-40-เส้น\)-มีให้เลือก-3-แบบ-Jumper-Wire-40p-10-20-30-40-cm-พร้อมส่งทันที!!!!-i.117988183.1866546973) |
+|  | ![MF Dupont](/artwork-manual/images/male-female_Dupont.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM ผู้-เมีย OPTION ![Shopee MF Dupont](/artwork-manual/images/ss-dupontFM.png)** |
+
+| Component Name :  | Female to Female Dupont Wires |
+| ----- | :---: |
+| Description: | Used for connecting data pins to the microcontroller and amplifier module. Can also be connected to other Dupont Wire types. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/สายจัมป์-10-20-30-40-ซม.-\(แผงละ-40-เส้น\)-มีให้เลือก-3-แบบ-Jumper-Wire-40p-10-20-30-40-cm-พร้อมส่งทันที!!!!-i.117988183.1866546973) |
+|  | ![FF Dupont](/artwork-manual/images/female-female_Dupont.png) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สาย 40 CM เมีย-เมีย OPTION ![FF Dupont](/artwork-manual/images/ss-dupontFF.png)** |
+
+| Component Name :  | Power Supply Unit (5V, 3A) |
+| ----- | :---: |
+| Description: | Used to power the microcontroller once the work is installed. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: Lantern IoT Maker](https://shopee.co.th/Adapter-5V-3A-แบบ-USB-type-C-USB-C-ใช้ได้กับ-Raspberry-PI-อแดปเตอร์-220VAC-to-5VDC-หัวไทป์ซี-Power-Supply-ราสเบอรี่พาย-i.270502312.4381642757?sp_atk=d52360ed-1b86-48e9-99bb-596ee63a3c07&xptdk=d52360ed-1b86-48e9-99bb-596ee63a3c07) |
+|  | ![Power Supply](/artwork-manual/images/PowerSupplyUnit.png) Power Consumption: 15W Power Adapter Type: 220VAC Dimension (L x W x H): 6x10x5cm Cord Length: 1 meter |
+
+| Component Name :  | Terminal Blocks |
+| ----- | :---: |
+| Description: | Screw-type insulated connectors that securely fasten several wires together for electrical circuits. |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: SmartP Store](https://shopee.co.th/TC100A-600V-เทอร์มินอล-บล็อกต่อสายไฟ-Terminal-Block-TC1002-TC1003-TC1004-i.29111487.29962853600?sp_atk=9f73954a-e6fc-41d9-b2ad-1cf31462ef14&xptdk=9f73954a-e6fc-41d9-b2ad-1cf31462ef14) |
+|  | ![Terminal Blocks](/artwork-manual/images/TerminalBlock.jpg) **FOR SHOPEE PURCHASE PLEASE CHOOSE THE TC-1004 OPTION, Quantity: 2pcs ![Shopee Terminal Block](/artwork-manual/images/ss-terminalblock.png)** |
+
+| Component Name :  | Heat-shrink Tubing |
+| ----- | :---: |
+| Description: | Heat activated tubing used to protect wire connections |
+| Shopee (Thailand) Link:  | [Shopee \- SELLER NAME: AEI.th](https://shopee.co.th/ชุดท่อหด-set-Heat-Shrinkable-Tube-1-ชุด-มีหลายเส้น-พร้อมส่งทันที!!!!-i.117988183.28503560356) |
+|  | **FOR SHOPEE PURCHASE PLEASE CHOOSE THE สีดำชุดท่อหด127 OPTION** ![Shopee Heatshrink](/artwork-manual/images/ss-heatshrink.png) |
