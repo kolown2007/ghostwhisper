@@ -1,6 +1,6 @@
 
 
-note: We recommend to use the [firmware upload instructions](/artwork-manual/firmware-upload.md). It is less technical. This instructions if you want to help contribute in the development of GhostWhisper.
+NOTE: We recommend to use the [firmware upload instructions](/artwork-manual/firmware-upload.md) since it is less technical. Below are the instructions for VSCode & PlatformIO Installation if you want to help contribute in the development of GhostWhisper.
 
 ## Install the required software on your computer
 
@@ -32,4 +32,14 @@ note: We recommend to use the [firmware upload instructions](/artwork-manual/fir
      
    Connect the ESP32 to your computer using the data cable (USB-C to USB-A) it came with and click the upload button in PlatformIO. Make sure to press the **BOOT** button of the ESP32 while uploading the code, do not release the button until the code has been fully uploaded. Once the upload is done, press the RST (reset) button of the ESP32 to refresh the program on the ESP32. 
    
-   Keep the ESP32 plugged into your computer for the next step.
+   Keep the ESP32 plugged into your computer for the next step: [connecting to wifi](/artwork-manual/wifi-connect.md).
+
+------
+
+## GhostWhisper Assembly Links:
+
+**1. Assemble the Hardware**: [wiring-guide](/artwork-manual/wiring-guide.md)
+
+**2. Install the Firmware**: [firmware installation](/artwork-manual/firmware-upload.md)
+
+**3. Connect the ESP32 to WiFi**: [connecting to wifi](/artwork-manual/wifi-connect.md)
