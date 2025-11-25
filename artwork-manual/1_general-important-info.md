@@ -25,7 +25,7 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 * Phillips screwdriver  
 * Wire stripper or diagonal cutters  
 * USB-C cable for uploading the code to the microcontroller  
-* Computer installed with **VS Code** and **PlatformIO IDE**  
+* Computer with stable internet connection  
 * Optional: Soldering tools (soldering iron and solder lead)
 
 ## Wiring Diagram (PER MODULE)
@@ -80,13 +80,12 @@ Speaker units, amplifier, ESP32 microcontroller, WiFi network, custom software.
 
    ![step 5b](images/5b.gif)
 
-**5. Power the ESP32 using a dedicated 5V Power Supply Unit by connecting the USB-C end of the power supply to the ESP32. Plug the power supply to a wall outlet.**
+
+**5. Using the Data Cable that came with the ESP32, connect the ESP32 to your computer and follow [Step 2: firmware installation](/artwork-manual/firmware-upload.md); then [Step 3: connect to wifi](/artwork-manual/wifi-connect.md)**
+
+**6. Once the ESP32 is connected to the WiFi, the ghostwhisper module may be powered using a dedicated 5V Power Supply Unit by connecting the USB-C end of the Power Supply Unit to the port of the ESP32. Plug the power supply to a wall outlet.**
+
    ![step 6](images/6.gif)
-
-
-**Full video instructions (no audio) can be accessed here: https://youtu.be/pFi20m0UNg8**
-
-Proceed to [Step 2: firmware installation](/artwork-manual/firmware-upload.md) and then [Step 3: connect to wifi](/artwork-manual/wifi-connect.md)
 
 
 ## Images of Components (with Links for Material Procurement)
