@@ -23,7 +23,7 @@
    To turn the piece ON or OFF, plug or unplug the Power Supply Unit from the outlet. Alternatively, the Power Supply Unit may be plugged into an adaptor with a switch or a powerstrip that has a switch.
 
 
-NOTE: If issues emerge during Artwork Operation, the **Troubleshooting Guide** can be accessed [here](artwork-manual/2_technical-info.md#troubleshooting)
+NOTE: If issues emerge during Artwork Operation, the **Troubleshooting Guide** can be accessed [here](/artwork-manual/2_technical-info.md#troubleshooting)
 
 
 -------
