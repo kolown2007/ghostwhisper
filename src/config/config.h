@@ -16,8 +16,14 @@
 #define I2S_BCLK 27
 #define I2S_LRC 26
 
-// LED Configuration
-#define STATUS_LED_PIN LED_BUILTIN  // Use built-in LED for status indication
+// Board-specific configurations for LED Status
+#ifdef BOARD_NODEMCU_32S
+  #define STATUS_LED_PIN BUILTIN_LED  // Use built-in LED for status indication
+#endif
+
+#ifdef BOARD_ESP32_DEV
+  #define STATUS_LED_PIN 2  // Use built-in LED for status indication
+#endif
 
 // System Configuration
 #define SERIAL_BAUD_RATE 9600
